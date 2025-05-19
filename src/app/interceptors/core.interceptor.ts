@@ -19,13 +19,13 @@ export const coreInterceptor: HttpInterceptorFn = (req, next) => {
         }
     }
 
-    headers = headers.append('Accept', 'application/json');
-
-    flag = req.headers.getAll('Content-Type')?.some((header) => header === 'multipart/form-data');
-
-    if (!flag) {
-        headers = headers.append('Content-Type', 'application/json');
-    }
+    // headers = headers.append('Accept', 'application/json');
+    //
+    // flag = req.headers.getAll('Content-Type')?.some((header) => header === 'multipart/form-data');
+    //
+    // if (!flag) {
+    //     headers = headers.append('Content-Type', 'application/json');
+    // }
 
     switch (req.method) {
         case 'POST':

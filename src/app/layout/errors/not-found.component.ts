@@ -65,7 +65,7 @@ import { MY_ROUTES } from '@routes';
                             </span>
                             </a>
 
-                            <p-button label="Regresar" [routerLink]="[MY_ROUTES.authPages.signIn.absolute]"
+                            <p-button label="Regresar" (onClick)="back()"
                                       [icon]="PrimeIcons.ARROW_LEFT" />
                         </div>
                     </div>

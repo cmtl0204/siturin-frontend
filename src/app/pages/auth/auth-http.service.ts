@@ -34,9 +34,7 @@ export class AuthHttpService {
                     this._authService.role = response.data.roles[0];
                 }
 
-                this._customMessageService.showSuccess({ summary: response.title, detail: response.message });
-
-                return response;
+                return response.data;
             })
         );
     }

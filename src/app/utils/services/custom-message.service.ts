@@ -14,6 +14,7 @@ export class CustomMessageService {
     private _modalAcceptSeverity: Severity = null;
     private _modalRejectSeverity: Severity = 'danger';
     private _modalIcon: string = '';
+    private _modalTitleIcon: string = '';
     private _modalIconColor: string = '';
     private _modalTitle: string = '';
     private _modalMessage: string | string[] = '';
@@ -41,9 +42,12 @@ export class CustomMessageService {
     }
 
     showHttpError(error: string | string[] | any) {
-        if (Array.isArray(error)) error.sort();
-
         this._modalLife = error.message.length * 100;
+
+        if (Array.isArray(error.message)) {
+            this._modalLife = error.message.length * 5000;
+            error.message.sort();
+        }
 
         this._messageService.add({ severity: 'error', summary: error.error, detail: error.message });
     }
@@ -59,12 +63,34 @@ export class CustomMessageService {
         this._modalMessage = message;
     }
 
+    showModalInfo({ summary, detail }: { summary: string; detail: string }): void {
+        this._isModalVisible.set(true);
+        this._modalAcceptSeverity = 'info';
+        this._modalTitleIcon = PrimeIcons.INFO_CIRCLE;
+        this._modalIconColor = 'var(--primary-color)';
+        this._modalTitle = summary;
+        this._modalMessage = detail;
+    }
+
+    showModalWarn({ summary, detail }: { summary: string; detail: string }): void {
+        this._isModalVisible.set(true);
+        this._modalAcceptSeverity = 'info';
+        this._modalTitleIcon = PrimeIcons.EXCLAMATION_TRIANGLE;
+        this._modalIconColor = 'var(--primary-color)';
+        this._modalTitle = summary;
+        this._modalMessage = detail;
+    }
+
     get modalTitle(): string {
         return this._modalTitle;
     }
 
     get modalIcon(): string {
         return this._modalIcon;
+    }
+
+    get modalTitleIcon(): string {
+        return this._modalTitleIcon;
     }
 
     get modalIconColor(): string {

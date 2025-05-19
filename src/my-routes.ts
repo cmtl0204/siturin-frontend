@@ -24,47 +24,195 @@ export const MY_ROUTES = {
     },
     corePages: {
         base: 'core',
-        absolute: '/pages/core',
-        dacTechnician: {
-            base: 'dac-technician',
-            absolute: '/pages/core/dac-technician',
+        absolute: '/main/core',
+        dac: {
+            base: 'dac',
+            absolute: '/main/core/dac',
             dashboard: {
                 base: 'dashboard',
-                absolute: '/pages/core/dac-technician/dashboard'
+                absolute: '/main/core/dac/dashboard'
+            },
+            project: {
+                base: 'projects',
+                absolute: '/main/core/dac/projects',
+                list: {
+                    base: 'projects/list',
+                    absolute: '/main/core/dac/projects/list'
+                },
+                form: {
+                    base: 'projects/form',
+                    absolute: '/main/core/dac/projects/form'
+                },
+                document: {
+                    base: 'projects/document',
+                    absolute: '/main/core/dac/projects/document'
+                }
+            },
+            program: {
+                base: 'programs',
+                absolute: '/main/core/dac/programs',
+                list: {
+                    base: 'programs/list',
+                    absolute: '/main/core/dac/programs/list'
+                },
+                form: {
+                    base: 'programs/form',
+                    absolute: '/main/core/dac/programs/form'
+                },
+                document: {
+                    base: 'programs/document',
+                    absolute: '/main/core/dac/programs/document'
+                }
+            }
+        },
+        specialist: {
+            base: 'specialist',
+            absolute: '/main/core/specialist',
+            dashboard: {
+                base: 'dashboard',
+                absolute: '/main/core/specialist/dashboard'
+            },
+            project: {
+                base: 'projects',
+                absolute: '/main/core/dac/projects',
+                list: {
+                    base: 'projects/list',
+                    absolute: '/main/core/dac/projects/list'
+                },
+                form: {
+                    base: 'projects/form',
+                    absolute: '/main/core/dac/projects/form'
+                },
+                document: {
+                    base: 'projects/document',
+                    absolute: '/main/core/dac/projects/document'
+                }
+            },
+            program: {
+                base: 'programs',
+                absolute: '/main/core/dac/programs',
+                list: {
+                    base: 'programs/list',
+                    absolute: '/main/core/dac/programs/list'
+                },
+                form: {
+                    base: 'programs/form',
+                    absolute: '/main/core/dac/programs/form'
+                },
+                document: {
+                    base: 'programs/document',
+                    absolute: '/main/core/dac/programs/document'
+                }
+            }
+        },
+        gad: {
+            base: 'gad',
+            absolute: '/main/core/gad',
+            dashboard: {
+                base: 'dashboard',
+                absolute: '/main/core/gad/dashboard'
+            },
+            project: {
+                base: 'projects',
+                absolute: '/main/core/dac/projects',
+                list: {
+                    base: 'projects/list',
+                    absolute: '/main/core/dac/projects/list'
+                },
+                form: {
+                    base: 'projects/form',
+                    absolute: '/main/core/dac/projects/form'
+                },
+                document: {
+                    base: 'projects/document',
+                    absolute: '/main/core/dac/projects/document'
+                }
+            },
+            program: {
+                base: 'programs',
+                absolute: '/main/core/dac/programs',
+                list: {
+                    base: 'programs/list',
+                    absolute: '/main/core/dac/programs/list'
+                },
+                form: {
+                    base: 'programs/form',
+                    absolute: '/main/core/dac/programs/form'
+                },
+                document: {
+                    base: 'programs/document',
+                    absolute: '/main/core/dac/programs/document'
+                }
             }
         },
         external: {
-            base: 'external-technician',
-            absolute: '/pages/core/external-technician',
+            base: 'external',
+            absolute: '/main/core/external',
             dashboard: {
                 base: 'dashboard',
-                absolute: '/pages/core/external-technician/dashboard'
+                absolute: '/main/core/external/dashboard'
+            },
+            accreditation: {
+                base: 'accreditations',
+                absolute: '/main/core/external/accreditations',
+            },
+            program: {
+                base: 'programs',
+                absolute: '/main/core/dac/programs',
+                list: {
+                    base: 'programs/list',
+                    absolute: '/main/core/dac/programs/list'
+                },
+                form: {
+                    base: 'programs/form',
+                    absolute: '/main/core/dac/programs/form'
+                },
+                document: {
+                    base: 'programs/document',
+                    absolute: '/main/core/dac/programs/document'
+                }
             }
         },
-        gadTechnician: {
-            base: 'dac-technician',
-            absolute: '/pages/core/gad-technician',
+        technician: {
+            base: 'dac',
+            absolute: '/main/core/technician',
             dashboard: {
                 base: 'dashboard',
-                absolute: '/pages/core/gad-technician/dashboard'
+                absolute: '/main/core/technician/dashboard'
+            },
+            project: {
+                base: 'projects',
+                absolute: '/main/core/dac/projects',
+                list: {
+                    base: 'projects/list',
+                    absolute: '/main/core/dac/projects/list'
+                },
+                form: {
+                    base: 'projects/form',
+                    absolute: '/main/core/dac/projects/form'
+                },
+                document: {
+                    base: 'projects/document',
+                    absolute: '/main/core/dac/projects/document'
+                }
+            },
+            program: {
+                base: 'programs',
+                absolute: '/main/core/dac/programs',
+                list: {
+                    base: 'programs/list',
+                    absolute: '/main/core/dac/programs/list'
+                },
+                form: {
+                    base: 'programs/form',
+                    absolute: '/main/core/dac/programs/form'
+                },
+                document: {
+                    base: 'programs/document',
+                    absolute: '/main/core/dac/programs/document'
+                }
             }
         },
-        specialistTechnician: {
-            base: 'specialist-technician',
-            absolute: '/pages/core/specialist-technician',
-            dashboard: {
-                base: 'dashboard',
-                absolute: '/pages/core/specialist-technician/dashboard'
-            }
-        },
-        zonalTechnician: {
-            base: 'zonal-technician',
-            absolute: '/pages/core/zonal-technician',
-            dashboard: {
-                base: 'dashboard',
-                absolute: 'pages/core/zonal-technician/dashboard'
-            }
-        }
     },
     authPages: {
         base: 'auth',
@@ -81,6 +229,9 @@ export const MY_ROUTES = {
             absolute: '/auth/password-reset'
         }
     },
-    login: 'auth/sign-in',
-    dashboard: '/dashboard',
+    signIn: '/auth/sign-in',
+    dashboards: {
+        base: 'dashboards',
+        absolute: '/main/dashboards'
+    }
 };

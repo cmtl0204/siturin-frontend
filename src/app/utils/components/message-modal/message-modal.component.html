@@ -25,6 +25,11 @@
                 </ul>
             }
         } @else {
+            <div class="text-center">
+                <i [class]="customMessageService.modalTitleIcon"
+                   [style]="{'color':customMessageService.modalIconColor,'font-size':'2.5rem'}"></i>
+            </div>
+
             <p>{{ customMessageService.modalMessage }}</p>
         }
     </ng-template>
@@ -34,7 +39,7 @@
             <p-button
                 label="Cerrar"
                 [severity]="customMessageService.modalAcceptSeverity"
-                (click)="customMessageService.setModalVisible(false)" />
+                (click)="customMessageService.setModalVisible(false)"/>
         </div>
     </ng-template>
 </p-dialog>

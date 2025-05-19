@@ -72,7 +72,7 @@ import { MY_ROUTES } from '@routes';
                                 <p-button
                                     label="Ir al Dashboard"
                                     severity="success"
-                                    [routerLink]="[MY_ROUTES.dashboard]"
+                                    [routerLink]="[MY_ROUTES.dashboards.absolute]"
                                     [icon]="PrimeIcons.HOME" />
                             }
 

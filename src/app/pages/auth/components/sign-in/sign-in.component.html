@@ -9,13 +9,13 @@
             label="Correo electrónico"
             [required]="usernameField"></label>
 
-        <input pInputText id="username" type="text" formControlName="username" />
+        <input pInputText id="username" type="text" formControlName="username"/>
 
         <p-message
             appErrorMessage
             [errors]="usernameField.errors"
             [touched]="usernameField.touched"
-            [dirty]="usernameField.dirty" />
+            [dirty]="usernameField.dirty"/>
     </div>
 
     <div class="flex flex-col gap-2">
@@ -26,33 +26,54 @@
         <p-password
             id="password" type="text" formControlName="password"
             [toggleMask]="true"
-            [feedback]="false" />
+            [feedback]="false"/>
 
         <p-message
             appErrorMessage
             [errors]="passwordField.errors"
             [touched]="passwordField.touched"
-            [dirty]="passwordField.dirty" />
+            [dirty]="passwordField.dirty"/>
     </div>
+
+    @if (roleControl.hasValidator(Validators.required)) {
+        <div class="flex flex-col gap-2">
+            <label
+                appLabel for="role"
+                label="Rol"
+                [required]="roleControl"></label>
+
+            <p-select
+                [options]="roles"
+                [formControl]="roleControl"
+                optionLabel="name"
+            />
+
+            <p-message
+                appErrorMessage
+                [errors]="roleControl.errors"
+                [touched]="roleControl.touched"
+                [dirty]="roleControl.dirty"/>
+        </div>
+    }
 
     <div class="flex flex-col gap-2">
         <p-button
             label="Ingresar"
             [icon]="PrimeIcons.SIGN_IN"
             severity="success"
-            (onClick)="onSubmit()" />
+            (onClick)="onSubmit()"/>
 
         <p-button
             label="Crear Cuenta"
             [icon]="PrimeIcons.USER_PLUS"
             class="mt-2"
-            [routerLink]="MY_ROUTES.authPages.signUp.absolute" />
+            [routerLink]="MY_ROUTES.authPages.signUp.absolute"/>
 
         <p-button
             label="Recuperar Cuenta"
             [icon]="PrimeIcons.LOCK_OPEN"
             severity="warn"
             class="mt-2"
-            [routerLink]="MY_ROUTES.authPages.passwordReset.absolute" />
+            [routerLink]="MY_ROUTES.authPages.passwordReset.absolute"/>
     </div>
 </form>

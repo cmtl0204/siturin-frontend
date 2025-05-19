@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { Dialog } from 'primeng/dialog';
 import { Button } from 'primeng/button';
+import { NgClass } from '@angular/common';
 
 @Component({
     selector: 'app-message-modal',

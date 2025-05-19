@@ -1,13 +1,13 @@
 import { AuthInterface, RoleInterface, UserInterface } from '@modules/auth/interfaces';
 
 export interface SignInResponseInterface {
-    data: Data;
+    data: DataSignInInterface;
     message: string;
     title: string;
     accessToken: string;
 }
 
-interface Data {
+export interface DataSignInInterface {
     auth: AuthInterface;
     accessToken: string;
     roles: RoleInterface[];

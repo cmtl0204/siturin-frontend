@@ -1,156 +1,208 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { MenuItem } from 'primeng/api';
+import { Router, RouterModule } from '@angular/router';
+import { MenuItem, PrimeIcons } from 'primeng/api';
 import { AppMenuitem } from './app.menuitem';
+import { MY_ROUTES } from '@routes';
+import { Ripple } from 'primeng/ripple';
+import { AuthService } from '@modules/auth/auth.service';
+import { RoleEnum } from '@utils/enums';
 
 @Component({
     selector: 'app-menu',
     standalone: true,
-    imports: [CommonModule, AppMenuitem, RouterModule],
-    template: `<ul class="layout-menu">
-        <ng-container *ngFor="let item of model; let i = index">
-            <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true"></li>
-            <li *ngIf="item.separator" class="menu-separator"></li>
-        </ng-container>
-    </ul> `
+    imports: [CommonModule, AppMenuitem, RouterModule, Ripple],
+    template: `
+        <ul class="layout-menu">
+            <ng-container *ngFor="let item of model; let i = index">
+                <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true"></li>
+                <li *ngIf="item.separator" class="menu-separator"></li>
+            </ng-container>
+        </ul>
+        <div class="mt-auto">
+            <hr class="mb-4 mx-4 border-t border-0 border-surface" />
+
+            <a (click)="signOut()" pRipple class="m-4 flex items-center cursor-pointer p-4 gap-2 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
+                <i [class]="PrimeIcons.POWER_OFF" style="color:red "></i>
+                <span class="font-bold" style="color: red"> Cerrar Sesión </span>
+            </a>
+        </div>
+    `
 })
-export class AppMenu {
-    model: MenuItem[] = [];
+export class AppMenu implements OnInit {
+    private readonly _router = inject(Router);
+    protected readonly authService = inject(AuthService);
+    protected readonly PrimeIcons = PrimeIcons;
+    protected model: MenuItem[] = [];
 
     ngOnInit() {
+        console.log('menu');
         this.model = [
             {
                 label: 'Home',
                 items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
             },
             {
-                label: 'UI Components',
+                label: 'MINTUR',
                 items: [
-                    { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
-                    { label: 'Button', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon', routerLink: ['/uikit/button'] },
-                    { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
-                    { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
-                    { label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree'] },
-                    { label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/uikit/panel'] },
-                    { label: 'Overlay', icon: 'pi pi-fw pi-clone', routerLink: ['/uikit/overlay'] },
-                    { label: 'Media', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/media'] },
-                    { label: 'Menu', icon: 'pi pi-fw pi-bars', routerLink: ['/uikit/menu'] },
-                    { label: 'Message', icon: 'pi pi-fw pi-comment', routerLink: ['/uikit/message'] },
-                    { label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file'] },
-                    { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts'] },
-                    { label: 'Timeline', icon: 'pi pi-fw pi-calendar', routerLink: ['/uikit/timeline'] },
-                    { label: 'Misc', icon: 'pi pi-fw pi-circle', routerLink: ['/uikit/misc'] }
-                ]
-            },
-            {
-                label: 'Pages',
-                icon: 'pi pi-fw pi-briefcase',
-                routerLink: ['/pages'],
-                items: [
+                    ...this.loadMenu,
                     {
-                        label: 'Landing',
-                        icon: 'pi pi-fw pi-globe',
-                        routerLink: ['/landing']
-                    },
-                    {
-                        label: 'Auth',
-                        icon: 'pi pi-fw pi-user',
-                        items: [
-                            {
-                                label: 'Login',
-                                icon: 'pi pi-fw pi-sign-in',
-                                routerLink: ['/auth/login']
-                            },
-                            {
-                                label: 'Error',
-                                icon: 'pi pi-fw pi-times-circle',
-                                routerLink: ['/auth/error']
-                            },
-                            {
-                                label: 'Access Denied',
-                                icon: 'pi pi-fw pi-lock',
-                                routerLink: ['/auth/access']
-                            }
-                        ]
-                    },
-                    {
-                        label: 'Crud',
-                        icon: 'pi pi-fw pi-pencil',
-                        routerLink: ['/pages/crud']
-                    },
-                    {
-                        label: 'Not Found',
-                        icon: 'pi pi-fw pi-exclamation-circle',
-                        routerLink: ['/pages/notfound']
-                    },
-                    {
-                        label: 'Empty',
-                        icon: 'pi pi-fw pi-circle-off',
-                        routerLink: ['/pages/empty']
+                        label: this.authService.auth.username,
+                        icon: PrimeIcons.USER,
+                        routerLink: [MY_ROUTES.corePages.dac.program.list.absolute]
                     }
                 ]
+            }
+        ];
+    }
+
+    signOut() {
+        this.authService.removeLogin();
+    }
+
+    get loadMenu(): MenuItem[] {
+        switch (this.authService.role.code) {
+            case RoleEnum.EXTERNAL:
+                return this.externalMenu;
+            case RoleEnum.GAD:
+                return this.gadMenu;
+            case RoleEnum.DAC:
+                return this.dacMenu;
+            case RoleEnum.SPECIALIST:
+                return this.specialistMenu;
+            case RoleEnum.TECHNICIAN:
+                return this.technicianMenu;
+            default:
+                return [];
+        }
+    }
+
+    get externalMenu(): MenuItem[] {
+        return [
+            {
+                label: 'Simulador Normativa',
+                icon: PrimeIcons.DESKTOP,
+                routerLink: [MY_ROUTES.corePages.dac.program.list.absolute]
             },
             {
-                label: 'Hierarchy',
-                items: [
-                    {
-                        label: 'Submenu 1',
-                        icon: 'pi pi-fw pi-bookmark',
-                        items: [
-                            {
-                                label: 'Submenu 1.1',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    { label: 'Submenu 1.1.1', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 1.1.2', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 1.1.3', icon: 'pi pi-fw pi-bookmark' }
-                                ]
-                            },
-                            {
-                                label: 'Submenu 1.2',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [{ label: 'Submenu 1.2.1', icon: 'pi pi-fw pi-bookmark' }]
-                            }
-                        ]
-                    },
-                    {
-                        label: 'Submenu 2',
-                        icon: 'pi pi-fw pi-bookmark',
-                        items: [
-                            {
-                                label: 'Submenu 2.1',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    { label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-bookmark' }
-                                ]
-                            },
-                            {
-                                label: 'Submenu 2.2',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [{ label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-bookmark' }]
-                            }
-                        ]
-                    }
-                ]
+                label: 'Proceso de Acreditación de Actividades Turísticas',
+                icon: PrimeIcons.LIST_CHECK,
+                routerLink: [MY_ROUTES.corePages.external.accreditation.absolute]
             },
             {
-                label: 'Get Started',
-                items: [
-                    {
-                        label: 'Documentation',
-                        icon: 'pi pi-fw pi-book',
-                        routerLink: ['/documentation']
-                    },
-                    {
-                        label: 'View Source',
-                        icon: 'pi pi-fw pi-github',
-                        url: 'https://github.com/primefaces',
-                        target: '_blank'
-                    }
-                ]
+                label: 'Manuales de Usuario',
+                icon: PrimeIcons.BOOK,
+                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+            }
+        ];
+    }
+
+    get gadMenu(): MenuItem[] {
+        return [
+            {
+                label: 'Simulador Normativa',
+                icon: PrimeIcons.DESKTOP,
+                routerLink: [MY_ROUTES.corePages.dac.program.list.absolute]
+            },
+            {
+                label: 'Catastro Turístico (GAD)',
+                icon: PrimeIcons.LIST_CHECK,
+                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+            },
+            {
+                label: 'Bitácora',
+                icon: PrimeIcons.HISTORY,
+                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+            },
+            {
+                label: 'Manuales de Usuario',
+                icon: PrimeIcons.BOOK,
+                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+            }
+        ];
+    }
+
+    get dacMenu(): MenuItem[] {
+        return [
+            {
+                label: 'Simulador Normativa',
+                icon: PrimeIcons.DESKTOP,
+                routerLink: [MY_ROUTES.corePages.dac.program.list.absolute]
+            },
+            {
+                label: 'Catastro Turístico (DAC)',
+                icon: PrimeIcons.LIST_CHECK,
+                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+            },
+            {
+                label: 'Bitácora',
+                icon: PrimeIcons.HISTORY,
+                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+            },
+            {
+                label: 'Manuales de Usuario',
+                icon: PrimeIcons.BOOK,
+                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+            }
+        ];
+    }
+
+    get technicianMenu(): MenuItem[] {
+        return [
+            {
+                label: 'Simulador Normativa',
+                icon: PrimeIcons.DESKTOP,
+                routerLink: [MY_ROUTES.corePages.dac.program.list.absolute]
+            },
+            {
+                label: 'Técnico Zonal',
+                icon: PrimeIcons.LIST,
+                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+            },
+            {
+                label: 'Catastro Turístico',
+                icon: PrimeIcons.LIST_CHECK,
+                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+            },
+            {
+                label: 'Bitácora',
+                icon: PrimeIcons.HISTORY,
+                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+            },
+            {
+                label: 'Manuales de Usuario',
+                icon: PrimeIcons.BOOK,
+                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+            }
+        ];
+    }
+
+    get specialistMenu(): MenuItem[] {
+        return [
+            {
+                label: 'Simulador Normativa',
+                icon: PrimeIcons.DESKTOP,
+                routerLink: [MY_ROUTES.corePages.dac.program.list.absolute]
+            },
+            {
+                label: 'Especialista Zonal',
+                icon: PrimeIcons.LIST,
+                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+            },
+            {
+                label: 'Catastro Turístico',
+                icon: PrimeIcons.LIST_CHECK,
+                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+            },
+            {
+                label: 'Bitácora',
+                icon: PrimeIcons.HISTORY,
+                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+            },
+            {
+                label: 'Manuales de Usuario',
+                icon: PrimeIcons.BOOK,
+                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
             }
         ];
     }

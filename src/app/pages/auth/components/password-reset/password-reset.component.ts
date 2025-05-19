@@ -25,7 +25,7 @@ import { invalidEmailMINTURValidator, invalidEmailValidator, pendingPaymentRucVa
     selector: 'app-password-reset',
     templateUrl: './password-reset.component.html',
     standalone: true,
-    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, ReactiveFormsModule, DatePickerModule, Message, LabelDirective, ErrorMessageDirective, InputOtp, KeyFilter, JsonPipe]
+    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, ReactiveFormsModule, DatePickerModule, Message, LabelDirective, ErrorMessageDirective, InputOtp, KeyFilter]
 })
 export default class PasswordResetComponent {
     @Output() outForm = new EventEmitter(true);

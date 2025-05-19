@@ -1,5 +1,5 @@
-import { Injectable, signal, WritableSignal } from '@angular/core';
-import { PaginatorInterface } from '@modules/auth/interfaces';
+import { Injectable, signal } from '@angular/core';
+import { PaginatorInterface } from '@utils/interfaces';
 
 @Injectable({
     providedIn: 'root'
@@ -28,7 +28,7 @@ export class CoreService {
     }
 
     showLoading(): void {
-         this._isLoading.set(true);
+        this._isLoading.set(true);
     }
 
     hideLoading() {

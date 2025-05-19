@@ -8,6 +8,7 @@ import { RoleEnum } from '@utils/enums';
 import { Router } from '@angular/router';
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { CoreService } from '@utils/services/core.service';
+import { MY_ROUTES } from '@routes';
 
 @Injectable({
     providedIn: 'root'
@@ -80,9 +81,6 @@ export class AuthService {
     }
 
     removeLogin() {
-        localStorage.clear();
-        sessionStorage.clear();
-
         this._coreService.showProcessing();
 
         setTimeout(() => {
@@ -91,20 +89,10 @@ export class AuthService {
             if (this.accessToken) {
                 this._customMessageService.showInfo({ summary: 'Se cerró la sesión correctamente', detail: '' });
             }
-        }, 500);
-    }
 
-    selectDashboard() {
-        switch (this.role.code) {
-            case RoleEnum.ADMIN: {
-                break;
-            }
-            case RoleEnum.AGREEMENT_ADMINISTRATOR: {
-                break;
-            }
-            default: {
-                console.log('no tiene roles');
-            }
-        }
+            this._router.navigateByUrl(MY_ROUTES.signIn);
+            localStorage.clear();
+            sessionStorage.clear();
+        }, 500);
     }
 }
