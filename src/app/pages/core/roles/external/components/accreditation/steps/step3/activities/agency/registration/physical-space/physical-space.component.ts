@@ -67,8 +67,6 @@ export class PhysicalSpaceComponent implements OnInit {
         });
     }
 
-    find() {}
-
     getFormErrors(): string[] {
         const errors: string[] = [];
 
@@ -87,6 +85,8 @@ export class PhysicalSpaceComponent implements OnInit {
 
         return [];
     }
+
+    find() {}
 
     get localTypeField(): AbstractControl {
         return this.form.controls['localType'];

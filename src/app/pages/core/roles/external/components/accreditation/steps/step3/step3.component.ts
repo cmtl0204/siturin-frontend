@@ -1,18 +1,16 @@
 import { Component, inject } from '@angular/core';
 import { Select } from 'primeng/select';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Button } from 'primeng/button';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Fluid } from 'primeng/fluid';
 import { LabelDirective } from '@utils/directives/label.directive';
 import { Message } from 'primeng/message';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { PrimeIcons } from 'primeng/api';
 import { AgencyComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/agency/agency.component';
-import { CatalogueInterface } from '@utils/interfaces';
 
 @Component({
     selector: 'app-step3',
-    imports: [Select, FormsModule, Button, Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, AgencyComponent],
+    imports: [Select, FormsModule, Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, AgencyComponent],
     templateUrl: './step3.component.html',
     styleUrl: './step3.component.scss'
 })
