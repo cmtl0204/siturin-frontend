@@ -1,0 +1,157 @@
+<p-fluid>
+    <form [formGroup]="form" class="card flex flex-col gap-6 w-full">
+        <div class="font-semibold text-xl">
+            Seleccione la Actividad y/o Modalidad Turística; clasificación y categoría de ser el caso
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <!-- zone -->
+            <div class="md:col-span-3 flex flex-col gap-2">
+                <label
+                    appLabel
+                    for="zone"
+                    label="Zona Geográfica"
+                    [required]="zoneField">
+                </label>
+
+                <p-select
+                    [options]="zones"
+                    formControlName="zone"
+                    optionLabel="name">
+                    <ng-template #selectedItem let-selectedItem>
+                        @if (selectedItem) {
+                            <div class="flex items-center gap-2">
+                                <div>{{ selectedItem.name }}</div>
+                            </div>
+                        }
+                    </ng-template>
+
+                    <ng-template let-item #item>
+                        <div class="flex items-center gap-2">
+                            <div>{{ item.name }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+
+                <p-message
+                    appErrorMessage
+                    [errors]="zoneField.errors"
+                    [touched]="zoneField.touched"
+                    [dirty]="zoneField.dirty"/>
+            </div>
+
+            <!-- activity -->
+            <div class="md:col-span-3 flex flex-col gap-2">
+                <label
+                    appLabel
+                    for="activity"
+                    label="Actividad"
+                    [required]="activityField">
+                </label>
+
+                <p-select
+                    [options]="activities"
+                    formControlName="activity"
+                    optionLabel="name">
+                    <ng-template #selectedItem let-selectedItem>
+                        @if (selectedItem) {
+                            <div class="flex items-center gap-2">
+                                <div>{{ selectedItem.name }}</div>
+                            </div>
+                        }
+                    </ng-template>
+
+                    <ng-template let-item #item>
+                        <div class="flex items-center gap-2">
+                            <div>{{ item.name }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+
+                <p-message
+                    appErrorMessage
+                    [errors]="activityField.errors"
+                    [touched]="activityField.touched"
+                    [dirty]="activityField.dirty"/>
+            </div>
+
+            <!-- classification -->
+            <div class="md:col-span-3 flex flex-col gap-2">
+                <label
+                    appLabel
+                    for="classification"
+                    label="Clasificación"
+                    [required]="classificationField">
+                </label>
+
+                <p-select
+                    [options]="classifications"
+                    formControlName="classification"
+                    optionLabel="name">
+                    <ng-template #selectedItem let-selectedItem>
+                        @if (selectedItem) {
+                            <div class="flex items-center gap-2">
+                                <div>{{ selectedItem.name }}</div>
+                            </div>
+                        }
+                    </ng-template>
+
+                    <ng-template let-item #item>
+                        <div class="flex items-center gap-2">
+                            <div>{{ item.name }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+
+                <p-message
+                    appErrorMessage
+                    [errors]="classificationField.errors"
+                    [touched]="classificationField.touched"
+                    [dirty]="classificationField.dirty"/>
+            </div>
+
+            <!-- category -->
+            <div class="md:col-span-3 flex flex-col gap-2">
+                <label
+                    appLabel
+                    for="category"
+                    label="Categoria"
+                    [required]="categoryField">
+                </label>
+
+                <p-select
+                    [options]="categories"
+                    formControlName="category"
+                    optionLabel="name">
+                    <ng-template #selectedItem let-selectedItem>
+                        @if (selectedItem) {
+                            <div class="flex items-center gap-2">
+                                <div>{{ selectedItem.name }}</div>
+                            </div>
+                        }
+                    </ng-template>
+
+                    <ng-template let-item #item>
+                        <div class="flex items-center gap-2">
+                            <div>{{ item.name }}</div>
+                        </div>
+                    </ng-template>
+                </p-select>
+
+                <p-message
+                    appErrorMessage
+                    [errors]="categoryField.errors"
+                    [touched]="categoryField.touched"
+                    [dirty]="categoryField.dirty"/>
+            </div>
+        </div>
+    </form>
+
+    <div>
+        @switch ('agency') {
+            @case ('agency') {
+                <app-agency/>
+            }
+        }
+    </div>
+</p-fluid>

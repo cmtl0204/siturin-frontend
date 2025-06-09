@@ -1,0 +1,45 @@
+<p-dialog
+    [modal]="true"
+    [visible]="customMessageService.modalVisible()"
+    [style]="{ width: '30rem' }"
+    [closable]="false">
+
+    <ng-template #header>
+        {{ customMessageService.modalTitle }}
+    </ng-template>
+
+    <ng-template #content>
+        <div class="text-center">
+        </div>
+
+        @if (Array.isArray(customMessageService.modalMessage)) {
+            @for (message of customMessageService.modalMessage; track message) {
+                <ul>
+                    <li>
+                        <h6>
+                            <i [class]="customMessageService.modalIcon"
+                               [style]="{'color':customMessageService.modalIconColor}"></i>
+                            {{ message }}
+                        </h6>
+                    </li>
+                </ul>
+            }
+        } @else {
+            <div class="text-center">
+                <i [class]="customMessageService.modalTitleIcon"
+                   [style]="{'color':customMessageService.modalIconColor,'font-size':'2.5rem'}"></i>
+            </div>
+
+            <p>{{ customMessageService.modalMessage }}</p>
+        }
+    </ng-template>
+
+    <ng-template #footer>
+        <div class="flex justify-content-center gap-2">
+            <p-button
+                label="Cerrar"
+                [severity]="customMessageService.modalAcceptSeverity"
+                (click)="customMessageService.setModalVisible(false)"/>
+        </div>
+    </ng-template>
+</p-dialog>

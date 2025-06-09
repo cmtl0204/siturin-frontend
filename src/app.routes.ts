@@ -1,23 +1,34 @@
 import { Routes } from '@angular/router';
-import { AppLayout } from './app/layout/component/app.layout';
-import { Dashboard } from './app/pages/dashboard/dashboard';
-import { Documentation } from './app/pages/documentation/documentation';
-import { Landing } from './app/pages/landing/landing';
-import { Notfound } from './app/pages/notfound/notfound';
+import { MY_ROUTES } from '@routes';
+import { AppLayoutMain } from '@layout/component/app.layout-main';
+import { AppLayoutBlank } from '@layout/component/app.layout-blank';
+import { AppLayoutAuth } from '@layout/component/app.layout-auth';
+import { tokenGuard } from './app/guards/token.guard';
 
 export const appRoutes: Routes = [
     {
-        path: '',
-        component: AppLayout,
+        path: 'main',
+        component: AppLayoutMain,
+        canActivate: [tokenGuard],
         children: [
-            { path: '', component: Dashboard },
-            { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
-            { path: 'documentation', component: Documentation },
-            { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
+            { path: MY_ROUTES.dashboards.base, loadChildren: () => import('./app/pages/dashboards/dashboard.routes') },
+            { path: MY_ROUTES.corePages.base, loadChildren: () => import('./app/pages/core/core.routes') },
         ]
     },
-    { path: 'landing', component: Landing },
-    { path: 'notfound', component: Notfound },
-    { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
-    { path: '**', redirectTo: '/notfound' }
+
+    {
+        path: MY_ROUTES.errorPages.base,
+        component: AppLayoutBlank,
+        children: [{ path: '', loadChildren: () => import('./app/layout/errors/errors.routes') }]
+    },
+
+    {
+        path: MY_ROUTES.authPages.base,
+        component: AppLayoutAuth,
+        children: [{ path: '', loadChildren: () => import('./app/pages/auth/auth.routes') }]
+    },
+
+    { path: '', redirectTo: '/main/dashboards', pathMatch: 'full' },
+
+    { path: '**', redirectTo: MY_ROUTES.errorPages.notFound.absolute }
 ];

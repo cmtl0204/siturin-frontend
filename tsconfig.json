@@ -17,6 +17,44 @@
         "importHelpers": true,
         "target": "ES2022",
         "module": "ES2022",
+        "paths": {
+            "@interfaces": [
+                "./src/app/interfaces"
+            ],
+            "@routes": [
+                "./src/my-routes"
+            ],
+            "@errorRoutes": [
+                "./src/app/layout/errors/*"
+            ],
+            "@assets/*": [
+                "./src/assets/*"
+            ],
+            "@env/*": [
+                "./src/environments/*"
+            ],
+            "@guards": [
+                "./src/app/guards"
+            ],
+            "@layout/*": [
+                "./src/app/layout/*"
+            ],
+            "@modules/*": [
+                "./src/app/pages/*"
+            ],
+            "@shared/*": [
+                "./src/app/shared/*"
+            ],
+            "@utils/*": [
+                "./src/app/utils/*"
+            ],
+            "@servicesApp/*": [
+                "./src/app/services/app/*"
+            ],
+            "@servicesHttp/*": [
+                "./src/app/services/http/*"
+            ],
+        }
     },
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,
