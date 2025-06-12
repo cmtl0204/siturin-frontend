@@ -1,0 +1,69 @@
+<p-table
+    [value]="items"
+    [columns]="cols"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [lazy]="true">
+    <ng-template #caption>
+        <p-fluid>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <div class="md:col-span-6 flex flex-col gap-2">
+                    <span class="text-xl font-bold">{{title}}</span>
+                </div>
+
+                <div class="md:col-span-6 flex flex-col gap-2">
+                    <p-iconfield>
+                        <p-inputicon>
+                            <i [class]="PrimeIcons.SEARCH"></i>
+                        </p-inputicon>
+
+                        <input pInputText [formControl]="searchControl"
+                               placeholder="Buscar..." />
+                    </p-iconfield>
+                </div>
+            </div>
+        </p-fluid>
+    </ng-template>
+
+    <ng-template #header let-columns>
+        <tr>
+            @for (col of columns; track col) {
+                <th>
+                    {{ col.header }}
+                </th>
+            }
+            <th>
+                <p-button pTooltip="Crear" [icon]="PrimeIcons.PLUS" severity="success" (onClick)="create()" />
+            </th>
+        </tr>
+    </ng-template>
+
+    <ng-template #body let-item>
+        <tr>
+            <td>{{ item.code }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.executorUndersecretary }}</td>
+            <td>{{ item.term }}</td>
+            <td>
+                <app-button-action
+                    [buttonActions]="buttonActions"
+                    [enabled]="isButtonActionsEnabled"
+                    (isHide)="isButtonActionsEnabled=$event"
+                    (click)="selectItem(item)">
+                </app-button-action>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template #emptymessage>
+        <tr>
+            <td colspan="6">
+                No existen registros
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-paginator
+    (onPageChange)="onPageChange($event)"
+    [rows]="paginatorInterface.limit"
+    [totalRecords]="paginatorInterface.totalItems" />

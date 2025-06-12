@@ -1,0 +1,47 @@
+<p-fluid>
+    <form
+        [formGroup]="form"
+        class="card flex flex-col gap-6 w-full">
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <h2>Guías de Turismo</h2>
+
+                <p-message severity="info">
+                    <div>
+                        <b>Importante:</b>
+                        <p class="mt-4">Registrar Guía de Turismo contratado por el establecimiento.</p>
+                    </div>
+                </p-message>
+            </div>
+
+            <!-- hasTouristGuide -->
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <label
+                    appLabel
+                    for="hasTouristGuide"
+                    [required]="hasTouristGuideField"
+                    label="Declaro que el establecimiento, al momento del envío de la solicitud, ha contratado Guías de Turismo">
+                </label>
+
+                <p-toggleswitch id="hasTouristGuide" formControlName="hasTouristGuide" />
+
+                <p-message
+                    appErrorMessage
+                    [errors]="hasTouristGuideField.errors"
+                    [touched]="hasTouristGuideField.touched"
+                    [dirty]="hasTouristGuideField.dirty" />
+            </div>
+        </div>
+    </form>
+
+    @if (hasTouristGuideField.value) {
+        <app-list
+            [items]="items"
+            [cols]="cols"
+            title="Listado de Guías"
+            [paginator]="paginator"
+            (onSelect)="buildButtonActions($event)"
+        ></app-list>
+    }
+</p-fluid>

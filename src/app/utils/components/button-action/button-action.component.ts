@@ -19,6 +19,7 @@ export class ButtonActionComponent {
     @Input() enabled: boolean = false;
     @Input() buttonActions: MenuItem[] = [];
     @Output() isHide: EventEmitter<boolean> = new EventEmitter<boolean>(false);
+    protected readonly PrimeIcons = PrimeIcons;
     protected readonly LabelButtonActionEnum = LabelButtonActionEnum;
     protected currentYear: string;
 
@@ -29,6 +30,4 @@ export class ButtonActionComponent {
     close(): void {
         this.isHide.emit(false);
     }
-
-    protected readonly PrimeIcons = PrimeIcons;
 }

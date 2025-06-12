@@ -39,12 +39,9 @@ export class AppMenu implements OnInit {
         console.log('menu');
         this.model = [
             {
-                label: 'Home',
-                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
-            },
-            {
                 label: 'MINTUR',
                 items: [
+                    { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
                     ...this.loadMenu,
                     {
                         label: this.authService.auth.username,
@@ -52,7 +49,7 @@ export class AppMenu implements OnInit {
                         routerLink: [MY_ROUTES.corePages.dac.program.list.absolute]
                     }
                 ]
-            }
+            },
         ];
     }
 

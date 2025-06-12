@@ -5,10 +5,11 @@ import { Button } from 'primeng/button';
 import { PrimeIcons } from 'primeng/api';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CustomMessageService } from '@utils/services';
+import { TouristGuideComponent } from '@modules/core/shared';
 
 @Component({
     selector: 'app-registration',
-    imports: [PhysicalSpaceComponent, AccreditedStaffLanguageComponent, Button],
+    imports: [PhysicalSpaceComponent, AccreditedStaffLanguageComponent, Button, TouristGuideComponent],
     templateUrl: './registration.component.html',
     styleUrl: './registration.component.scss'
 })
@@ -33,19 +34,14 @@ export class RegistrationComponent {
 
     onSubmit() {
         if (!this.checkFormErrors()) {
-         this.saveProcess();
+            this.saveProcess();
         }
     }
 
-    saveProcess(){
-
-    }
+    saveProcess() {}
 
     checkFormErrors() {
-        const errors: string[] = [
-            ...this.accreditedStaffLanguageComponent.toArray().flatMap(c => c.getFormErrors()),
-            ...this.physicalSpaceComponent.toArray().flatMap(c => c.getFormErrors())
-        ]
+        const errors: string[] = [...this.accreditedStaffLanguageComponent.toArray().flatMap((c) => c.getFormErrors()), ...this.physicalSpaceComponent.toArray().flatMap((c) => c.getFormErrors())];
 
         if (errors.length > 0) {
             this._customMessageService.showFormErrors(errors);

@@ -49,7 +49,9 @@ import { MY_ROUTES } from '@routes';
 
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
-                    <p-button type="button" [text]="true" [raised]="true" [label]="_authService.auth.username" [icon]="PrimeIcons.USER" />
+                    <p-button type="button" [text]="true" [label]="authService.auth.username" [icon]="PrimeIcons.USER" />
+
+                    <p-button type="button" [text]="true" severity="warn" [label]="authService.role.name" />
 
                     <p-button (onClick)="signOut()" type="button" [text]="true" [raised]="true" severity="danger" label="Cerrar Sesión" [icon]="PrimeIcons.POWER_OFF" />
                 </div>
@@ -58,7 +60,7 @@ import { MY_ROUTES } from '@routes';
     </div>`
 })
 export class AppTopbar {
-    protected readonly _authService = inject(AuthService);
+    protected readonly authService = inject(AuthService);
     private readonly _router = inject(Router);
     items!: MenuItem[];
 
@@ -72,6 +74,6 @@ export class AppTopbar {
     protected readonly PrimeIcons = PrimeIcons;
 
     signOut() {
-        this._authService.removeLogin();
+        this.authService.removeLogin();
     }
 }
