@@ -42,6 +42,72 @@
             title="Listado de Guías"
             [paginator]="paginator"
             (onSelect)="buildButtonActions($event)"
+            (onCreate)="create()"
         ></app-list>
     }
 </p-fluid>
+
+<p-dialog [(visible)]="isVisibleModal"
+          [modal]="true"
+          [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+          [style]="{ width: '25vw' }"
+          [draggable]="false"
+          (onHide)="closeModal()"
+          [resizable]="false">
+    <ng-template #header>
+        <div class="inline-flex items-center justify-center gap-2">
+            <span class="font-bold whitespace-nowrap">
+                Agregar Guía de Turismo
+            </span>
+        </div>
+    </ng-template>
+
+    <p-fluid>
+        <form [formGroup]="form"
+              class="card flex flex-col gap-2 w-full">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <!-- identification -->
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <label
+                        appLabel
+                        for="identification"
+                        [required]="identificationField"
+                        label="Número de cédula">
+                    </label>
+
+                    <input pInputText id="identification" formControlName="identification">
+
+                    <p-message
+                        appErrorMessage
+                        [errors]="identificationField.errors"
+                        [touched]="identificationField.touched"
+                        [dirty]="identificationField.dirty" />
+                </div>
+
+                <!-- name -->
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <label
+                        appLabel
+                        for="name"
+                        label="Nombres"
+                        [required]="nameField">
+                    </label>
+
+                    <input pInputText id="name" formControlName="name">
+
+                    <p-message
+                        appErrorMessage
+                        [errors]="nameField.errors"
+                        [touched]="nameField.touched"
+                        [dirty]="nameField.dirty" />
+                </div>
+
+                <!-- actions -->
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <p-button label="Agregar" [icon]="PrimeIcons.SAVE" (onClick)="addTouristGuide()"/>
+                </div>
+            </div>
+        </form>
+    </p-fluid>
+
+</p-dialog>

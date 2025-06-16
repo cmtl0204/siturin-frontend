@@ -7,7 +7,7 @@
         <p-fluid>
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
                 <div class="md:col-span-6 flex flex-col gap-2">
-                    <span class="text-xl font-bold">{{title}}</span>
+                    <span class="text-xl font-bold">{{ title }}</span>
                 </div>
 
                 <div class="md:col-span-6 flex flex-col gap-2">
@@ -37,12 +37,24 @@
         </tr>
     </ng-template>
 
-    <ng-template #body let-item>
+    <ng-template #body let-item let-columns="columns">
         <tr>
-            <td>{{ item.code }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.executorUndersecretary }}</td>
-            <td>{{ item.term }}</td>
+            @for (col of columns; track col) {
+                @switch (col?.type) {
+                    @case ('object') {
+                        <td>{{ item[col?.field][col?.objectName] }}</td>
+                    }
+
+                    @case ('date') {
+                        <td>{{ item[col.field] | date }}</td>
+                    }
+
+                    @default {
+                        <td>{{ item[col.field] }}</td>
+                    }
+                }
+            }
+
             <td>
                 <app-button-action
                     [buttonActions]="buttonActions"

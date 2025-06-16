@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Fluid } from 'primeng/fluid';
 import { MenuItem, PrimeIcons } from 'primeng/api';
@@ -18,10 +18,12 @@ import { Tooltip } from 'primeng/tooltip';
 import { ButtonActionComponent } from '@utils/components/button-action/button-action.component';
 import { ListComponent } from '@utils/components/list/list.component';
 import { viewButtonAction } from '@utils/components/button-action/consts';
+import { Dialog } from 'primeng/dialog';
+import { InputText } from 'primeng/inputtext';
 
 @Component({
     selector: 'app-tourist-guide',
-    imports: [Fluid, ReactiveFormsModule, LabelDirective, Select, Message, ErrorMessageDirective, ToggleSwitch, TableModule, IconField, InputIcon, Button, Tooltip, ButtonActionComponent, ListComponent],
+    imports: [Fluid, ReactiveFormsModule, LabelDirective, Select, Message, ErrorMessageDirective, ToggleSwitch, TableModule, IconField, InputIcon, Button, Tooltip, ButtonActionComponent, ListComponent, Dialog, InputText],
     templateUrl: './tourist-guide.component.html',
     styleUrl: './tourist-guide.component.scss'
 })
@@ -38,17 +40,18 @@ export class TouristGuideComponent implements OnInit {
     protected buttonActions: MenuItem[] = [];
     protected paginator!: PaginatorInterface;
 
+    protected isVisibleModal = false;
+
     protected items: CatalogueInterface[] = [
-        { id: '1', name: 'Casa' },
-        {
-            id: '2',
-            name: 'Edificio'
-        }
+        { id: '1', name: 'Casa', parent: { name: 'Juan' }, createdAt: new Date('2025-01-02') },
+        { id: '2', name: 'Edificio', parent: { name: 'Juan' }, createdAt: new Date('2025-01-02') }
     ];
 
     protected cols: ColInterface[] = [
-        { header: '1', field: 'ID' },
-        { header: '2', field: 'Nombre' }
+        { header: 'ID', field: 'id' },
+        { header: 'Nombre', field: 'name' },
+        { header: 'Padre', field: 'parent', type: 'object', objectName: 'name' },
+        { header: 'Fecha', field: 'createdAt', type: 'date' }
     ];
 
     constructor() {
@@ -62,9 +65,10 @@ export class TouristGuideComponent implements OnInit {
     buildForm() {
         this.form = this._formBuilder.group({
             hasTouristGuide: [false, [Validators.required]],
-            permanentPhysicalSpace: [null, [Validators.required]],
-            isProtectedArea: [false, [Validators.required]],
-            hasProtectedAreaContract: [false, [Validators.required]]
+            identification: [null, [Validators.required]],
+            name: [null, [Validators.required]],
+            isGuide: [false, [Validators.required]],
+            licenses: [[]]
         });
 
         this.watchFormChanges();
@@ -85,19 +89,16 @@ export class TouristGuideComponent implements OnInit {
                 command: () => {
                     // if (this.selectedItem?.id) this.redirectViewProject(this.selectedItem.id);
                 }
-            },
+            }
         ];
     }
 
     getFormErrors(): string[] {
         const errors: string[] = [];
 
-        if (this.permanentPhysicalSpaceField.invalid) errors.push('Espacio físico Permanente');
-        if (this.isProtectedAreaField.invalid)
-            errors.push(
-                '¿Realiza actividades autorizadas por la Autoridad Ambiental Nacional en el Subsistema Estatal del Sistema de Áreas Naturales Protegidas, de conformidad con lo establecido en los artículos 8 y 9 de la Ley de Turismo dentro del Subsistema Estatal del Sistema Nacional de Áreas Protegidas?'
-            );
-        if (this.hasProtectedAreaContractField.invalid) errors.push('Al momento de la inspección se presentará la licencia única de funcionamiento');
+        if (this.identificationField.invalid) errors.push('Número de cédula');
+        if (this.nameField.invalid) errors.push('Nombres');
+        if (this.isGuideField.invalid) errors.push('Al momento de la inspección se presentará la licencia única de funcionamiento');
 
         if (errors.length > 0) {
             this.form.markAllAsTouched();
@@ -107,21 +108,58 @@ export class TouristGuideComponent implements OnInit {
         return [];
     }
 
+    validateForm(){
+        const errors: string[] = [];
+
+        if (this.identificationField.invalid) errors.push('Número de cédula');
+        if (this.nameField.invalid) errors.push('Nombres');
+
+        if (errors.length > 0) {
+            this.form.markAllAsTouched();
+            this._customMessageService.showFormErrors(errors);
+            return false;
+        }
+
+        return true;
+    }
+
     find() {}
+
+    create() {
+        this.isVisibleModal = true;
+    }
+
+    closeModal() {
+        this.isVisibleModal = false;
+        this.identificationField.reset();
+        this.nameField.reset();
+        this.isGuideField.reset();
+    }
+
+    addTouristGuide() {
+        if (this.validateForm()) {
+            this.items.push(this.form.value);
+            this.closeModal();
+        }
+    }
 
     get hasTouristGuideField(): AbstractControl {
         return this.form.controls['hasTouristGuide'];
     }
 
-    get permanentPhysicalSpaceField(): AbstractControl {
-        return this.form.controls['permanentPhysicalSpace'];
+    get identificationField(): AbstractControl {
+        return this.form.controls['identification'];
     }
 
-    get isProtectedAreaField(): AbstractControl {
-        return this.form.controls['isProtectedArea'];
+    get nameField(): AbstractControl {
+        return this.form.controls['name'];
     }
 
-    get hasProtectedAreaContractField(): AbstractControl {
-        return this.form.controls['hasProtectedAreaContract'];
+    get isGuideField(): AbstractControl {
+        return this.form.controls['isGuide'];
+    }
+
+    get licensesField(): FormArray {
+        return this.form.controls['licenses'] as FormArray;
     }
 }
