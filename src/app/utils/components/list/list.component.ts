@@ -3,7 +3,7 @@ import { LabelButtonActionEnum } from '@utils/enums';
 import { MenuItem, PrimeIcons } from 'primeng/api';
 import { format } from 'date-fns';
 import { Button } from 'primeng/button';
-import { PaginatorInterface } from '@utils/interfaces';
+import { PaginationInterface } from '@utils/interfaces';
 import { ButtonActionComponent } from '@utils/components/button-action/button-action.component';
 import { Fluid } from 'primeng/fluid';
 import { IconField } from 'primeng/iconfield';
@@ -31,22 +31,21 @@ export class ListComponent {
     @Input() enabled: boolean = false;
     @Input() title!: string;
     @Input() isButtonActionsEnabled = false;
-    @Input() paginator!: PaginatorInterface;
+    @Input() pagination!: PaginationInterface;
     @Output() onCreate: EventEmitter<any> = new EventEmitter<any>();
     @Output() onEdit: EventEmitter<any> = new EventEmitter<any>();
     @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
     @Output() onSearch: EventEmitter<string> = new EventEmitter<string>();
-    @Output() onPaginator: EventEmitter<PaginatorState> = new EventEmitter<PaginatorState>();
+    @Output() onPagination: EventEmitter<number> = new EventEmitter<number>();
     @Output() onSelect: EventEmitter<any> = new EventEmitter<any>();
     protected readonly PrimeIcons = PrimeIcons;
     protected readonly coreService = inject(CoreService);
-    protected paginatorInterface!: PaginatorInterface;
     protected selectedItem = new EventEmitter<any>();
     protected searchControl: FormControl = new FormControl(null);
     protected currentYear: string;
 
     constructor() {
-        this.paginatorInterface = this.coreService.paginator;
+        this.pagination = this.coreService.pagination;
 
         this.currentYear = format(new Date(), 'yyyy');
 
@@ -82,6 +81,6 @@ export class ListComponent {
     }
 
     onPageChange(event: PaginatorState) {
-        this.onPaginator.emit(event);
+        if (event?.page || event.page === 0) this.onPagination.emit(event.page + 1);
     }
 }

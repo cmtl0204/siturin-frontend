@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { LabelButtonActionEnum } from '@utils/enums';
 import { MenuItem, PrimeIcons } from 'primeng/api';
 import { format } from 'date-fns';
 import { Drawer } from 'primeng/drawer';
 import { Ripple } from 'primeng/ripple';
-import { JsonPipe, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Button } from 'primeng/button';
 import { PanelMenu } from 'primeng/panelmenu';
 
@@ -12,7 +12,7 @@ import { PanelMenu } from 'primeng/panelmenu';
     selector: 'app-button-action',
     templateUrl: './button-action.component.html',
     styleUrls: ['./button-action.component.scss'],
-    imports: [Drawer, Ripple, NgClass, Button, JsonPipe, PanelMenu],
+    imports: [Drawer, Ripple, NgClass, Button, PanelMenu],
     standalone: true
 })
 export class ButtonActionComponent {

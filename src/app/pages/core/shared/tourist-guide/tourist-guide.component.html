@@ -34,16 +34,20 @@
             </div>
         </div>
     </form>
+</p-fluid>
 
+<p-fluid>
     @if (hasTouristGuideField.value) {
         <app-list
             [items]="items"
             [cols]="cols"
+            [buttonActions]="buttonActions"
             title="Listado de Guías"
-            [paginator]="paginator"
+            [pagination]="pagination"
             (onSelect)="buildButtonActions($event)"
             (onCreate)="create()"
-        ></app-list>
+            (onPagination)="findTouristGuides($event)"
+        />
     }
 </p-fluid>
 
@@ -63,7 +67,7 @@
     </ng-template>
 
     <p-fluid>
-        <form [formGroup]="form"
+        <form [formGroup]="form" (ngSubmit)="onSubmit()"
               class="card flex flex-col gap-2 w-full">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
                 <!-- identification -->
@@ -104,7 +108,7 @@
 
                 <!-- actions -->
                 <div class="md:col-span-12 flex flex-col gap-2">
-                    <p-button label="Agregar" [icon]="PrimeIcons.SAVE" (onClick)="addTouristGuide()"/>
+                    <p-button type="submit" label="Guardar" [icon]="PrimeIcons.SAVE" />
                 </div>
             </div>
         </form>

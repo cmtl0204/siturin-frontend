@@ -5,7 +5,7 @@ import { provideRouter, withEnabledBlockingInitialNavigation, withInMemoryScroll
 import Theme from '@primeng/themes/material';
 import { providePrimeNG } from 'primeng/config';
 import { appRoutes } from './app.routes';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { HttpInterceptorProviders } from './app/interceptors';
 
 export const appConfig: ApplicationConfig = {
@@ -23,6 +23,7 @@ export const appConfig: ApplicationConfig = {
         provideAnimationsAsync(),
         providePrimeNG({ theme: { preset: Theme, options: { darkModeSelector: '.app-dark' } } }),
 
-        MessageService
+        MessageService,
+        ConfirmationService
     ]
 };

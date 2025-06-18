@@ -1,29 +1,26 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Fluid } from 'primeng/fluid';
-import { MenuItem, PrimeIcons } from 'primeng/api';
-import { Select } from 'primeng/select';
+import { ConfirmationService, MenuItem, PrimeIcons } from 'primeng/api';
 import { ToggleSwitch } from 'primeng/toggleswitch';
 import { Message } from 'primeng/message';
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { LabelDirective } from '@utils/directives/label.directive';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
-import { CatalogueInterface, ColInterface, PaginatorInterface } from '@utils/interfaces';
+import { ColInterface, PaginationInterface } from '@utils/interfaces';
 import { TableModule } from 'primeng/table';
-import { IconField } from 'primeng/iconfield';
-import { InputIcon } from 'primeng/inputicon';
 import { Button } from 'primeng/button';
-import { Tooltip } from 'primeng/tooltip';
-import { ButtonActionComponent } from '@utils/components/button-action/button-action.component';
 import { ListComponent } from '@utils/components/list/list.component';
-import { viewButtonAction } from '@utils/components/button-action/consts';
+import { deleteButtonAction, editButtonAction, viewButtonAction } from '@utils/components/button-action/consts';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
+import { TouristGuideInterface } from '@modules/core/interfaces';
+import { TouristGuideHttpService } from '@modules/core/shared/adventure-tourism-modality/tourist-guide-http.service';
 
 @Component({
     selector: 'app-tourist-guide',
-    imports: [Fluid, ReactiveFormsModule, LabelDirective, Select, Message, ErrorMessageDirective, ToggleSwitch, TableModule, IconField, InputIcon, Button, Tooltip, ButtonActionComponent, ListComponent, Dialog, InputText],
+    imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, ToggleSwitch, TableModule, Button, ListComponent, Dialog, InputText],
     templateUrl: './tourist-guide.component.html',
     styleUrl: './tourist-guide.component.scss'
 })
@@ -32,43 +29,38 @@ export class TouristGuideComponent implements OnInit {
     @Output() dataOut = new EventEmitter<FormGroup>();
     @Output() fieldErrorsOut = new EventEmitter<string[]>();
 
-    private readonly _formBuilder = inject(FormBuilder);
-    protected readonly _customMessageService = inject(CustomMessageService);
+    private readonly formBuilder = inject(FormBuilder);
+    protected readonly customMessageService = inject(CustomMessageService);
+    protected readonly touristGuideHttpService = inject(TouristGuideHttpService);
+    private confirmationService = inject(ConfirmationService);
     protected readonly PrimeIcons = PrimeIcons;
 
     protected form!: FormGroup;
     protected buttonActions: MenuItem[] = [];
-    protected paginator!: PaginatorInterface;
+    protected pagination!: PaginationInterface;
 
     protected isVisibleModal = false;
 
-    protected items: CatalogueInterface[] = [
-        { id: '1', name: 'Casa', parent: { name: 'Juan' }, createdAt: new Date('2025-01-02') },
-        { id: '2', name: 'Edificio', parent: { name: 'Juan' }, createdAt: new Date('2025-01-02') }
-    ];
-
-    protected cols: ColInterface[] = [
-        { header: 'ID', field: 'id' },
-        { header: 'Nombre', field: 'name' },
-        { header: 'Padre', field: 'parent', type: 'object', objectName: 'name' },
-        { header: 'Fecha', field: 'createdAt', type: 'date' }
-    ];
+    protected cols: ColInterface[] = [];
+    protected items: TouristGuideInterface[] = [];
 
     constructor() {
         this.buildForm();
+        this.buildColumns();
     }
 
     ngOnInit() {
-        this.find();
+        this.findTouristGuides();
     }
 
     buildForm() {
-        this.form = this._formBuilder.group({
+        this.form = this.formBuilder.group({
+            id: [null],
             hasTouristGuide: [false, [Validators.required]],
             identification: [null, [Validators.required]],
             name: [null, [Validators.required]],
             isGuide: [false, [Validators.required]],
-            licenses: [[]]
+            touristLicences: [[]]
         });
 
         this.watchFormChanges();
@@ -80,25 +72,49 @@ export class TouristGuideComponent implements OnInit {
                 this.dataOut.emit(this.form);
             }
         });
+
+        this.hasTouristGuideField.valueChanges.subscribe((value) => {
+            this.touristLicensesField.setValidators(Validators.required);
+            this.touristLicensesField.updateValueAndValidity();
+        });
     }
 
-    buildButtonActions(item: any) {
+    buildButtonActions(item: TouristGuideInterface) {
         this.buttonActions = [
             {
                 ...viewButtonAction,
                 command: () => {
-                    // if (this.selectedItem?.id) this.redirectViewProject(this.selectedItem.id);
+                    if (item?.id) this.view();
+                }
+            },
+            {
+                ...editButtonAction,
+                command: () => {
+                    if (item?.id) this.edit(item.id);
+                }
+            },
+            {
+                ...deleteButtonAction,
+                command: () => {
+                    if (item?.id) this.delete(item.id);
                 }
             }
+        ];
+    }
+
+    buildColumns() {
+        this.cols = [
+            { header: 'Número de cédula', field: 'identification' },
+            { header: 'Nombre', field: 'name' }
         ];
     }
 
     getFormErrors(): string[] {
         const errors: string[] = [];
 
-        if (this.identificationField.invalid) errors.push('Número de cédula');
-        if (this.nameField.invalid) errors.push('Nombres');
-        if (this.isGuideField.invalid) errors.push('Al momento de la inspección se presentará la licencia única de funcionamiento');
+        console.log(this.touristLicensesField);
+
+        if (this.hasTouristGuideField.value && this.touristLicensesField.invalid) errors.push('Guías de Turismo');
 
         if (errors.length > 0) {
             this.form.markAllAsTouched();
@@ -108,7 +124,7 @@ export class TouristGuideComponent implements OnInit {
         return [];
     }
 
-    validateForm(){
+    validateForm() {
         const errors: string[] = [];
 
         if (this.identificationField.invalid) errors.push('Número de cédula');
@@ -116,16 +132,30 @@ export class TouristGuideComponent implements OnInit {
 
         if (errors.length > 0) {
             this.form.markAllAsTouched();
-            this._customMessageService.showFormErrors(errors);
+            this.customMessageService.showFormErrors(errors);
             return false;
         }
 
         return true;
     }
 
-    find() {}
-
     create() {
+        this.idField.disable();
+        this.isVisibleModal = true;
+    }
+
+    edit(id: string) {
+        this.idField.enable();
+        if (id) this.findTouristGuide(id);
+    }
+
+    delete(id: string) {
+        this.isVisibleModal = false;
+
+        if (id) this.deleteTouristGuide(id);
+    }
+
+    view() {
         this.isVisibleModal = true;
     }
 
@@ -136,11 +166,92 @@ export class TouristGuideComponent implements OnInit {
         this.isGuideField.reset();
     }
 
-    addTouristGuide() {
+    onSubmit() {
+        this.isGuideField.setValue(true);
+
         if (this.validateForm()) {
-            this.items.push(this.form.value);
-            this.closeModal();
+            if (this.idField.enabled) {
+                this.updateTouristGuide();
+            } else {
+                this.createTouristGuide();
+            }
         }
+    }
+
+    createTouristGuide() {
+        this.isGuideField.setValue(true);
+
+        if (this.validateForm()) {
+            this.touristGuideHttpService.create(this.form.value).subscribe({
+                next: (data) => {
+                    this.findTouristGuides();
+                    this.closeModal();
+                }
+            });
+        }
+    }
+
+    updateTouristGuide() {
+        this.isGuideField.setValue(true);
+
+        if (this.validateForm()) {
+            this.touristGuideHttpService.update(this.idField.value, this.form.value).subscribe({
+                next: (data) => {
+                    this.findTouristGuides();
+                    this.closeModal();
+                }
+            });
+        }
+    }
+
+    deleteTouristGuide(id: string) {
+        this.isVisibleModal = false;
+        console.log(id);
+
+        this.confirmationService.confirm({
+            message: '¿Está seguro de eliminar?',
+            header: 'Eliminar',
+            icon: PrimeIcons.TRASH,
+            rejectButtonStyleClass: 'p-button-text',
+            rejectButtonProps: {
+                label: 'Cancelar',
+                severity: 'danger',
+                text: true
+            },
+            acceptButtonProps: {
+                label: 'Sí, Eliminar'
+            },
+            accept: () => {
+                this.touristGuideHttpService.delete(id).subscribe({
+                    next: (data) => {
+                        this.findTouristGuides();
+                    }
+                });
+            },
+            key: 'confirmdialog'
+        });
+    }
+
+    findTouristGuides(page = 1) {
+        this.touristGuideHttpService.findAll(page).subscribe({
+            next: (response) => {
+                this.items = response.data;
+                this.pagination = response.pagination!;
+            }
+        });
+    }
+
+    findTouristGuide(id: string) {
+        this.touristGuideHttpService.findOne(id).subscribe({
+            next: (data: TouristGuideInterface) => {
+                this.form.patchValue(data);
+                this.isVisibleModal = true;
+            }
+        });
+    }
+
+    get idField(): AbstractControl {
+        return this.form.controls['id'];
     }
 
     get hasTouristGuideField(): AbstractControl {
@@ -159,7 +270,7 @@ export class TouristGuideComponent implements OnInit {
         return this.form.controls['isGuide'];
     }
 
-    get licensesField(): FormArray {
-        return this.form.controls['licenses'] as FormArray;
+    get touristLicensesField(): FormArray {
+        return this.form.controls['touristLicences'] as FormArray;
     }
 }

@@ -1,4 +1,4 @@
-export interface PaginatorInterface {
+export interface PaginationInterface {
   page: number;
   firstItem?: number;
   lastPage?: number;

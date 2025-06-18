@@ -18,6 +18,7 @@ export class RegistrationComponent {
 
     @ViewChildren(AccreditedStaffLanguageComponent) private accreditedStaffLanguageComponent!: QueryList<AccreditedStaffLanguageComponent>;
     @ViewChildren(PhysicalSpaceComponent) private physicalSpaceComponent!: QueryList<PhysicalSpaceComponent>;
+    @ViewChildren(TouristGuideComponent) private touristGuideComponent!: QueryList<TouristGuideComponent>;
 
     private formBuilder = inject(FormBuilder);
     protected mainForm!: FormGroup;
@@ -41,7 +42,11 @@ export class RegistrationComponent {
     saveProcess() {}
 
     checkFormErrors() {
-        const errors: string[] = [...this.accreditedStaffLanguageComponent.toArray().flatMap((c) => c.getFormErrors()), ...this.physicalSpaceComponent.toArray().flatMap((c) => c.getFormErrors())];
+        const errors: string[] = [
+            ...this.accreditedStaffLanguageComponent.toArray().flatMap((c) => c.getFormErrors()),
+            ...this.physicalSpaceComponent.toArray().flatMap((c) => c.getFormErrors()),
+            ...this.touristGuideComponent.toArray().flatMap((c) => c.getFormErrors())
+        ];
 
         if (errors.length > 0) {
             this._customMessageService.showFormErrors(errors);

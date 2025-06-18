@@ -1,8 +1,8 @@
-import { PaginatorInterface } from '@modules/auth/interfaces/paginator.interface';
+import { PaginationInterface } from '@modules/auth/interfaces/paginator.interface';
 
 export interface HttpResponseInterface {
   data: any;
-  pagination?: PaginatorInterface;
+  pagination?: PaginationInterface;
   error?: string;
   message: string;
   detail: string;
@@ -12,7 +12,7 @@ export interface HttpResponseInterface {
 }
 
 export interface ServerResponsePaginator extends HttpResponseInterface {
-  meta: PaginatorInterface;
+  meta: PaginationInterface;
   links?: Links;
 }
 

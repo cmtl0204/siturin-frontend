@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { PaginatorInterface } from '@utils/interfaces';
+import { PaginationInterface } from '@utils/interfaces';
 
 @Injectable({
     providedIn: 'root'
@@ -43,7 +43,7 @@ export class CoreService {
         this._isProcessing.set(false);
     }
 
-    get paginator(): PaginatorInterface {
+    get pagination(): PaginationInterface {
         return { page: 0, limit: 10, totalItems: 0, firstItem: 1, lastPage: 1, lastItem: 1 };
     }
 

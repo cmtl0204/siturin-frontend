@@ -7,11 +7,12 @@ import { CustomMessageService } from '@utils/services/custom-message.service';
 import { MessageProcessingComponent } from '@utils/components/message-processing/message-processing.component';
 import { AppConfigurator } from '@layout/component/app.configurator';
 import { FormsModule } from '@angular/forms';
+import { ConfirmDialog } from 'primeng/confirmdialog';
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [RouterModule, ToastModule, MessageModalComponent, MessageProcessingComponent, AppConfigurator, FormsModule],
+    imports: [RouterModule, ToastModule, MessageModalComponent, MessageProcessingComponent, AppConfigurator, FormsModule, ConfirmDialog],
     template: `
         @if (coreService.processing()) {
             <app-message-processing />
@@ -22,6 +23,8 @@ import { FormsModule } from '@angular/forms';
         }
 
         <p-toast position="top-right" [life]="customMessageService.modalLife" />
+
+        <p-confirmdialog key="confirmdialog"></p-confirmdialog>
 
         <app-configurator />
 
