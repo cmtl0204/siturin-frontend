@@ -22,11 +22,12 @@ export class PhysicalSpaceComponent implements OnInit {
     @Output() dataOut = new EventEmitter<FormGroup>();
     @Output() fieldErrorsOut = new EventEmitter<string[]>();
 
-    private readonly _formBuilder = inject(FormBuilder);
-    protected readonly _customMessageService = inject(CustomMessageService);
     protected readonly PrimeIcons = PrimeIcons;
+    private readonly formBuilder = inject(FormBuilder);
+    protected readonly customMessageService = inject(CustomMessageService);
 
     protected form!: FormGroup;
+
     protected localTypes: CatalogueInterface[] = [
         { name: 'Option 1', code: 'Option 1' },
         { name: 'Option 2', code: 'Option 2' },
@@ -45,11 +46,11 @@ export class PhysicalSpaceComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.find();
+        this.loadData();
     }
 
     buildForm() {
-        this.form = this._formBuilder.group({
+        this.form = this.formBuilder.group({
             localType: [null, [Validators.required]],
             permanentPhysicalSpace: [null, [Validators.required]],
             isProtectedArea: [false, [Validators.required]],
@@ -71,11 +72,14 @@ export class PhysicalSpaceComponent implements OnInit {
         const errors: string[] = [];
 
         if (this.localTypeField.invalid) errors.push('Su local es');
+
         if (this.permanentPhysicalSpaceField.invalid) errors.push('Espacio físico Permanente');
+
         if (this.isProtectedAreaField.invalid)
             errors.push(
                 '¿Realiza actividades autorizadas por la Autoridad Ambiental Nacional en el Subsistema Estatal del Sistema de Áreas Naturales Protegidas, de conformidad con lo establecido en los artículos 8 y 9 de la Ley de Turismo dentro del Subsistema Estatal del Sistema Nacional de Áreas Protegidas?'
             );
+
         if (this.hasProtectedAreaContractField.invalid) errors.push('Al momento de la inspección se presentará la licencia única de funcionamiento');
 
         if (errors.length > 0) {
@@ -86,7 +90,7 @@ export class PhysicalSpaceComponent implements OnInit {
         return [];
     }
 
-    find() {}
+    loadData() {}
 
     get localTypeField(): AbstractControl {
         return this.form.controls['localType'];

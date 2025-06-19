@@ -32,7 +32,7 @@ export class AccreditedStaffLanguageComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.find();
+        this.loadData();
     }
 
     buildForm() {
@@ -65,7 +65,7 @@ export class AccreditedStaffLanguageComponent implements OnInit {
         return [];
     }
 
-    find() {}
+    loadData() {}
 
     get totalAccreditedStaffLanguageField(): AbstractControl {
         return this.form.controls['totalAccreditedStaffLanguage'];

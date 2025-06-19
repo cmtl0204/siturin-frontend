@@ -1,6 +1,6 @@
 import { Component, inject, QueryList, ViewChildren } from '@angular/core';
-import { PhysicalSpaceComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/agency/registration/physical-space/physical-space.component';
-import { AccreditedStaffLanguageComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/agency/registration/accredited-staff-language/accredited-staff-language.component';
+import { PhysicalSpaceComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/agency/shared/physical-space/physical-space.component';
+import { AccreditedStaffLanguageComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/agency/shared/accredited-staff-language/accredited-staff-language.component';
 import { Button } from 'primeng/button';
 import { PrimeIcons } from 'primeng/api';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -21,25 +21,31 @@ export class RegistrationComponent {
     @ViewChildren(TouristGuideComponent) private touristGuideComponent!: QueryList<TouristGuideComponent>;
 
     private formBuilder = inject(FormBuilder);
+
     protected mainForm!: FormGroup;
 
-    protected readonly _customMessageService = inject(CustomMessageService);
+    protected readonly customMessageService = inject(CustomMessageService);
 
     constructor() {
         this.mainForm = this.formBuilder.group({});
     }
 
     saveForm(childForm: FormGroup) {
+        console.log(childForm.value);
         this.mainForm.patchValue(childForm.value);
     }
 
     onSubmit() {
+        console.log(this.mainForm);
+
         if (!this.checkFormErrors()) {
             this.saveProcess();
         }
     }
 
-    saveProcess() {}
+    saveProcess() {
+        console.log(this.mainForm.value);
+    }
 
     checkFormErrors() {
         const errors: string[] = [
@@ -49,7 +55,7 @@ export class RegistrationComponent {
         ];
 
         if (errors.length > 0) {
-            this._customMessageService.showFormErrors(errors);
+            this.customMessageService.showFormErrors(errors);
             return false;
         }
 
