@@ -31,13 +31,16 @@ export class RegistrationComponent {
     }
 
     saveForm(childForm: FormGroup) {
-        console.log(childForm.value);
-        this.mainForm.patchValue(childForm.value);
+        Object.keys(childForm.controls).forEach(controlName => {
+            if (!this.mainForm.contains(controlName)) {
+                this.mainForm.addControl(controlName, this.formBuilder.control(childForm.get(controlName)?.value));
+            } else {
+                this.mainForm.get(controlName)?.patchValue(childForm.get(controlName)?.value);
+            }
+        });
     }
 
     onSubmit() {
-        console.log(this.mainForm);
-
         if (!this.checkFormErrors()) {
             this.saveProcess();
         }
