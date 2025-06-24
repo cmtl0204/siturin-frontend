@@ -197,6 +197,18 @@ export const MY_ROUTES = {
                 }
             }
         },
+      admin: {
+        base: 'admin',
+        absolute: '/main/core/admin',
+        roles: { 
+            base: 'roles',
+            absolute: '/main/core/admin/roles',
+            list: {
+                base: 'list',
+                absolute: '/main/core/admin/roles/list'
+            }
+        }
+    },
     },
     authPages: {
         base: 'auth',

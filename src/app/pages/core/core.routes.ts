@@ -21,5 +21,9 @@ export default [
     {
         path: MY_ROUTES.corePages.technician.base,
         loadChildren: () => import('@modules/core/roles/technician/technician.routes')
-    }
+    },
+    {
+        path: MY_ROUTES.corePages.admin.base,
+        loadChildren: () => import('@modules/core/admin/manager.routes')
+    }
 ] as Routes;
