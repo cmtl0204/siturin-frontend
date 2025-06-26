@@ -1,1 +1,58 @@
-<p>vivas works!</p>
+<form [formGroup]="formulario" (ngSubmit)="enviar()">
+  <div class="campo">
+    <label>Avatar (URL):</label>
+    <input type="text" formControlName="avatar" />
+  </div>
+
+  <div class="campo">
+    <label>Teléfono Celular:</label>
+    <input type="text" formControlName="cellPhone" />
+  </div>
+
+  <div class="campo">
+    <label>Correo Electrónico:</label>
+    <input type="email" formControlName="email" />
+  </div>
+
+  <div class="campo">
+    <label>Fecha de nacimiento:</label>
+    <input type="date" formControlName="birthdate" />
+  </div>
+
+  <div class="campo">
+    <label>Número de documento:</label>
+    <input type="text" formControlName="identification" />
+  </div>
+
+  <div class="campo">
+    <label>Apellidos:</label>
+    <input type="text" formControlName="lastname" />
+  </div>
+
+  <div class="campo">
+    <label>Contraseña:</label>
+    <input type="password" formControlName="password" />
+  </div>
+
+  <div class="campo">
+    <label>Correo Personal:</label>
+    <input type="email" formControlName="personalEmail" />
+  </div>
+
+  <div class="campo">
+    <label>Teléfono:</label>
+    <input type="text" formControlName="phone" />
+  </div>
+
+  <div class="campo">
+    <label>Nombres:</label>
+    <input type="text" formControlName="name" />
+  </div>
+
+  <div class="campo">
+    <label>Nombre de Usuario:</label>
+    <input type="text" formControlName="username" />
+  </div>
+
+  <button type="submit">Enviar</button>
+</form>
