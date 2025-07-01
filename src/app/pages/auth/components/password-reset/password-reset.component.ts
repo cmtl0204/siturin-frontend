@@ -98,7 +98,6 @@ export default class PasswordResetComponent {
 
         this._authHttpService.signUpExternal(this.form.value).subscribe({
             next: (response) => {
-                console.log(response);
                 this.form.reset();
                 this.outForm.emit(false);
             }

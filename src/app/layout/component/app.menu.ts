@@ -36,7 +36,6 @@ export class AppMenu implements OnInit {
     protected model: MenuItem[] = [];
 
     ngOnInit() {
-        console.log('menu');
         this.model = [
             {
                 label: 'MINTUR',
@@ -49,7 +48,7 @@ export class AppMenu implements OnInit {
                         routerLink: [MY_ROUTES.corePages.dac.program.list.absolute]
                     }
                 ]
-            },
+            }
         ];
     }
 

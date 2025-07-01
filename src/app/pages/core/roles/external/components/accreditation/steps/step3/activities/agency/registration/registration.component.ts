@@ -6,10 +6,11 @@ import { PrimeIcons } from 'primeng/api';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CustomMessageService } from '@utils/services';
 import { TouristGuideComponent } from '@modules/core/shared';
+import { Divider } from 'primeng/divider';
 
 @Component({
     selector: 'app-registration',
-    imports: [PhysicalSpaceComponent, AccreditedStaffLanguageComponent, Button, TouristGuideComponent],
+    imports: [PhysicalSpaceComponent, AccreditedStaffLanguageComponent, Button, TouristGuideComponent, Divider],
     templateUrl: './registration.component.html',
     styleUrl: './registration.component.scss'
 })
@@ -31,7 +32,7 @@ export class RegistrationComponent {
     }
 
     saveForm(childForm: FormGroup) {
-        Object.keys(childForm.controls).forEach(controlName => {
+        Object.keys(childForm.controls).forEach((controlName) => {
             if (!this.mainForm.contains(controlName)) {
                 this.mainForm.addControl(controlName, this.formBuilder.control(childForm.get(controlName)?.value));
             } else {
