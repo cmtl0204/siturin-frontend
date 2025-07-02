@@ -112,9 +112,7 @@ export class TouristGuideComponent implements OnInit {
     getFormErrors(): string[] {
         const errors: string[] = [];
 
-        console.log(this.touristLicensesField);
-
-        if (this.hasTouristGuideField.value && this.touristLicensesField.invalid) errors.push('Guías de Turismo');
+        if (this.hasTouristGuideField.value && this.items.length === 0) errors.push('Guías de Turismo');
 
         if (errors.length > 0) {
             this.form.markAllAsTouched();
