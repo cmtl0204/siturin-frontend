@@ -17,10 +17,12 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { TouristGuideInterface } from '@modules/core/interfaces';
 import { TouristGuideHttpService } from '@modules/core/shared/adventure-tourism-modality/tourist-guide-http.service';
+import { Divider } from 'primeng/divider';
+import { ListBasicComponent } from '@utils/components/list-basic/list-basic.component';
 
 @Component({
     selector: 'app-tourist-guide',
-    imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, ToggleSwitch, TableModule, Button, ListComponent, Dialog, InputText],
+    imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, ToggleSwitch, TableModule, Button, ListComponent, Dialog, InputText, Divider, ListBasicComponent],
     templateUrl: './tourist-guide.component.html',
     styleUrl: './tourist-guide.component.scss'
 })
@@ -50,8 +52,10 @@ export class TouristGuideComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.findTouristGuides();
+        this.loadData();
     }
+
+    loadData() {}
 
     buildForm() {
         this.form = this.formBuilder.group({
@@ -67,12 +71,6 @@ export class TouristGuideComponent implements OnInit {
     }
 
     watchFormChanges() {
-        this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
-            if (this.form.valid) {
-                this.dataOut.emit(this.form);
-            }
-        });
-
         this.hasTouristGuideField.valueChanges.subscribe((value) => {
             this.touristLicensesField.setValidators(Validators.required);
             this.touristLicensesField.updateValueAndValidity();
@@ -82,21 +80,9 @@ export class TouristGuideComponent implements OnInit {
     buildButtonActions(item: TouristGuideInterface) {
         this.buttonActions = [
             {
-                ...viewButtonAction,
-                command: () => {
-                    if (item?.id) this.view();
-                }
-            },
-            {
-                ...editButtonAction,
-                command: () => {
-                    if (item?.id) this.edit(item.id);
-                }
-            },
-            {
                 ...deleteButtonAction,
                 command: () => {
-                    if (item?.id) this.delete(item.id);
+                    if (item?.identification) this.delete(item.identification);
                 }
             }
         ];
@@ -142,15 +128,16 @@ export class TouristGuideComponent implements OnInit {
         this.isVisibleModal = true;
     }
 
-    edit(id: string) {
+    edit(identification: string) {
         this.idField.enable();
-        if (id) this.findTouristGuide(id);
+        this.findTouristGuide(identification);
+        this.isVisibleModal = true;
     }
 
-    delete(id: string) {
+    delete(identification: string) {
         this.isVisibleModal = false;
 
-        if (id) this.deleteTouristGuide(id);
+        if (identification) this.deleteTouristGuide(identification);
     }
 
     view() {
@@ -168,11 +155,7 @@ export class TouristGuideComponent implements OnInit {
         this.isGuideField.setValue(true);
 
         if (this.validateForm()) {
-            if (this.idField.enabled) {
-                this.updateTouristGuide();
-            } else {
-                this.createTouristGuide();
-            }
+            this.createTouristGuide();
         }
     }
 
@@ -180,31 +163,19 @@ export class TouristGuideComponent implements OnInit {
         this.isGuideField.setValue(true);
 
         if (this.validateForm()) {
-            this.touristGuideHttpService.create(this.form.value).subscribe({
-                next: (data) => {
-                    this.findTouristGuides();
-                    this.closeModal();
-                }
-            });
+            this.items.push(this.form.value);
+            this.closeModal();
+
+            this.dataOut.emit(
+                this.formBuilder.group({
+                    touristGuides: [this.items, [Validators.required]]
+                })
+            );
         }
     }
 
-    updateTouristGuide() {
-        this.isGuideField.setValue(true);
-
-        if (this.validateForm()) {
-            this.touristGuideHttpService.update(this.idField.value, this.form.value).subscribe({
-                next: (data) => {
-                    this.findTouristGuides();
-                    this.closeModal();
-                }
-            });
-        }
-    }
-
-    deleteTouristGuide(id: string) {
+    deleteTouristGuide(identification: string) {
         this.isVisibleModal = false;
-        console.log(id);
 
         this.confirmationService.confirm({
             message: '¿Está seguro de eliminar?',
@@ -220,32 +191,22 @@ export class TouristGuideComponent implements OnInit {
                 label: 'Sí, Eliminar'
             },
             accept: () => {
-                this.touristGuideHttpService.delete(id).subscribe({
-                    next: (data) => {
-                        this.findTouristGuides();
-                    }
-                });
+                const index = this.items.findIndex((item) => item.identification === identification);
+                this.items.splice(index, 1);
+
+                this.dataOut.emit(
+                    this.formBuilder.group({
+                        touristGuides: [this.items, [Validators.required]]
+                    })
+                );
             },
             key: 'confirmdialog'
         });
     }
 
-    findTouristGuides(page = 1) {
-        this.touristGuideHttpService.findAll(page).subscribe({
-            next: (response) => {
-                this.items = response.data;
-                this.pagination = response.pagination!;
-            }
-        });
-    }
-
-    findTouristGuide(id: string) {
-        this.touristGuideHttpService.findOne(id).subscribe({
-            next: (data: TouristGuideInterface) => {
-                this.form.patchValue(data);
-                this.isVisibleModal = true;
-            }
-        });
+    findTouristGuide(identification: string) {
+        const index = this.items.findIndex((item) => item.identification === identification);
+        this.form.patchValue(this.items[index]);
     }
 
     get idField(): AbstractControl {

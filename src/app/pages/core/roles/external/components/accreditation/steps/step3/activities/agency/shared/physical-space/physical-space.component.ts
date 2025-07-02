@@ -54,7 +54,7 @@ export class PhysicalSpaceComponent implements OnInit {
             localType: [null, [Validators.required]],
             permanentPhysicalSpace: [null, [Validators.required]],
             isProtectedArea: [false, [Validators.required]],
-            hasProtectedAreaContract: [false, [Validators.required]]
+            hasProtectedAreaContract: [false]
         });
 
         this.watchFormChanges();
@@ -64,6 +64,15 @@ export class PhysicalSpaceComponent implements OnInit {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
             if (this.form.valid) {
                 this.dataOut.emit(this.form);
+            }
+        });
+
+        this.isProtectedAreaField.valueChanges.subscribe((value) => {
+            this.hasProtectedAreaContractField.clearValidators();
+            this.hasProtectedAreaContractField.reset();
+
+            if (value) {
+                this.hasProtectedAreaContractField.setValidators(Validators.required);
             }
         });
     }
@@ -107,4 +116,6 @@ export class PhysicalSpaceComponent implements OnInit {
     get hasProtectedAreaContractField(): AbstractControl {
         return this.form.controls['hasProtectedAreaContract'];
     }
+
+    protected readonly Validators = Validators;
 }

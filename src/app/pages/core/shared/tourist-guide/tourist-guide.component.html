@@ -38,15 +38,13 @@
 
 <p-fluid>
     @if (hasTouristGuideField.value) {
-        <app-list
+        <app-list-basic
             [items]="items"
             [cols]="cols"
             [buttonActions]="buttonActions"
             title="Listado de Guías"
-            [pagination]="pagination"
             (onSelect)="buildButtonActions($event)"
             (onCreate)="create()"
-            (onPagination)="findTouristGuides($event)"
         />
     }
 </p-fluid>

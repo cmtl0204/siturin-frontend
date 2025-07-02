@@ -15,7 +15,7 @@ export class TouristGuideHttpService {
     private readonly _apiUrl = `${environment.API_URL}/core/shared/tourist-guides`;
     private readonly _customMessageService = inject(CustomMessageService);
 
-    findAll(page = 1, search = null): Observable<HttpResponseInterface> {
+    findAll(page = 1, search = ''): Observable<HttpResponseInterface> {
         const url = `${this._apiUrl}`;
 
         let params = new HttpParams();
