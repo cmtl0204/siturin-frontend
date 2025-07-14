@@ -55,7 +55,8 @@ export class TouristGuideComponent implements OnInit {
         this.loadData();
     }
 
-    loadData() {}
+    loadData() {
+    }
 
     buildForm() {
         this.form = this.formBuilder.group({
