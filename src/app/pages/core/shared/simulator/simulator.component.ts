@@ -10,8 +10,10 @@ import { Select } from 'primeng/select';
 import { Divider } from 'primeng/divider';
 import { PrimeIcons } from 'primeng/api';
 import { Tooltip } from 'primeng/tooltip';
-import { Breadcrumb } from 'primeng/breadcrumb';
 import { BreadcrumbService } from '@layout/service';
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
+import { format } from 'date-fns';
 
 @Component({
     selector: 'app-simulator',
@@ -64,8 +66,7 @@ export class SimulatorComponent {
                         secondaryPhone: data[i][6],
                         address: data[i][7],
                         notes: data[i][8],
-                        attachment: data[i][9],
-                        fullName: `${data[i][2]} ${data[i][3]}`
+                        attachment: data[i][9]
                     });
                 }
 
@@ -78,5 +79,30 @@ export class SimulatorComponent {
 
     downloadAttachment(url: string): void {
         window.open(url, '_blank');
+    }
+
+    downloadReport(): void {
+        const data = this.contactsClone.map((contact) => {
+            return {
+                'Nombre Contacto': contact.name
+            };
+        });
+
+        const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+        const workbook: XLSX.WorkBook = {
+            Sheets: { Datos: worksheet },
+            SheetNames: ['Datos']
+        };
+
+        const excelBuffer: any = XLSX.write(workbook, {
+            bookType: 'xlsx',
+            type: 'array'
+        });
+
+        const blob: Blob = new Blob([excelBuffer], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        });
+        const fileName = `reporte_contactos_${format(new Date(), 'yyyy_MM_dd_HH_mm_ss')}.xlsx`;
+        FileSaver.saveAs(blob, fileName);
     }
 }
