@@ -154,8 +154,8 @@ export const MY_ROUTES = {
             },
             accreditation: {
                 base: 'accreditations',
-                absolute: '/main/core/external/accreditations',
-            },
+                absolute: '/main/core/external/accreditations'
+            }
         },
         technician: {
             base: 'dac',
@@ -197,6 +197,14 @@ export const MY_ROUTES = {
                 }
             }
         },
+        shared: {
+            base: 'shared',
+            absolute: '/main/core/shared',
+            simulator: {
+                base: 'simulators',
+                absolute: '/main/core/shared/simulators'
+            }
+        }
     },
     authPages: {
         base: 'auth',

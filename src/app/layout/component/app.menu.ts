@@ -78,7 +78,7 @@ export class AppMenu implements OnInit {
             {
                 label: 'Simulador Normativa',
                 icon: PrimeIcons.DESKTOP,
-                routerLink: [MY_ROUTES.corePages.dac.program.list.absolute]
+                routerLink: [MY_ROUTES.corePages.shared.simulator.absolute]
             },
             {
                 label: 'Proceso de Acreditación de Actividades Turísticas',
