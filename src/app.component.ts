@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { CoreService } from '@utils/services/core.service';
@@ -8,6 +8,9 @@ import { MessageProcessingComponent } from '@utils/components/message-processing
 import { AppConfigurator } from '@layout/component/app.configurator';
 import { FormsModule } from '@angular/forms';
 import { ConfirmDialog } from 'primeng/confirmdialog';
+import { CatalogueHttpService, CoreSessionStorageService, DpaHttpService } from '@utils/services';
+import { switchMap, tap } from 'rxjs/operators';
+import { CoreEnum } from '@utils/enums';
 
 @Component({
     selector: 'app-root',
@@ -31,7 +34,27 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
         <router-outlet />
     `
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     protected readonly coreService = inject(CoreService);
+    private readonly _dpaHttpService = inject(DpaHttpService);
+    protected readonly catalogueHttpService = inject(CatalogueHttpService);
     protected readonly customMessageService = inject(CustomMessageService);
+    private readonly coreSessionStorageService = inject(CoreSessionStorageService);
+
+    constructor() {}
+
+    async ngOnInit() {
+        this.catalogueHttpService
+            .findCache()
+            .pipe(
+                tap(async (response) => {
+                    await this.coreSessionStorageService.setEncryptedValue(CoreEnum.catalogues, response);
+                }),
+                switchMap(() => this._dpaHttpService.findCache()),
+                tap(async (response) => {
+                    await this.coreSessionStorageService.setEncryptedValue(CoreEnum.dpa, response);
+                })
+            )
+            .subscribe();
+    }
 }

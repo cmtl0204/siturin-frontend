@@ -55,12 +55,13 @@ import { MY_ROUTES } from '@routes';
 
                 <div class="layout-topbar-menu hidden lg:block">
                     <div class="layout-topbar-menu-content">
-                        <p-button type="button" [text]="true" [raised]="true" [rounded]="true"
-                                  [label]="authService.auth.username" [icon]="PrimeIcons.USER" />
+                        @if (authService.auth && authService.role) {
+                            <p-button type="button" [text]="true" [raised]="true" [rounded]="true"
+                                      [label]="authService.auth.username" [icon]="PrimeIcons.USER" />
 
-                        <p-button type="button" [text]="true" [raised]="true" [rounded]="true" severity="warn"
-                                  [label]="authService.role.name" />
-
+                            <p-button type="button" [text]="true" [raised]="true" [rounded]="true" severity="warn"
+                                      [label]="authService.role.name" />
+                        }
                         <p-button (onClick)="signOut()" type="button" [text]="true" [raised]="true" [rounded]="true"
                                   severity="danger" label="Cerrar Sesión" [icon]="PrimeIcons.POWER_OFF" />
                     </div>

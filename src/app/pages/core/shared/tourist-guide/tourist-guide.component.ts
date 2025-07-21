@@ -1,6 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Fluid } from 'primeng/fluid';
 import { ConfirmationService, MenuItem, PrimeIcons } from 'primeng/api';
 import { ToggleSwitch } from 'primeng/toggleswitch';
@@ -11,18 +10,16 @@ import { ErrorMessageDirective } from '@utils/directives/error-message.directive
 import { ColInterface, PaginationInterface } from '@utils/interfaces';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
-import { ListComponent } from '@utils/components/list/list.component';
-import { deleteButtonAction, editButtonAction, viewButtonAction } from '@utils/components/button-action/consts';
+import { deleteButtonAction } from '@utils/components/button-action/consts';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { TouristGuideInterface } from '@modules/core/interfaces';
 import { TouristGuideHttpService } from '@modules/core/shared/adventure-tourism-modality/tourist-guide-http.service';
-import { Divider } from 'primeng/divider';
 import { ListBasicComponent } from '@utils/components/list-basic/list-basic.component';
 
 @Component({
     selector: 'app-tourist-guide',
-    imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, ToggleSwitch, TableModule, Button, ListComponent, Dialog, InputText, Divider, ListBasicComponent],
+    imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, ToggleSwitch, TableModule, Button, Dialog, InputText, ListBasicComponent],
     templateUrl: './tourist-guide.component.html',
     styleUrl: './tourist-guide.component.scss'
 })
@@ -55,8 +52,7 @@ export class TouristGuideComponent implements OnInit {
         this.loadData();
     }
 
-    loadData() {
-    }
+    loadData() {}
 
     buildForm() {
         this.form = this.formBuilder.group({

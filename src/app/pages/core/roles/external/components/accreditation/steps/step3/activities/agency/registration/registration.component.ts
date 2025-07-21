@@ -6,11 +6,10 @@ import { PrimeIcons } from 'primeng/api';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CustomMessageService } from '@utils/services';
 import { TouristGuideComponent } from '@modules/core/shared';
-import { Divider } from 'primeng/divider';
 
 @Component({
     selector: 'app-registration',
-    imports: [PhysicalSpaceComponent, AccreditedStaffLanguageComponent, Button, TouristGuideComponent, Divider],
+    imports: [PhysicalSpaceComponent, AccreditedStaffLanguageComponent, Button, TouristGuideComponent],
     templateUrl: './registration.component.html',
     styleUrl: './registration.component.scss'
 })

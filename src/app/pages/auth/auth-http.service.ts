@@ -2,12 +2,13 @@ import { inject, Injectable } from '@angular/core';
 import { HttpResponseInterface, SignInInterface } from './interfaces';
 import { environment } from '@env/environment';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { AuthService } from '@modules/auth/auth.service';
 import { SignInResponseInterface } from '@modules/auth/interfaces';
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { CoreService } from '@utils/services/core.service';
 import { Observable } from 'rxjs';
+import { CatalogueHttpService, DpaHttpService } from '@utils/services';
 
 @Injectable({
     providedIn: 'root'
@@ -16,13 +17,18 @@ export class AuthHttpService {
     private readonly _authService = inject(AuthService);
     private readonly _httpClient = inject(HttpClient);
     private readonly _apiUrl = `${environment.API_URL}/auth`;
-    private readonly _coreService = inject(CoreService);
+    private readonly _dpaHttpService = inject(DpaHttpService);
+    private readonly _catalogueHttpService = inject(CatalogueHttpService);
     private readonly _customMessageService = inject(CustomMessageService);
 
     signIn(payload: SignInInterface) {
         const url = `${this._apiUrl}/sign-in`;
 
-        return this._httpClient.post<SignInResponseInterface>(url, payload).pipe(
+        return this._catalogueHttpService.findCache().pipe(
+            tap((response) => console.log(response)),
+            switchMap(() => this._dpaHttpService.findCache()),
+            tap((response) => console.log(response)),
+            switchMap(() => this._httpClient.post<SignInResponseInterface>(url, payload)),
             map((response) => {
                 this._authService.accessToken = response.data.accessToken;
 
@@ -37,6 +43,22 @@ export class AuthHttpService {
                 return response.data;
             })
         );
+
+        // return this._httpClient.post<SignInResponseInterface>(url, payload).pipe(
+        //     map((response) => {
+        //         this._authService.accessToken = response.data.accessToken;
+        //
+        //         this._authService.auth = response.data.auth;
+        //
+        //         this._authService.roles = response.data.roles;
+        //
+        //         if (response.data.roles.length === 1) {
+        //             this._authService.role = response.data.roles[0];
+        //         }
+        //
+        //         return response.data;
+        //     })
+        // );
     }
 
     signUpExternal(payload: SignInInterface) {

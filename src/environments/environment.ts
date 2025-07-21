@@ -4,5 +4,5 @@ export const environment = {
     API_URL: 'http://localhost:3000/api/v1',
     APP_NAME: '(Pruebas) Sistema de Turismo Inteligente',
     APP_SHORT_NAME: '(Pruebas) SITURIN',
-    PATH_ASSETS: 'development'
+    PATH_ASSETS: 'development',
 };

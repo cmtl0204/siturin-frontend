@@ -1,1 +1,4 @@
-<p>juridical-person works!</p>
+@if (process$()) {
+    {{ process$().id |json }}
+    {{ process$().activity |json }}
+}

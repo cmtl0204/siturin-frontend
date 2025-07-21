@@ -10,7 +10,6 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { Tooltip } from 'primeng/tooltip';
 import { InputText } from 'primeng/inputtext';
-import { Paginator } from 'primeng/paginator';
 import { CoreService } from '@utils/services';
 import { ColInterface } from '@utils/interfaces/col.interface';
 import { DatePipe } from '@angular/common';
@@ -19,7 +18,7 @@ import { DatePipe } from '@angular/common';
     selector: 'app-list-basic',
     templateUrl: './list-basic.component.html',
     styleUrls: ['./list-basic.component.scss'],
-    imports: [Button, ButtonActionComponent, Fluid, IconField, InputIcon, ReactiveFormsModule, TableModule, Tooltip, InputText, Paginator, DatePipe],
+    imports: [Button, ButtonActionComponent, Fluid, IconField, InputIcon, ReactiveFormsModule, TableModule, Tooltip, InputText, DatePipe],
     standalone: true
 })
 export class ListBasicComponent {

@@ -4,7 +4,7 @@ import { environment } from '@env/environment';
 
 import { AuthInterface } from '@modules/auth/interfaces/auth.interface';
 import { RoleInterface } from '@modules/auth/interfaces/role.interface';
-import { RoleEnum } from '@utils/enums';
+import { CoreEnum, RoleEnum } from '@utils/enums';
 import { Router } from '@angular/router';
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { CoreService } from '@utils/services/core.service';
@@ -92,7 +92,11 @@ export class AuthService {
 
             this._router.navigateByUrl(MY_ROUTES.signIn);
             localStorage.clear();
-            sessionStorage.clear();
+
+            for (let i = 0; i < sessionStorage.length; i++) {
+                sessionStorage.removeItem(sessionStorage.key(i)!);
+            }
+
         }, 500);
     }
 }

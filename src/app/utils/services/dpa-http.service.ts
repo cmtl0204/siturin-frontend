@@ -1,17 +1,18 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '@env/environment';
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { HttpResponseInterface } from '@modules/auth/interfaces';
 import { map } from 'rxjs/operators';
+import { ProgramInterface } from '@modules/core/interfaces';
 import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
-export class CatalogueHttpService {
+export class DpaHttpService {
     private readonly _httpClient = inject(HttpClient);
-    private readonly _apiUrl = `${environment.API_URL}/common/catalogues`;
+    private readonly _apiUrl = `${environment.API_URL}/common/dpa`;
     private readonly _customMessageService = inject(CustomMessageService);
 
     findCache(): Observable<HttpResponseInterface> {
