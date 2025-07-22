@@ -21,7 +21,6 @@ export class RegistrationComponent {
     @ViewChildren(TouristGuideComponent) private touristGuideComponent!: QueryList<TouristGuideComponent>;
 
     private formBuilder = inject(FormBuilder);
-
     protected mainForm!: FormGroup;
 
     protected readonly customMessageService = inject(CustomMessageService);

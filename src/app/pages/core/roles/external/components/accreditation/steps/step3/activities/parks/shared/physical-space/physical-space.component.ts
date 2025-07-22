@@ -51,7 +51,6 @@ export class PhysicalSpaceComponent implements OnInit {
     buildForm() {
         this.form = this.formBuilder.group({
             localType: [null, [Validators.required]],
-            permanentPhysicalSpace: [null, [Validators.required]],
             isProtectedArea: [false, [Validators.required]],
             hasProtectedAreaContract: [false]
         });
@@ -81,8 +80,6 @@ export class PhysicalSpaceComponent implements OnInit {
 
         if (this.localTypeField.invalid) errors.push('Su local es');
 
-        if (this.permanentPhysicalSpaceField.invalid) errors.push('Espacio físico Permanente');
-
         if (this.isProtectedAreaField.invalid)
             errors.push(
                 '¿Realiza actividades autorizadas por la Autoridad Ambiental Nacional en el Subsistema Estatal del Sistema de Áreas Naturales Protegidas, de conformidad con lo establecido en los artículos 8 y 9 de la Ley de Turismo dentro del Subsistema Estatal del Sistema Nacional de Áreas Protegidas?'
@@ -102,10 +99,6 @@ export class PhysicalSpaceComponent implements OnInit {
 
     get localTypeField(): AbstractControl {
         return this.form.controls['localType'];
-    }
-
-    get permanentPhysicalSpaceField(): AbstractControl {
-        return this.form.controls['permanentPhysicalSpace'];
     }
 
     get isProtectedAreaField(): AbstractControl {

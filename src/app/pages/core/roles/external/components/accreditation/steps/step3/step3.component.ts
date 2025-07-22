@@ -10,10 +10,12 @@ import { ParksComponent } from './activities/parks/parks.component';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { CatalogueInterface } from '@utils/interfaces';
 import { CatalogueService } from '@utils/services/catalogue.service';
-import { CatalogueTypeEnum, CoreEnum } from '@utils/enums';
+import { CatalogueActivitiesCodeEnum, CatalogueProcessesTypeEnum, CatalogueTypeEnum, CoreEnum } from '@utils/enums';
 import { CoreSessionStorageService } from '@utils/services';
 import { ActivityInterface, CategoryInterface, ClassificationInterface } from '@modules/core/shared/interfaces';
 import { ActivityService } from '@modules/core/shared/services';
+import { ProcessI } from '@utils/services/core-session-storage.service';
+import { AgencyComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/agency/agency.component';
 
 interface CatalogMode {
     code: 'registration' | 'update' | 'reclassification' | 'readmission' | string;
@@ -23,7 +25,7 @@ interface CatalogMode {
 @Component({
     selector: 'app-step3',
     standalone: true,
-    imports: [Select, FormsModule, Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, ParksComponent],
+    imports: [Select, FormsModule, Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, ParksComponent, AgencyComponent],
     templateUrl: './step3.component.html',
     styleUrl: './step3.component.scss'
 })
@@ -33,20 +35,18 @@ export class Step3Component implements OnInit {
 
     protected readonly PrimeIcons = PrimeIcons;
     private readonly formBuilder = inject(FormBuilder);
+    protected form!: FormGroup;
+    protected process!: ProcessI;
 
     private readonly activityService = inject(ActivityService);
     private readonly coreSessionStorageService = inject(CoreSessionStorageService);
     private readonly catalogueService = inject(CatalogueService);
-    protected process$ = this.coreSessionStorageService.processSignal;
 
-    protected form!: FormGroup;
+    protected readonly CatalogueActivitiesCodeEnum = CatalogueActivitiesCodeEnum;
 
     protected geographicAreas: CatalogueInterface[] = [];
-
     protected activities: ActivityInterface[] = [];
-
     protected classifications: ClassificationInterface[] = [];
-
     protected categories: CategoryInterface[] = [];
 
     constructor() {
@@ -56,78 +56,67 @@ export class Step3Component implements OnInit {
             const processSignal = this.coreSessionStorageService.processSignal();
 
             if (processSignal) {
-                console.log(processSignal);
+                // console.log(processSignal);
             }
         });
     }
 
     async ngOnInit() {
+        this.process = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
+        this.geographicAreaField.patchValue(this.process.activity.geographicArea);
+
         await this.loadCatalogues();
         await this.loadActivities();
         await this.watchFormChanges();
-
-        this.setFormMode();
+        await this.loadData();
     }
 
     buildForm() {
         this.form = this.formBuilder.group({
-            geographicArea: [{ value: this.process$().activity.geographicArea, disabled: true }, [Validators.required]],
+            geographicArea: [{ value: null, disabled: true }, [Validators.required]],
             activity: [null, [Validators.required]],
             classification: [null, [Validators.required]],
             category: [null, [Validators.required]]
         });
     }
 
-    setFormMode(): void {
-        switch (this.process$().type?.code!) {
-            case 'update':
-                this.disableAll();
-                break;
-
-            case 'registration':
-                this.enableAll();
-                break;
-
-            case 'reclassification':
-                this.enableAll();
-                this.activityField.disable();
-                break;
-
-            case 'readmission':
-                this.enableAll();
-                break;
-        }
-    }
-
     async watchFormChanges() {
-        this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(() => {
+        this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(async () => {
             if (this.form.valid) {
                 this.dataOut.emit(this.form);
+                await this.coreSessionStorageService.setEncryptedValue(CoreEnum.process, { ...this.form.getRawValue() });
             }
         });
 
         this.activityField.valueChanges.subscribe(async (activity) => {
             if (activity) {
-                this.classificationField.reset();
-                this.categoryField.reset();
+                if (this.process.type?.code === CatalogueProcessesTypeEnum.registration || this.process.type?.code === CatalogueProcessesTypeEnum.readmission || this.process.type?.code === CatalogueProcessesTypeEnum.new_classification) {
+                    this.classificationField.reset();
+                    this.categoryField.reset();
+                }
 
                 this.classifications = await this.activityService.findClassificationsByActivity(activity.id);
-
-                await this.coreSessionStorageService.setEncryptedValue(CoreEnum.process, { activity });
             }
         });
 
         this.classificationField.valueChanges.subscribe(async (classification) => {
             if (classification) {
-                this.categoryField.reset();
+                if (
+                    this.process.type?.code === CatalogueProcessesTypeEnum.registration ||
+                    this.process.type?.code === CatalogueProcessesTypeEnum.readmission ||
+                    this.process.type?.code === CatalogueProcessesTypeEnum.new_classification ||
+                    this.process.type?.code === CatalogueProcessesTypeEnum.reclassification
+                ) {
+                    this.categoryField.reset();
+                }
+
                 this.categories = await this.activityService.findCategoriesByClassification(classification.id);
-                await this.coreSessionStorageService.setEncryptedValue(CoreEnum.process, { classification });
             }
         });
 
         this.categoryField.valueChanges.subscribe(async (category) => {
             if (category) {
-                await this.coreSessionStorageService.setEncryptedValue(CoreEnum.process, { category });
+                // TODO
             }
         });
     }
@@ -178,7 +167,31 @@ export class Step3Component implements OnInit {
         this.activities = await this.activityService.findActivitiesByZone(this.geographicAreaField.getRawValue().id);
     }
 
-    loadData() {}
+    async loadData() {
+        switch (this.process.type?.code!) {
+            case CatalogueProcessesTypeEnum.update:
+                this.form.patchValue(this.process);
+                await this.loadActivities();
+                this.disableAll();
+                break;
+
+            case CatalogueProcessesTypeEnum.reclassification:
+                this.form.patchValue(this.process);
+                await this.loadActivities();
+                this.activityField.disable();
+                this.classificationField.reset();
+                this.categoryField.reset();
+                break;
+
+            case CatalogueProcessesTypeEnum.recategorization:
+                this.form.patchValue(this.process);
+                await this.loadActivities();
+                this.activityField.disable();
+                this.classificationField.disable();
+                this.categoryField.reset();
+                break;
+        }
+    }
 
     get geographicAreaField(): AbstractControl {
         return this.form.controls['geographicArea'];

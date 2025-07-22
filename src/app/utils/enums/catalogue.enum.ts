@@ -12,12 +12,12 @@ export enum CatalogueTypeEnum {
     MARITAL_STATUS = 'MARITAL_STATUS',
     SEX = 'SEX',
     YES_NO = 'YES_NO',
-    YES_NO_NA = 'YES_NO_NA',
+    YES_NO_NA = 'YES_NO_NA'
 }
 
 export enum CatalogueStateEnum {
     ENABLED = 'enabled',
-    DISABLED = 'disabled',
+    DISABLED = 'disabled'
 }
 
 export enum CatalogueInspectionsStateEnum {
@@ -27,7 +27,7 @@ export enum CatalogueInspectionsStateEnum {
     scheduled = 'scheduled',
     confirmed = 'confirmed',
     rescheduled_1 = 'rescheduled_1',
-    rescheduled_2 = 'rescheduled_2',
+    rescheduled_2 = 'rescheduled_2'
 }
 
 export enum CatalogueProcessesTypeEnum {
@@ -38,18 +38,30 @@ export enum CatalogueProcessesTypeEnum {
     new_activity = 'new_activity',
     readmission = 'readmission',
     reclassification = 'reclassification',
-    recategorization = 'recategorization',
+    recategorization = 'recategorization'
 }
 
 export enum CatalogueProcessesStateEnum {
     pending_1 = 'pending_1',
     pending_2 = 'pending_2',
-    completed = 'completed',
+    completed = 'completed'
 }
 
 export enum CatalogueActivitiesCodeEnum {
+    accommodation_continent = 'accommodation_continent',
+    accommodation_galapagos = 'accommodation_galapagos',
     agency_continent = 'agency_continent',
     agency_galapagos = 'agency_galapagos',
+    ctc_continent = 'ctc_continent',
+    ctc_galapagos = 'ctc_galapagos',
+    event_continent = 'events_continent',
+    event_galapagos = 'events_galapagos',
+    food_drink_continent = 'food_drink_continent',
+    food_drink_galapagos = 'food_drink_galapagos',
+    park_continent = 'park_continent',
+    park_galapagos = 'park_galapagos',
+    transport_continent = 'transport_continent',
+    transport_galapagos = 'transport_galapagos'
 }
 
 export enum CatalogueCadastresStateEnum {
@@ -59,23 +71,23 @@ export enum CatalogueCadastresStateEnum {
     temporary_suspension = 'temporary_suspension',
     definitive_suspension = 'definitive_suspension',
     recategorized = 'recategorized',
-    reclassified = 'reclassified',
+    reclassified = 'reclassified'
 }
 
 export enum CatalogueSchoolPeriodStateEnum {
     OPEN = 'open',
-    CLOSE = 'close',
+    CLOSE = 'close'
 }
 
 export enum CatalogueSchoolPeriodTypeEnum {
     ORDINARY = 'ordinary',
     EXTRAORDINARY = 'extraordinary',
-    ESPECIAL = 'especial',
+    ESPECIAL = 'especial'
 }
 
 export enum CatalogueSubjectRequirementTypeEnum {
     PREREQUISITE = 'prerequisite',
-    CO_REQUISITE = 'co_requisite',
+    CO_REQUISITE = 'co_requisite'
 }
 
 export enum CatalogueCareersModalityEnum {
@@ -84,17 +96,17 @@ export enum CatalogueCareersModalityEnum {
     DISTANCE = 'distance',
     DUAL = 'dual',
     ONLINE = 'online',
-    HYBRID = 'hybrid',
+    HYBRID = 'hybrid'
 }
 
 export enum CatalogueYesNoEnum {
     YES = '1',
-    NO = '2',
+    NO = '2'
 }
 
 export enum UsersIdentificationTypeStateEnum {
     IDENTIFICATION = '1',
-    PASSPORT = '2',
+    PASSPORT = '2'
 }
 
 export enum CatalogueMaritalStatusEnum {
@@ -102,7 +114,7 @@ export enum CatalogueMaritalStatusEnum {
     MARRIED = 'married',
     WIDOWER = 'widower',
     DIVORCED = 'divorced',
-    FREE_UNION = 'free_union',
+    FREE_UNION = 'free_union'
 }
 
 export enum CatalogueEthnicOriginEnum {
@@ -110,14 +122,14 @@ export enum CatalogueEthnicOriginEnum {
     AFRO_ECUADORIAN = 'afro_ecuadorian',
     MONTUBIO = 'montubio',
     HALF_BLOOD = 'half_blood',
-    WHITE = 'white',
+    WHITE = 'white'
 }
 
 export enum CatalogueTypeSchoolEnum {
     FISCAL = 'fiscal',
     FISCOMISIONAL = 'fiscomisional',
     PARTICULAR = 'particular',
-    MUNICIPAL = 'municipal',
+    MUNICIPAL = 'municipal'
 }
 
 export enum CatalogueStudentLiveEnum {
@@ -127,7 +139,7 @@ export enum CatalogueStudentLiveEnum {
     FATHER = 'father',
     SPOUSE = 'spouse',
     GRANDPARENTS = 'grandparents',
-    OTHER = 'other',
+    OTHER = 'other'
 }
 
 export enum CatalogueEconomicContributionEnum {
@@ -135,5 +147,5 @@ export enum CatalogueEconomicContributionEnum {
     GRAND_PARENTS = 'grand_parents',
     FAMILY = 'family',
     OWN_SALARY = 'own_salary',
-    OTHER = 'other',
+    OTHER = 'other'
 }

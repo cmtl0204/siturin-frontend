@@ -1,10 +1,14 @@
-@if (process$()) {
-    {{ process$() | json}}
+@switch (processTypeCode) {
+    @case (CatalogueProcessesTypeEnum.registration) {
+        <app-registration />
+    }
+    @case (CatalogueProcessesTypeEnum.update) {
+        <app-update />
+    }
+    @case (CatalogueProcessesTypeEnum.readmission) {
+        <app-readmission />
+    }
+    @case (CatalogueProcessesTypeEnum.reclassification) {
+        <app-reclassification />
+    }
 }
-
-<ng-container [ngSwitch]="mode">
-    <app-registration *ngSwitchCase="'registration'" (dataOut)="dataOut.emit($event)" />
-    <app-update *ngSwitchCase="'update'" (dataOut)="dataOut.emit($event)" />
-    <app-readmission *ngSwitchCase="'readmission'" (dataOut)="dataOut.emit($event)" />
-    <app-reclassification *ngSwitchCase="'reclassification'" (dataOut)="dataOut.emit($event)" />
-</ng-container>

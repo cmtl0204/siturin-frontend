@@ -42,14 +42,16 @@ export class CustomMessageService {
     }
 
     showHttpError(error: string | string[] | any) {
-        this._modalLife = error.message.length * 100;
+        if (error) {
+            this._modalLife = error.message.length * 100;
 
-        if (Array.isArray(error.message)) {
-            this._modalLife = error.message.length * 5000;
-            error.message.sort();
+            if (Array.isArray(error.message)) {
+                this._modalLife = error.message.length * 5000;
+                error.message.sort();
+            }
+
+            this._messageService.add({ severity: 'error', summary: error.error, detail: error.message });
         }
-
-        this._messageService.add({ severity: 'error', summary: error.error, detail: error.message });
     }
 
     showFormErrors(message: string | string[]): void {

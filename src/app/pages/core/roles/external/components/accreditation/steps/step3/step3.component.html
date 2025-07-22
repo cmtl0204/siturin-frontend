@@ -5,14 +5,18 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-            <!-- zone -->
-            <div class="md:col-span-3 flex flex-col gap-2">
-                <label appLabel for="zone" label="Zona Geográfica" [required]="geographicAreaField">
+            <!-- geographicArea -->
+            <div class="md:col-span-6 flex flex-col gap-2">
+                <label
+                    appLabel
+                    for="geographicArea"
+                    label="Zona Geográfica"
+                    [required]="geographicAreaField">
                 </label>
 
                 <p-select
+                    id="geographicArea"
                     dataKey="id"
-                    id="zone"
                     [options]="geographicAreas"
                     optionLabel="name"
                     placeholder="Seleccione"
@@ -23,53 +27,65 @@
                     appErrorMessage
                     [errors]="geographicAreaField.errors"
                     [touched]="geographicAreaField.touched"
-                    [dirty]="geographicAreaField.dirty">
-                </p-message>
+                    [dirty]="geographicAreaField.dirty" />
             </div>
 
             <!-- activity -->
-            <div class="md:col-span-3 flex flex-col gap-2">
-                <label appLabel for="activity" label="Actividad" [required]="activityField">
+            <div class="md:col-span-6 flex flex-col gap-2">
+                <label
+                    appLabel for="activity"
+                    label="Actividad"
+                    [required]="activityField">
                 </label>
 
                 <p-select
                     id="actividad"
+                    dataKey="id"
                     [options]="activities"
                     optionLabel="name"
                     placeholder="Seleccione"
                     formControlName="activity"
                     [required]="true" />
 
-                <p-message appErrorMessage [errors]="activityField.errors" [touched]="activityField.touched"
-                           [dirty]="activityField.dirty">
-                </p-message>
+                <p-message
+                    appErrorMessage
+                    [errors]="activityField.errors"
+                    [touched]="activityField.touched"
+                    [dirty]="activityField.dirty" />
             </div>
 
             <!-- classification -->
-            <div class="md:col-span-3 flex flex-col gap-2">
-                <label appLabel for="classification" label="Clasificación" [required]="classificationField">
+            <div class="md:col-span-6 flex flex-col gap-2">
+                <label
+                    appLabel for="classification"
+                    label="Clasificación"
+                    [required]="classificationField">
                 </label>
 
                 <p-select
                     id="clasificacion"
+                    dataKey="id"
                     [options]="classifications"
                     optionLabel="name"
                     placeholder="Seleccione"
                     formControlName="classification"
                     [required]="true" />
 
-                <p-message appErrorMessage [errors]="classificationField.errors" [touched]="classificationField.touched"
-                           [dirty]="classificationField.dirty">
-                </p-message>
+                <p-message
+                    appErrorMessage
+                    [errors]="classificationField.errors"
+                    [touched]="classificationField.touched"
+                    [dirty]="classificationField.dirty" />
             </div>
 
             <!-- category -->
-            <div class="md:col-span-3 flex flex-col gap-2">
+            <div class="md:col-span-6 flex flex-col gap-2">
                 <label appLabel for="category" label="Categoría" [required]="categoryField">
                 </label>
 
                 <p-select
                     id="categoria"
+                    dataKey="id"
                     [options]="categories"
                     optionLabel="name"
                     placeholder="Seleccione"
@@ -83,5 +99,14 @@
         </div>
     </form>
 
-    <app-parks [mode]="process$().type?.code!" (dataOut)="saveForm($event)" />
+    @if (activityField.value && classificationField.value && categoryField.value) {
+        @switch (activityField.value.code) {
+            @case (CatalogueActivitiesCodeEnum.park_continent || CatalogueActivitiesCodeEnum.park_galapagos) {
+                <app-parks [processTypeCode]="process.type?.code!" (dataOut)="saveForm($event)" />
+            }
+            @case (CatalogueActivitiesCodeEnum.agency_continent || CatalogueActivitiesCodeEnum.agency_galapagos) {
+                <app-agency [processTypeCode]="process.type?.code!" />
+            }
+        }
+    }
 </p-fluid>

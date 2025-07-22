@@ -26,7 +26,6 @@ import { ListBasicComponent } from '@utils/components/list-basic/list-basic.comp
 export class TouristGuideComponent implements OnInit {
     @Input() data!: string | undefined;
     @Output() dataOut = new EventEmitter<FormGroup>();
-    @Output() fieldErrorsOut = new EventEmitter<string[]>();
 
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);

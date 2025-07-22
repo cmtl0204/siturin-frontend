@@ -4,7 +4,7 @@ import { ClassificationInterface } from '@modules/core/shared/interfaces/classif
 export interface ActivityInterface {
     id?: string;
     geographicArea?: CatalogueInterface;
-    geographicAreaId: string;
+    geographicAreaId?: string;
     code?: string;
     name?: string;
     classifications?: ClassificationInterface[];

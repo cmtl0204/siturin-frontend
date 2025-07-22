@@ -25,7 +25,6 @@ export class ActivityService {
                 .map((item) => {
                     return {
                         id: item.id,
-                        geographicAreaId: item.geographicAreaId,
                         code: item.code,
                         name: item.name
                     };

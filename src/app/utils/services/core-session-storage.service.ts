@@ -4,7 +4,7 @@ import { CoreEnum } from '@utils/enums';
 import { CatalogueInterface } from '@utils/interfaces';
 
 export interface ProcessI {
-    id?: string;
+    processId?: string;
     activity?: any;
     classification?: any;
     category?: any;

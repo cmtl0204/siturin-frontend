@@ -1,53 +1,50 @@
 import { Component, EventEmitter, inject, Output, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PrimeIcons } from 'primeng/api';
-import { EnvironmentalPermissionInfoComponent } from "../shared/environmental-permission-info/environmental-permission-info.component";
-import { PeopleCapacityComponent } from "../shared/people-capacity/people-capacity.component";
+import { PeopleCapacityComponent } from '../shared/people-capacity/people-capacity.component';
 import { Button } from 'primeng/button';
 import { CustomMessageService } from '@utils/services/custom-message.service';
+import { PhysicalSpaceComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/parks/shared/physical-space/physical-space.component';
 
 @Component({
-  selector: 'app-update',
-  imports: [EnvironmentalPermissionInfoComponent, PeopleCapacityComponent, Button],
-  templateUrl: './update.component.html',
-  styleUrl: './update.component.scss'
+    selector: 'app-update',
+    imports: [ PeopleCapacityComponent, Button, PhysicalSpaceComponent],
+    templateUrl: './update.component.html',
+    styleUrl: './update.component.scss'
 })
 export class UpdateComponent {
-  @Output() dataOut = new EventEmitter<FormGroup>();
+    @Output() dataOut = new EventEmitter<FormGroup>();
 
-  protected readonly PrimeIcons = PrimeIcons;
+    protected readonly PrimeIcons = PrimeIcons;
 
-  @ViewChildren(EnvironmentalPermissionInfoComponent) private info!: QueryList<EnvironmentalPermissionInfoComponent>;
-  @ViewChildren(PeopleCapacityComponent) private capacity!: QueryList<PeopleCapacityComponent>;
+    @ViewChildren(PhysicalSpaceComponent) private info!: QueryList<PhysicalSpaceComponent>;
+    @ViewChildren(PeopleCapacityComponent) private capacity!: QueryList<PeopleCapacityComponent>;
 
-  private formBuilder = inject(FormBuilder);
-  protected mainForm = this.formBuilder.group({});
-  protected readonly customMessageService = inject(CustomMessageService);
+    private formBuilder = inject(FormBuilder);
+    protected mainForm = this.formBuilder.group({});
+    protected readonly customMessageService = inject(CustomMessageService);
 
-  saveForm(childForm: FormGroup) {
-    Object.keys(childForm.controls).forEach(name => {
-      const control = childForm.get(name);
-      if (control && !this.mainForm.contains(name)) {
-        this.mainForm.addControl(name, control);
-      } else {
-        this.mainForm.get(name)?.patchValue(control?.value);
-      }
-    });
-  }
-
-  onSubmit() {
-    if (this.checkFormErrors()) this.dataOut.emit(this.mainForm);
-  }
-
-  checkFormErrors() {
-    const errors = [
-      ...this.info.toArray().flatMap(c => c.getFormErrors()),
-      ...this.capacity.toArray().flatMap(c => c.getFormErrors())
-    ];
-    if (errors.length > 0) {
-      this.customMessageService.showFormErrors(errors);
-      return false;
+    saveForm(childForm: FormGroup) {
+        Object.keys(childForm.controls).forEach((name) => {
+            const control = childForm.get(name);
+            if (control && !this.mainForm.contains(name)) {
+                this.mainForm.addControl(name, control);
+            } else {
+                this.mainForm.get(name)?.patchValue(control?.value);
+            }
+        });
     }
-    return true;
-  }
+
+    onSubmit() {
+        if (this.checkFormErrors()) this.dataOut.emit(this.mainForm);
+    }
+
+    checkFormErrors() {
+        const errors = [...this.info.toArray().flatMap((c) => c.getFormErrors()), ...this.capacity.toArray().flatMap((c) => c.getFormErrors())];
+        if (errors.length > 0) {
+            this.customMessageService.showFormErrors(errors);
+            return false;
+        }
+        return true;
+    }
 }
