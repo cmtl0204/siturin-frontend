@@ -14,7 +14,12 @@ import { ProcessI } from '@utils/services/core-session-storage.service';
 export class Step1Component implements OnInit {
     private readonly coreSessionStorageService = inject(CoreSessionStorageService);
 
-    async ngOnInit() {}
+    async ngOnInit() {
+        await this.saveData({
+            id: 'e30fba26-4b77-44f0-8c46-27e6d3f63b47',
+            type: { id: '4cc349ad-460e-4aba-8ef3-14513db7a16d', code: 'registration' }
+        });
+    }
 
     async saveData(value: ProcessI) {
         await this.coreSessionStorageService.setEncryptedValue(CoreEnum.process, value);

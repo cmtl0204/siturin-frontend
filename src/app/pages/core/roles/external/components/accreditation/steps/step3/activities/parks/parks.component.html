@@ -1,0 +1,10 @@
+@if (process$()) {
+    {{ process$() | json}}
+}
+
+<ng-container [ngSwitch]="mode">
+    <app-registration *ngSwitchCase="'registration'" (dataOut)="dataOut.emit($event)" />
+    <app-update *ngSwitchCase="'update'" (dataOut)="dataOut.emit($event)" />
+    <app-readmission *ngSwitchCase="'readmission'" (dataOut)="dataOut.emit($event)" />
+    <app-reclassification *ngSwitchCase="'reclassification'" (dataOut)="dataOut.emit($event)" />
+</ng-container>

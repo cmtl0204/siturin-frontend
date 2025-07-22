@@ -1,12 +1,14 @@
 import { Injectable, signal } from '@angular/core';
 import { environment } from '@env/environment';
 import { CoreEnum } from '@utils/enums';
+import { CatalogueInterface } from '@utils/interfaces';
 
 export interface ProcessI {
     id?: string;
     activity?: any;
     classification?: any;
     category?: any;
+    type?: CatalogueInterface;
 }
 
 @Injectable({

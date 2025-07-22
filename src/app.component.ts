@@ -11,6 +11,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { CatalogueHttpService, CoreSessionStorageService, DpaHttpService } from '@utils/services';
 import { switchMap, tap } from 'rxjs/operators';
 import { CoreEnum } from '@utils/enums';
+import { CatalogueService } from '@utils/services/catalogue.service';
 
 @Component({
     selector: 'app-root',
@@ -38,6 +39,7 @@ export class AppComponent implements OnInit {
     protected readonly coreService = inject(CoreService);
     private readonly _dpaHttpService = inject(DpaHttpService);
     protected readonly catalogueHttpService = inject(CatalogueHttpService);
+    protected readonly catalogueService = inject(CatalogueService);
     protected readonly customMessageService = inject(CustomMessageService);
     private readonly coreSessionStorageService = inject(CoreSessionStorageService);
 
@@ -48,11 +50,13 @@ export class AppComponent implements OnInit {
             .findCache()
             .pipe(
                 tap(async (response) => {
-                    await this.coreSessionStorageService.setEncryptedValue(CoreEnum.catalogues, response);
+                    // await this.coreSessionStorageService.setEncryptedValue(CoreEnum.catalogues, response);
+                    sessionStorage.setItem(CoreEnum.catalogues, JSON.stringify(response));
                 }),
                 switchMap(() => this._dpaHttpService.findCache()),
                 tap(async (response) => {
-                    await this.coreSessionStorageService.setEncryptedValue(CoreEnum.dpa, response);
+                    // await this.coreSessionStorageService.setEncryptedValue(CoreEnum.dpa, response);
+                    sessionStorage.setItem(CoreEnum.dpa, JSON.stringify(response));
                 })
             )
             .subscribe();

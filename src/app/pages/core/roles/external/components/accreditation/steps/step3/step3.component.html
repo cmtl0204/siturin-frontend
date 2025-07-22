@@ -7,151 +7,74 @@
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
             <!-- zone -->
             <div class="md:col-span-3 flex flex-col gap-2">
-                <label
-                    appLabel
-                    for="zone"
-                    label="Zona Geográfica"
-                    [required]="zoneField">
+                <label appLabel for="zone" label="Zona Geográfica" [required]="zoneField">
                 </label>
 
-                <p-select
-                    [options]="zones"
-                    formControlName="zone"
-                    optionLabel="name">
-                    <ng-template #selectedItem let-selectedItem>
-                        @if (selectedItem) {
-                            <div class="flex items-center gap-2">
-                                <div>{{ selectedItem.name }}</div>
-                            </div>
-                        }
-                    </ng-template>
+                <p-select id="zonaGeografica" [options]="dpaZones" optionLabel="name" placeholder="Seleccione"
+                          formControlName="zone" [required]="true"> </p-select>
 
-                    <ng-template let-item #item>
-                        <div class="flex items-center gap-2">
-                            <div>{{ item.name }}</div>
-                        </div>
-                    </ng-template>
-                </p-select>
-
-                <p-message
-                    appErrorMessage
-                    [errors]="zoneField.errors"
-                    [touched]="zoneField.touched"
-                    [dirty]="zoneField.dirty"/>
+                <p-message appErrorMessage [errors]="zoneField.errors" [touched]="zoneField.touched"
+                           [dirty]="zoneField.dirty">
+                </p-message>
             </div>
 
             <!-- activity -->
             <div class="md:col-span-3 flex flex-col gap-2">
-                <label
-                    appLabel
-                    for="activity"
-                    label="Actividad"
-                    [required]="activityField">
+                <label appLabel for="activity" label="Actividad" [required]="activityField">
                 </label>
 
-                <p-select
-                    [options]="activities"
-                    formControlName="activity"
-                    optionLabel="name">
-                    <ng-template #selectedItem let-selectedItem>
-                        @if (selectedItem) {
-                            <div class="flex items-center gap-2">
-                                <div>{{ selectedItem.name }}</div>
-                            </div>
-                        }
-                    </ng-template>
-
-                    <ng-template let-item #item>
-                        <div class="flex items-center gap-2">
-                            <div>{{ item.name }}</div>
-                        </div>
-                    </ng-template>
+                <p-select id="actividad" [options]="activities" optionLabel="name" placeholder="Seleccione"
+                          formControlName="activityId" [required]="true">
                 </p-select>
 
-                <p-message
-                    appErrorMessage
-                    [errors]="activityField.errors"
-                    [touched]="activityField.touched"
-                    [dirty]="activityField.dirty"/>
+                <p-message appErrorMessage [errors]="activityField.errors" [touched]="activityField.touched"
+                           [dirty]="activityField.dirty">
+                </p-message>
             </div>
 
             <!-- classification -->
-            <div class="md:col-span-3 flex flex-col gap-2">
-                <label
-                    appLabel
-                    for="classification"
-                    label="Clasificación"
-                    [required]="classificationField">
+            <div class="md:col-span-3 flex flex-col gap-2" *ngIf="showClassification">
+                <label appLabel for="classification" label="Clasificación" [required]="classificationField">
                 </label>
 
-                <p-select
-                    [options]="classifications"
-                    formControlName="classification"
-                    optionLabel="name">
-                    <ng-template #selectedItem let-selectedItem>
-                        @if (selectedItem) {
-                            <div class="flex items-center gap-2">
-                                <div>{{ selectedItem.name }}</div>
-                            </div>
-                        }
-                    </ng-template>
-
-                    <ng-template let-item #item>
-                        <div class="flex items-center gap-2">
-                            <div>{{ item.name }}</div>
-                        </div>
-                    </ng-template>
+                <p-select id="clasificacion" [options]="classifications" optionLabel="name" placeholder="Seleccione"
+                          formControlName="classificationId" [required]="true">
                 </p-select>
 
-                <p-message
-                    appErrorMessage
-                    [errors]="classificationField.errors"
-                    [touched]="classificationField.touched"
-                    [dirty]="classificationField.dirty"/>
+                <p-message appErrorMessage [errors]="classificationField.errors" [touched]="classificationField.touched"
+                           [dirty]="classificationField.dirty">
+                </p-message>
             </div>
 
             <!-- category -->
-            <div class="md:col-span-3 flex flex-col gap-2">
-                <label
-                    appLabel
-                    for="category"
-                    label="Categoria"
-                    [required]="categoryField">
+            <div class="md:col-span-3 flex flex-col gap-2" *ngIf="showCategory">
+                <label appLabel for="category" label="Categoría" [required]="categoryField">
                 </label>
 
-                <p-select
-                    [options]="categories"
-                    formControlName="category"
-                    optionLabel="name">
-                    <ng-template #selectedItem let-selectedItem>
-                        @if (selectedItem) {
-                            <div class="flex items-center gap-2">
-                                <div>{{ selectedItem.name }}</div>
-                            </div>
-                        }
-                    </ng-template>
-
-                    <ng-template let-item #item>
-                        <div class="flex items-center gap-2">
-                            <div>{{ item.name }}</div>
-                        </div>
-                    </ng-template>
+                <p-select id="categoria" [options]="filteredCategories" optionLabel="name" placeholder="Seleccione"
+                          formControlName="categoryId" [required]="true">
                 </p-select>
 
-                <p-message
-                    appErrorMessage
-                    [errors]="categoryField.errors"
-                    [touched]="categoryField.touched"
-                    [dirty]="categoryField.dirty"/>
+                <p-message appErrorMessage [errors]="categoryField.errors" [touched]="categoryField.touched"
+                           [dirty]="categoryField.dirty">
+                </p-message>
             </div>
         </div>
     </form>
 
-    <div>
-        @switch ('agency') {
-            @case ('agency') {
-                <app-agency/>
-            }
-        }
+    <app-parks [mode]="catalogMode.code" (dataOut)="saveForm($event)" />
+
+    <div class="flex justify-end mt-4">
+        <p-button label="Reingreso" icon="" (onClick)="catalogMode = { code: 'readmission' }; setFormMode()"
+                  class="p-button-secondary"></p-button>
+
+        <p-button label="Actualizar" icon="pi pi-refreshpi pi-refresh" (onClick)="catalogMode = { code: 'update' }; setFormMode()"
+                  class="p-button-secondary"></p-button>
+
+        <p-button label="Reclasificar" icon="" (onClick)="catalogMode = { code: 'reclassification' }; setFormMode()"
+                  class="p-button-secondary"></p-button>
+
+        <!--<p-button label="Recategorizar" icon="" (onClick)="catalogMode = { code: 'recategorization' }; setFormMode()"
+            class="p-button-secondary"></p-button>-->
     </div>
 </p-fluid>
