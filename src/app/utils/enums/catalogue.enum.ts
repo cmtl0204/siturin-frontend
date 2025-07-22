@@ -3,6 +3,7 @@ export enum CatalogueTypeEnum {
     processes_state = 'processes_state',
     cadastres_state = 'cadastres_state',
     dpa_zone = 'dpa_zone',
+    activities_geographic_area = 'activities_geographic_area',
     internal_zonal_users_zone = 'internal_zonal_users_zone',
     BLOOD_TYPE = 'BLOOD_TYPE',
     ETHNIC_ORIGIN = 'ETHNIC_ORIGIN',

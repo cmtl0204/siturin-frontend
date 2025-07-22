@@ -3,5 +3,8 @@ export enum CoreEnum {
     cadastre = 'cadastre',
     establishment = 'establishment',
     catalogues = 'catalogues',
-    dpa = 'dpa'
+    dpa = 'dpa',
+    activities = 'activities',
+    classifications = 'classifications',
+    categories = 'categories'
 }

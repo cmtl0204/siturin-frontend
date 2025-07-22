@@ -18,7 +18,7 @@ export class JuridicalPersonComponent implements OnInit {
             const processSignal = this.coreSessionStorageService.processSignal();
 
             if (processSignal) {
-                console.log('Signal updated:', await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process));
+                // console.log('Signal updated:', await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process));
             }
         });
     }

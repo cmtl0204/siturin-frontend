@@ -32,7 +32,7 @@ export class CoreSessionStorageService {
 
     private async loadInitialSignal() {
         let decryptedValue = await this.getEncryptedValue(sessionStorage.getItem(CoreEnum.process));
-        console.log(await this.getEncryptedValue(sessionStorage.getItem(CoreEnum.process)));
+
         this._processSignal.set(decryptedValue);
 
         decryptedValue = await this.getEncryptedValue(sessionStorage.getItem(CoreEnum.cadastre));
@@ -121,7 +121,7 @@ export class CoreSessionStorageService {
         );
 
         const decoder = new TextDecoder();
-        console.log(JSON.parse(decoder.decode(decryptedData)));
+
         return JSON.parse(decoder.decode(decryptedData));
     }
 

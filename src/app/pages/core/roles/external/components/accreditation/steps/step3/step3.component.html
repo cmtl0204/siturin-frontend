@@ -7,14 +7,23 @@
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
             <!-- zone -->
             <div class="md:col-span-3 flex flex-col gap-2">
-                <label appLabel for="zone" label="Zona Geográfica" [required]="zoneField">
+                <label appLabel for="zone" label="Zona Geográfica" [required]="geographicAreaField">
                 </label>
 
-                <p-select id="zonaGeografica" [options]="dpaZones" optionLabel="name" placeholder="Seleccione"
-                          formControlName="zone" [required]="true"> </p-select>
+                <p-select
+                    dataKey="id"
+                    id="zone"
+                    [options]="geographicAreas"
+                    optionLabel="name"
+                    placeholder="Seleccione"
+                    formControlName="geographicArea"
+                    [required]="true" />
 
-                <p-message appErrorMessage [errors]="zoneField.errors" [touched]="zoneField.touched"
-                           [dirty]="zoneField.dirty">
+                <p-message
+                    appErrorMessage
+                    [errors]="geographicAreaField.errors"
+                    [touched]="geographicAreaField.touched"
+                    [dirty]="geographicAreaField.dirty">
                 </p-message>
             </div>
 
@@ -23,9 +32,13 @@
                 <label appLabel for="activity" label="Actividad" [required]="activityField">
                 </label>
 
-                <p-select id="actividad" [options]="activities" optionLabel="name" placeholder="Seleccione"
-                          formControlName="activityId" [required]="true">
-                </p-select>
+                <p-select
+                    id="actividad"
+                    [options]="activities"
+                    optionLabel="name"
+                    placeholder="Seleccione"
+                    formControlName="activity"
+                    [required]="true" />
 
                 <p-message appErrorMessage [errors]="activityField.errors" [touched]="activityField.touched"
                            [dirty]="activityField.dirty">
@@ -33,13 +46,17 @@
             </div>
 
             <!-- classification -->
-            <div class="md:col-span-3 flex flex-col gap-2" *ngIf="showClassification">
+            <div class="md:col-span-3 flex flex-col gap-2">
                 <label appLabel for="classification" label="Clasificación" [required]="classificationField">
                 </label>
 
-                <p-select id="clasificacion" [options]="classifications" optionLabel="name" placeholder="Seleccione"
-                          formControlName="classificationId" [required]="true">
-                </p-select>
+                <p-select
+                    id="clasificacion"
+                    [options]="classifications"
+                    optionLabel="name"
+                    placeholder="Seleccione"
+                    formControlName="classification"
+                    [required]="true" />
 
                 <p-message appErrorMessage [errors]="classificationField.errors" [touched]="classificationField.touched"
                            [dirty]="classificationField.dirty">
@@ -47,13 +64,17 @@
             </div>
 
             <!-- category -->
-            <div class="md:col-span-3 flex flex-col gap-2" *ngIf="showCategory">
+            <div class="md:col-span-3 flex flex-col gap-2">
                 <label appLabel for="category" label="Categoría" [required]="categoryField">
                 </label>
 
-                <p-select id="categoria" [options]="filteredCategories" optionLabel="name" placeholder="Seleccione"
-                          formControlName="categoryId" [required]="true">
-                </p-select>
+                <p-select
+                    id="categoria"
+                    [options]="categories"
+                    optionLabel="name"
+                    placeholder="Seleccione"
+                    formControlName="category"
+                    [required]="true" />
 
                 <p-message appErrorMessage [errors]="categoryField.errors" [touched]="categoryField.touched"
                            [dirty]="categoryField.dirty">
@@ -62,19 +83,5 @@
         </div>
     </form>
 
-    <app-parks [mode]="catalogMode.code" (dataOut)="saveForm($event)" />
-
-    <div class="flex justify-end mt-4">
-        <p-button label="Reingreso" icon="" (onClick)="catalogMode = { code: 'readmission' }; setFormMode()"
-                  class="p-button-secondary"></p-button>
-
-        <p-button label="Actualizar" icon="pi pi-refreshpi pi-refresh" (onClick)="catalogMode = { code: 'update' }; setFormMode()"
-                  class="p-button-secondary"></p-button>
-
-        <p-button label="Reclasificar" icon="" (onClick)="catalogMode = { code: 'reclassification' }; setFormMode()"
-                  class="p-button-secondary"></p-button>
-
-        <!--<p-button label="Recategorizar" icon="" (onClick)="catalogMode = { code: 'recategorization' }; setFormMode()"
-            class="p-button-secondary"></p-button>-->
-    </div>
+    <app-parks [mode]="process$().type?.code!" (dataOut)="saveForm($event)" />
 </p-fluid>

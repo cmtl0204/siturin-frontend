@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, effect, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { Select } from 'primeng/select';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Fluid } from 'primeng/fluid';
@@ -8,12 +8,12 @@ import { ErrorMessageDirective } from '@utils/directives/error-message.directive
 import { PrimeIcons } from 'primeng/api';
 import { ParksComponent } from './activities/parks/parks.component';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { NgIf } from '@angular/common';
-import { Button } from 'primeng/button';
 import { CatalogueInterface } from '@utils/interfaces';
 import { CatalogueService } from '@utils/services/catalogue.service';
 import { CatalogueTypeEnum, CoreEnum } from '@utils/enums';
 import { CoreSessionStorageService } from '@utils/services';
+import { ActivityInterface, CategoryInterface, ClassificationInterface } from '@modules/core/shared/interfaces';
+import { ActivityService } from '@modules/core/shared/services';
 
 interface CatalogMode {
     code: 'registration' | 'update' | 'reclassification' | 'readmission' | string;
@@ -23,7 +23,7 @@ interface CatalogMode {
 @Component({
     selector: 'app-step3',
     standalone: true,
-    imports: [Select, FormsModule, Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, NgIf, Button, ParksComponent],
+    imports: [Select, FormsModule, Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, ParksComponent],
     templateUrl: './step3.component.html',
     styleUrl: './step3.component.scss'
 })
@@ -31,111 +31,55 @@ export class Step3Component implements OnInit {
     @Output() dataOut = new EventEmitter<FormGroup>();
     @Output() fieldErrorsOut = new EventEmitter<string[]>();
 
-    private readonly formBuilder = inject(FormBuilder);
-    private readonly catalogueService = inject(CatalogueService);
-    private readonly coreSessionStorageService = inject(CoreSessionStorageService);
-    protected form!: FormGroup;
-    protected currentActivity: string | null = null;
-
-    protected showClassification: boolean = false;
-    protected showCategory: boolean = false;
-
     protected readonly PrimeIcons = PrimeIcons;
+    private readonly formBuilder = inject(FormBuilder);
 
-    protected catalogMode: CatalogMode = { code: 'registration' };
+    private readonly activityService = inject(ActivityService);
+    private readonly coreSessionStorageService = inject(CoreSessionStorageService);
+    private readonly catalogueService = inject(CatalogueService);
+    protected process$ = this.coreSessionStorageService.processSignal;
 
-    protected dpaZones: CatalogueInterface[] = [];
+    protected form!: FormGroup;
 
-    protected activities = [
-        { name: 'Alimentos y Bebidas', code: 'Alimentos y Bebidas' },
-        { name: 'Parques de atracciones estables', code: 'Parques de atracciones estables' },
-        { name: 'Alojamiento', code: 'Alojamiento' }
-    ];
+    protected geographicAreas: CatalogueInterface[] = [];
 
-    protected classifications = [
-        { name: 'Parques de atracciones estables', code: 'Parques de atracciones estables' },
-        { name: 'Bolera', code: 'Bolera' },
-        { name: 'Pista de patinaje', code: 'Pista de patinaje' },
-        { name: 'Terma', code: 'Terma' },
-        { name: 'Balneario', code: 'Balneario' },
-        { name: 'Centro de recreación turística', code: 'Centro de recreación turística' }
-    ];
+    protected activities: ActivityInterface[] = [];
 
-    protected allCategories = [
-        { name: 'Categoría Uno', code: 'Categoría Uno' },
-        { name: 'Categoría Dos', code: 'Categoría Dos' },
-        { name: 'Categoría Única', code: 'Categoría Única' }
-    ];
+    protected classifications: ClassificationInterface[] = [];
 
-    protected filteredCategories = [...this.allCategories];
+    protected categories: CategoryInterface[] = [];
 
-    private enableAll(): void {
-        this.activityField.enable();
-        this.classificationField.enable();
-        this.categoryField.enable();
-    }
-
-    private disableAll(): void {
-        this.activityField.disable();
-        this.classificationField.disable();
-        this.categoryField.disable();
-    }
-
-    constructor(private cdr: ChangeDetectorRef) {
+    constructor() {
         this.buildForm();
+
+        effect(async () => {
+            const processSignal = this.coreSessionStorageService.processSignal();
+
+            if (processSignal) {
+                console.log(processSignal);
+            }
+        });
     }
 
-    ngOnInit(): void {
-        this.loadCatalogues();
-        this.watchFormChanges();
-
-        this.catalogMode = { code: 'registration', name: 'Registrar' };
+    async ngOnInit() {
+        await this.loadCatalogues();
+        await this.loadActivities();
+        await this.watchFormChanges();
 
         this.setFormMode();
     }
 
     buildForm() {
         this.form = this.formBuilder.group({
-            zone: [{ value: null, disabled: true }, [Validators.required]],
-            activityId: [null, [Validators.required]],
-            classificationId: [null, [Validators.required]],
-            categoryId: [null, [Validators.required]]
-        });
-
-        this.form.get('activityId')?.valueChanges.subscribe((activity) => {
-            this.showClassification = activity?.name === 'Parques de atracciones estables';
-            if (!this.showClassification) {
-                this.form.get('classificationId')?.reset();
-                this.form.get('categoryId')?.reset();
-                this.showCategory = false;
-            }
-        });
-
-        this.form.get('classificationId')?.valueChanges.subscribe((classification) => {
-            const selected = classification?.name;
-            this.showCategory = !!selected;
-            if (!this.showCategory) {
-                this.form.get('categoryId')?.reset();
-                return;
-            }
-
-            if (selected === 'Terma' || selected === 'Balneario') {
-                this.filteredCategories = this.allCategories.filter((c) => c.name === 'Categoría Uno' || c.name === 'Categoría Dos');
-            } else {
-                this.filteredCategories = this.allCategories.filter((c) => c.name === 'Categoría Única');
-            }
-
-            const currentValue = this.categoryField.value;
-            const isStillValid = this.filteredCategories.some((c) => c.name === currentValue?.name);
-
-            if (!isStillValid) {
-                this.categoryField.reset();
-            }
+            geographicArea: [{ value: this.process$().activity.geographicArea, disabled: true }, [Validators.required]],
+            activity: [null, [Validators.required]],
+            classification: [null, [Validators.required]],
+            category: [null, [Validators.required]]
         });
     }
 
     setFormMode(): void {
-        switch (this.catalogMode.code) {
+        switch (this.process$().type?.code!) {
             case 'update':
                 this.disableAll();
                 break;
@@ -153,7 +97,6 @@ export class Step3Component implements OnInit {
                 this.enableAll();
                 break;
         }
-        this.cdr.detectChanges();
     }
 
     async watchFormChanges() {
@@ -163,8 +106,29 @@ export class Step3Component implements OnInit {
             }
         });
 
-        this.activityField.valueChanges.subscribe(async (value) => {
-            await this.coreSessionStorageService.setEncryptedValue(CoreEnum.process, { activity: value });
+        this.activityField.valueChanges.subscribe(async (activity) => {
+            if (activity) {
+                this.classificationField.reset();
+                this.categoryField.reset();
+
+                this.classifications = await this.activityService.findClassificationsByActivity(activity.id);
+
+                await this.coreSessionStorageService.setEncryptedValue(CoreEnum.process, { activity });
+            }
+        });
+
+        this.classificationField.valueChanges.subscribe(async (classification) => {
+            if (classification) {
+                this.categoryField.reset();
+                this.categories = await this.activityService.findCategoriesByClassification(classification.id);
+                await this.coreSessionStorageService.setEncryptedValue(CoreEnum.process, { classification });
+            }
+        });
+
+        this.categoryField.valueChanges.subscribe(async (category) => {
+            if (category) {
+                await this.coreSessionStorageService.setEncryptedValue(CoreEnum.process, { category });
+            }
         });
     }
 
@@ -177,14 +141,12 @@ export class Step3Component implements OnInit {
                 this.form.get(controlName)?.patchValue(control?.value);
             }
         });
-
-        console.log(this.form.value);
     }
 
     getFormErrors(): string[] {
         const errors: string[] = [];
 
-        if (this.zoneField.invalid) errors.push('Zona Geográfica es obligatoria.');
+        if (this.geographicAreaField.invalid) errors.push('Zona Geográfica es obligatoria.');
         if (this.activityField.invalid) errors.push('Actividad es obligatoria.');
         if (this.classificationField.invalid) errors.push('Clasificación es obligatoria.');
         if (this.categoryField.invalid) errors.push('Categoría es obligatoria.');
@@ -196,28 +158,41 @@ export class Step3Component implements OnInit {
         return errors;
     }
 
-    onSubmit() {
-        this.dataOut.emit(this.form);
+    private enableAll(): void {
+        this.activityField.enable();
+        this.classificationField.enable();
+        this.categoryField.enable();
     }
 
-    loadCatalogues() {
-        this.dpaZones = this.catalogueService.findByType(CatalogueTypeEnum.dpa_zone);
-        console.log(this.dpaZones);
+    private disableAll(): void {
+        this.activityField.disable();
+        this.classificationField.disable();
+        this.categoryField.disable();
     }
 
-    get zoneField(): AbstractControl {
-        return this.form.controls['zone'];
+    async loadCatalogues() {
+        this.geographicAreas = await this.catalogueService.findByType(CatalogueTypeEnum.activities_geographic_area);
+    }
+
+    async loadActivities() {
+        this.activities = await this.activityService.findActivitiesByZone(this.geographicAreaField.getRawValue().id);
+    }
+
+    loadData() {}
+
+    get geographicAreaField(): AbstractControl {
+        return this.form.controls['geographicArea'];
     }
 
     get activityField(): AbstractControl {
-        return this.form.controls['activityId'];
+        return this.form.controls['activity'];
     }
 
     get classificationField(): AbstractControl {
-        return this.form.controls['classificationId'];
+        return this.form.controls['classification'];
     }
 
     get categoryField(): AbstractControl {
-        return this.form.controls['categoryId'];
+        return this.form.controls['category'];
     }
 }

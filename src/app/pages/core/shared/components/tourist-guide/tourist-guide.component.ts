@@ -14,7 +14,7 @@ import { deleteButtonAction } from '@utils/components/button-action/consts';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { TouristGuideInterface } from '@modules/core/interfaces';
-import { TouristGuideHttpService } from '@modules/core/shared/adventure-tourism-modality/tourist-guide-http.service';
+import { TouristGuideHttpService } from '@modules/core/shared/components/adventure-tourism-modality/tourist-guide-http.service';
 import { ListBasicComponent } from '@utils/components/list-basic/list-basic.component';
 
 @Component({

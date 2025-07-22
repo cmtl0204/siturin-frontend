@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { MY_ROUTES } from '@routes';
-import { SimulatorComponent } from '@modules/core/shared/simulator/simulator.component';
+import { SimulatorComponent } from '@modules/core/shared/components/simulator/simulator.component';
 
 export default [
     {

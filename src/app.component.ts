@@ -11,7 +11,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { CatalogueHttpService, CoreSessionStorageService, DpaHttpService } from '@utils/services';
 import { switchMap, tap } from 'rxjs/operators';
 import { CoreEnum } from '@utils/enums';
-import { CatalogueService } from '@utils/services/catalogue.service';
+import { ActivityHttpService } from '@modules/core/shared/services';
 
 @Component({
     selector: 'app-root',
@@ -37,9 +37,9 @@ import { CatalogueService } from '@utils/services/catalogue.service';
 })
 export class AppComponent implements OnInit {
     protected readonly coreService = inject(CoreService);
-    private readonly _dpaHttpService = inject(DpaHttpService);
+    private readonly dpaHttpService = inject(DpaHttpService);
+    private readonly activityHttpService = inject(ActivityHttpService);
     protected readonly catalogueHttpService = inject(CatalogueHttpService);
-    protected readonly catalogueService = inject(CatalogueService);
     protected readonly customMessageService = inject(CustomMessageService);
     private readonly coreSessionStorageService = inject(CoreSessionStorageService);
 
@@ -50,13 +50,17 @@ export class AppComponent implements OnInit {
             .findCache()
             .pipe(
                 tap(async (response) => {
-                    // await this.coreSessionStorageService.setEncryptedValue(CoreEnum.catalogues, response);
-                    sessionStorage.setItem(CoreEnum.catalogues, JSON.stringify(response));
+                    await this.coreSessionStorageService.setEncryptedValue(CoreEnum.catalogues, response);
                 }),
-                switchMap(() => this._dpaHttpService.findCache()),
+                switchMap(() => this.dpaHttpService.findCache()),
                 tap(async (response) => {
-                    // await this.coreSessionStorageService.setEncryptedValue(CoreEnum.dpa, response);
-                    sessionStorage.setItem(CoreEnum.dpa, JSON.stringify(response));
+                    await this.coreSessionStorageService.setEncryptedValue(CoreEnum.dpa, response);
+                }),
+                switchMap(() => this.activityHttpService.findCache()),
+                tap(async (response) => {
+                    await this.coreSessionStorageService.setEncryptedValue(CoreEnum.activities, response.data.activities);
+                    await this.coreSessionStorageService.setEncryptedValue(CoreEnum.classifications, response.data.classifications);
+                    await this.coreSessionStorageService.setEncryptedValue(CoreEnum.categories, response.data.categories);
                 })
             )
             .subscribe();
