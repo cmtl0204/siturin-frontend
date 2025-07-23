@@ -10,8 +10,6 @@ import { CustomMessageService } from '@utils/services/custom-message.service';
 import { LabelDirective } from '@utils/directives/label.directive';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { CatalogueInterface } from '@utils/interfaces';
-import { CatalogueTypeEnum } from '@utils/enums';
-import { CatalogueService } from '@utils/services/catalogue.service';
 
 @Component({
     selector: 'app-physical-space',
@@ -27,24 +25,33 @@ export class PhysicalSpaceComponent implements OnInit {
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
 
-    private readonly catalogueService = inject(CatalogueService);
-
     protected form!: FormGroup;
 
-    protected localTypes: CatalogueInterface[] = [];
+    protected localTypes: CatalogueInterface[] = [
+        { name: 'Option 1', code: 'Option 1' },
+        { name: 'Option 2', code: 'Option 2' },
+        { name: 'Option 3', code: 'Option 3' }
+    ];
+    protected permanentPhysicalSpaces: CatalogueInterface[] = [
+        { id: '1', name: 'Casa' },
+        {
+            id: '2',
+            name: 'Edificio'
+        }
+    ];
 
     constructor() {
         this.buildForm();
     }
 
     ngOnInit() {
-        this.loadCatalogues();
         this.loadData();
     }
 
     buildForm() {
         this.form = this.formBuilder.group({
             localType: [null, [Validators.required]],
+            permanentPhysicalSpace: [null, [Validators.required]],
             isProtectedArea: [false, [Validators.required]],
             hasProtectedAreaContract: [false]
         });
@@ -74,6 +81,8 @@ export class PhysicalSpaceComponent implements OnInit {
 
         if (this.localTypeField.invalid) errors.push('Su local es');
 
+        if (this.permanentPhysicalSpaceField.invalid) errors.push('Espacio físico Permanente');
+
         if (this.isProtectedAreaField.invalid)
             errors.push(
                 '¿Realiza actividades autorizadas por la Autoridad Ambiental Nacional en el Subsistema Estatal del Sistema de Áreas Naturales Protegidas, de conformidad con lo establecido en los artículos 8 y 9 de la Ley de Turismo dentro del Subsistema Estatal del Sistema Nacional de Áreas Protegidas?'
@@ -91,12 +100,12 @@ export class PhysicalSpaceComponent implements OnInit {
 
     loadData() {}
 
-    async loadCatalogues() {
-        this.localTypes = await this.catalogueService.findByType(CatalogueTypeEnum.activities_geographic_area);
-    }
-
     get localTypeField(): AbstractControl {
         return this.form.controls['localType'];
+    }
+
+    get permanentPhysicalSpaceField(): AbstractControl {
+        return this.form.controls['permanentPhysicalSpace'];
     }
 
     get isProtectedAreaField(): AbstractControl {
