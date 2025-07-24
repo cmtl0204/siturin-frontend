@@ -2,7 +2,7 @@ import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular
 import { ActivatedRoute, Router } from '@angular/router';
 import { Fluid } from 'primeng/fluid';
 import { LabelDirective } from '@utils/directives/label.directive';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { ToggleSwitch } from 'primeng/toggleswitch';
 import { CustomMessageService } from '@utils/services';
@@ -38,9 +38,9 @@ export class JuridicalPersonComponent implements OnInit {
 
     buildForm() {
         this.form = this.formBuilder.group({
-            legalEntity: [null],
-            hasPersonDesignation: [false],
-            hasTouristActivityDocument: [false]
+            legalEntity: [null, [Validators.required]],
+            hasPersonDesignation: [false, [Validators.requiredTrue]],
+            hasTouristActivityDocument: [false, [Validators.requiredTrue]]
         });
 
         this.watchFormChanges();
@@ -48,23 +48,34 @@ export class JuridicalPersonComponent implements OnInit {
 
     watchFormChanges() {
         this.form.valueChanges.subscribe(() => {
-            this.dataOut.emit(this.form);
+            if (this.form.valid) this.dataOut.emit(this.form);
         });
+    }
+
+    getFormErrors(): string[] {
+        const errors: string[] = [];
+
+        if (this.legalEntityField.invalid) errors.push('Tipo de Personería Jurídica');
+
+        if (this.hasPersonDesignationField.invalid) errors.push('Nombramiento vigente del o los representantes legales, debidamente inscrito ante la autoridad correspondiente');
+
+        if (this.hasTouristActivityDocumentField.invalid) errors.push('Documento constitutivo de la misma debidamente aprobada por la autoridad correspondiente, en la que conste como su objeto social el desarrollo de la actividad turística');
+
+        if (errors.length > 0) {
+            this.form.markAllAsTouched();
+            return errors;
+        }
+
+        return [];
     }
 
     loadData() {
         if (this.data) {
-            try {
-                const parsedData = JSON.parse(this.data);
-                this.form.patchValue(parsedData);
-            } catch (error) {
-                console.error('Error parsing data:', error);
-            }
         }
     }
 
     async loadCatalogues() {
-    this.legalEntities = await this.catalogueService.findByType(CatalogueTypeEnum.processes_legal_entity)
+        this.legalEntities = await this.catalogueService.findByType(CatalogueTypeEnum.processes_legal_entity);
     }
 
     get legalEntityField(): AbstractControl {

@@ -20,9 +20,8 @@
                     id="province"
                     [options]="provinces"
                     formControlName="province"
-                    [filter]="true"
-                    filterBy="name"
                     optionLabel="name"
+                    [filter]="true"
                     placeholder="Seleccione una provincia" />
 
                 <p-message
@@ -47,6 +46,7 @@
                         [options]="cantons"
                         formControlName="canton"
                         optionLabel="name"
+                        [filter]="true"
                         placeholder="Seleccione un cantón" />
 
                     <p-message
@@ -71,6 +71,8 @@
                         id="parish"
                         [options]="parishes"
                         formControlName="parish"
+                        [filter]="true"
+                        filterBy="name"
                         placeholder="Seleccione una parroquia">
                         <ng-template #item let-item>
                             {{ item.name }} ({{ item.zoneType }})

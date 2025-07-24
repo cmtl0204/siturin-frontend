@@ -56,7 +56,7 @@ export class Step3Component implements OnInit {
             const processSignal = this.coreSessionStorageService.processSignal();
 
             if (processSignal) {
-                // console.log(processSignal);
+
             }
         });
     }

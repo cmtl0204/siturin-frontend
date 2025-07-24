@@ -1,13 +1,14 @@
-import { Component, inject, QueryList, ViewChildren } from '@angular/core';
+import { Component, EventEmitter, inject, Output, QueryList, ViewChildren } from '@angular/core';
 import { Button } from 'primeng/button';
 import { PrimeIcons } from 'primeng/api';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { CustomMessageService } from '@utils/services';
+import { CoreSessionStorageService, CustomMessageService } from '@utils/services';
 import { BusinessInfoComponent } from './business-info-component/business-info-component.component';
 import { StaffComponent } from '@modules/core/roles/external/components/accreditation/steps/step2/staff/staff.component';
 import { ContactPersonComponent } from '@modules/core/roles/external/components/accreditation/steps/step2/contact-person/contact-person.component';
 import { Fluid } from 'primeng/fluid';
 import { AddressComponent } from '@modules/core/roles/external/components/accreditation/steps/step2/address/address.component';
+import { CoreEnum } from '@utils/enums';
 
 @Component({
     selector: 'app-step2',
@@ -18,6 +19,7 @@ import { AddressComponent } from '@modules/core/roles/external/components/accred
 export class Step2Component {
     protected readonly PrimeIcons = PrimeIcons;
 
+    @Output() step: EventEmitter<number> = new EventEmitter<number>();
     @ViewChildren(BusinessInfoComponent) private businessInfoComponent!: QueryList<BusinessInfoComponent>;
     @ViewChildren(ContactPersonComponent) private contactPersonComponent!: QueryList<ContactPersonComponent>;
     @ViewChildren(StaffComponent) private staffComponent!: QueryList<StaffComponent>;
@@ -27,6 +29,7 @@ export class Step2Component {
     protected mainForm!: FormGroup;
 
     protected readonly customMessageService = inject(CustomMessageService);
+    protected readonly coreSessionStorageService = inject(CoreSessionStorageService);
 
     constructor() {
         this.mainForm = this.formBuilder.group({});
@@ -54,8 +57,6 @@ export class Step2Component {
             ...this.addressComponent.toArray().flatMap((c) => c.getFormErrors())
         ];
 
-        console.log(errors);
-
         if (errors.length > 0) {
             this.customMessageService.showFormErrors(errors);
             return false;
@@ -64,7 +65,14 @@ export class Step2Component {
         return true;
     }
 
-    saveProcess() {
+    async saveProcess() {
         console.log(this.mainForm.value);
+        const data = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
+        await this.coreSessionStorageService.setEncryptedValue('process', { ...this.mainForm.value, ...data });
+        this.step.emit(3);
+    }
+
+    back() {
+        this.step.emit(1);
     }
 }
