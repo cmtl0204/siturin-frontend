@@ -5,6 +5,7 @@ export enum CatalogueTypeEnum {
     dpa_zone = 'dpa_zone',
     activities_geographic_area = 'activities_geographic_area',
     internal_zonal_users_zone = 'internal_zonal_users_zone',
+    processes_legal_entity = 'processes_legal_entity',
     BLOOD_TYPE = 'BLOOD_TYPE',
     ETHNIC_ORIGIN = 'ETHNIC_ORIGIN',
     GENDER = 'GENDER',

@@ -92,9 +92,11 @@
                     formControlName="category"
                     [required]="true" />
 
-                <p-message appErrorMessage [errors]="categoryField.errors" [touched]="categoryField.touched"
-                           [dirty]="categoryField.dirty">
-                </p-message>
+                <p-message
+                    appErrorMessage
+                    [dirty]="categoryField.dirty"
+                    [errors]="categoryField.errors"
+                    [touched]="categoryField.touched" />
             </div>
         </div>
     </form>

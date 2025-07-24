@@ -5,6 +5,7 @@ import { CatalogueInterface } from '@utils/interfaces';
 
 export interface ProcessI {
     processId?: string;
+    establishmentId?: string;
     activity?: any;
     classification?: any;
     category?: any;

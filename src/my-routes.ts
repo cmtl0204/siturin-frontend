@@ -155,6 +155,10 @@ export const MY_ROUTES = {
             accreditation: {
                 base: 'accreditations',
                 absolute: '/main/core/external/accreditations'
+            },
+            establishment: {
+                base: 'establishments',
+                absolute: '/main/core/external/establishments'
             }
         },
         technician: {

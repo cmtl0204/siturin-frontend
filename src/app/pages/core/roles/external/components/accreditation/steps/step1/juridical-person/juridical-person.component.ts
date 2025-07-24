@@ -1,166 +1,81 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Fluid } from 'primeng/fluid';
+import { LabelDirective } from '@utils/directives/label.directive';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Select } from 'primeng/select';
+import { ToggleSwitch } from 'primeng/toggleswitch';
+import { CustomMessageService } from '@utils/services';
+import { CatalogueInterface } from '@utils/interfaces';
+import { Message } from 'primeng/message';
+import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
+import { CatalogueService } from '@utils/services/catalogue.service';
+import { CatalogueTypeEnum } from '@utils/enums';
 
 @Component({
     selector: 'app-juridical-person',
-    imports: [],
+    imports: [Fluid, LabelDirective, ReactiveFormsModule, Select, ToggleSwitch, Message, ErrorMessageDirective],
     templateUrl: './juridical-person.component.html',
     styleUrl: './juridical-person.component.scss'
 })
 export class JuridicalPersonComponent implements OnInit {
-    establecimiento: any = {};
-    tramite: string = '';
-    numeroRegistro: string = '';
+    @Input() data!: string | undefined;
+    @Output() dataOut = new EventEmitter<FormGroup>();
 
-    // Stepper variables
-    pasoActual: number = 1;
-    totalPasos: number = 3;
-    puedeAvanzar: boolean = false;
+    private readonly catalogueService = inject(CatalogueService);
 
-    // Estados de completado de cada paso
-    pasosCompletados: boolean[] = [false, false, false];
+    private readonly formBuilder = inject(FormBuilder);
+    protected readonly customMessageService = inject(CustomMessageService);
 
-    // Variables temporales para el demo
-    tipoPersoneria: string = '';
+    protected form!: FormGroup;
+    protected legalEntities: CatalogueInterface[] = [];
 
-    constructor(
-        private route: ActivatedRoute,
-        private router: Router
-    ) {}
-
-    ngOnInit(): void {
-        this.obtenerDatosEstablecimiento();
-
-        // Inicializar datos por defecto si no vienen de navegación
-        if (!this.establecimiento.id) {
-            this.establecimiento = {
-                id: '5',
-                nombre: 'AMERICAN DELI'
-            };
-            this.tramite = 'Registro';
-            this.numeroRegistro = 'No cuenta con Registro de Turismo';
-        }
-
-        // Verificar si puede avanzar en el paso inicial
-        this.verificarProgreso();
+    ngOnInit() {
+        this.buildForm();
+        this.loadCatalogues();
+        this.loadData();
     }
 
-    obtenerDatosEstablecimiento(): void {
-        // Ejemplo de cómo obtener datos del estado de navegación
-        const navigation = this.router.getCurrentNavigation();
-        if (navigation?.extras?.state) {
-            this.establecimiento = navigation.extras.state['establecimiento'] || {};
-            this.tramite = navigation.extras.state['tramite'] || 'Registro';
-            this.numeroRegistro = navigation.extras.state['numeroRegistro'] || 'No cuenta con Registro de Turismo';
-        } else {
-            // O obtener desde parámetros de ruta
-            this.route.params.subscribe((params) => {
-                if (params['id']) {
-                    this.cargarEstablecimientoPorId(params['id']);
-                }
-            });
-        }
+    buildForm() {
+        this.form = this.formBuilder.group({
+            legalEntity: [null],
+            hasPersonDesignation: [false],
+            hasTouristActivityDocument: [false]
+        });
+
+        this.watchFormChanges();
     }
 
-    private cargarEstablecimientoPorId(id: string): void {
-        // Simulación de llamada a servicio
-        // En una app real, aquí harías una llamada HTTP
-        this.establecimiento = {
-            id: id,
-            nombre: 'AMERICAN DELI'
-        };
-        this.tramite = 'Registro';
-        this.numeroRegistro = 'No cuenta con Registro de Turismo';
+    watchFormChanges() {
+        this.form.valueChanges.subscribe(() => {
+            this.dataOut.emit(this.form);
+        });
     }
 
-    regresarAEstablecimientos(): void {
-        this.router.navigate(['/establecimientos']);
-    }
-
-    // Métodos del Stepper
-    siguientePaso(): void {
-        if (this.pasoActual < this.totalPasos && this.puedeAvanzar) {
-            this.pasosCompletados[this.pasoActual - 1] = true;
-            this.pasoActual++;
-            this.verificarProgreso();
-        }
-    }
-
-    pasoAnterior(): void {
-        if (this.pasoActual > 1) {
-            this.pasoActual--;
-            this.verificarProgreso();
-        }
-    }
-
-    onPasoCompletado(completado: boolean): void {
-        this.puedeAvanzar = completado;
-        this.pasosCompletados[this.pasoActual - 1] = completado;
-
-        // Si es el paso 1 y está completado, avanzar automáticamente
-        if (this.pasoActual === 1 && completado) {
-            setTimeout(() => {
-                this.siguientePaso();
-            }, 500); // Pequeño delay para que el usuario vea el cambio
-        }
-    }
-
-    private verificarProgreso(): void {
-        // Lógica para determinar si se puede avanzar según el paso actual
-        switch (this.pasoActual) {
-            case 1:
-                // En el primer paso, verificar si el formulario de datos generales está completo
-                this.puedeAvanzar = true; // Por defecto true para prueba
-                break;
-            case 2:
-                // En el segundo paso, verificar si los documentos están subidos
-                this.puedeAvanzar = true;
-                break;
-            case 3:
-                // En el tercer paso, siempre se puede finalizar
-                this.puedeAvanzar = true;
-                break;
-        }
-    }
-
-    finalizarProceso(): void {
-        console.log('Proceso de acreditación completado');
-        console.log('Datos del establecimiento:', this.establecimiento);
-        console.log('Pasos completados:', this.pasosCompletados);
-
-        // Aquí puedes enviar los datos al backend
-        // this.acreditacionService.enviarSolicitud(this.establecimiento).subscribe(...)
-
-        // Mostrar mensaje de éxito o navegar a otra página
-        alert('¡Solicitud de acreditación enviada exitosamente!');
-    }
-
-    // Métodos para navegar directamente a un paso (opcional)
-    irAPaso(paso: number): void {
-        if (paso >= 1 && paso <= this.totalPasos) {
-            // Solo permitir ir a un paso si los anteriores están completados
-            const pasosAnterioresCompletos = this.pasosCompletados.slice(0, paso - 1).every((p) => p);
-
-            if (paso === 1 || pasosAnterioresCompletos) {
-                this.pasoActual = paso;
-                this.verificarProgreso();
+    loadData() {
+        if (this.data) {
+            try {
+                const parsedData = JSON.parse(this.data);
+                this.form.patchValue(parsedData);
+            } catch (error) {
+                console.error('Error parsing data:', error);
             }
         }
     }
 
-    get progresoPorcentaje(): number {
-        const pasosCompletos = this.pasosCompletados.filter((p) => p).length;
-        return (pasosCompletos / this.totalPasos) * 100;
+    async loadCatalogues() {
+    this.legalEntities = await this.catalogueService.findByType(CatalogueTypeEnum.processes_legal_entity)
     }
 
-    // Métodos temporales para el demo
-    completarPaso1(): void {
-        this.puedeAvanzar = true;
-        this.pasosCompletados[0] = true;
+    get legalEntityField(): AbstractControl {
+        return this.form.get('legalEntity')!;
     }
 
-    completarPaso2(): void {
-        this.puedeAvanzar = true;
-        this.pasosCompletados[1] = true;
+    get hasPersonDesignationField(): AbstractControl {
+        return this.form.get('hasPersonDesignation')!;
+    }
+
+    get hasTouristActivityDocumentField(): AbstractControl {
+        return this.form.get('hasTouristActivityDocument')!;
     }
 }

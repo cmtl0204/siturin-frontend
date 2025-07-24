@@ -16,24 +16,8 @@ export class Step1Component implements OnInit {
     async ngOnInit() {
         await this.saveData({
             processId: 'e30fba26-4b77-44f0-8c46-27e6d3f63b47',
+            establishmentId: '78c4a2f7-da76-4744-abea-5e3d09ba3398',
             type: { id: '4cc349ad-460e-4aba-8ef3-14513db7a16d', code: 'registration' },
-            activity: {
-                id: '2ee299ac-0241-4e60-a8d6-61113db9e7a8',
-                geographicArea: {
-                    id: '6c051659-133f-4c5c-8304-0cd44c616428'
-                },
-                code: 'registration'
-            },
-            classification: {
-                id: '42cb691e-78bb-4f5f-983d-41a49817e536',
-                code: 'parques',
-                name: 'PARQUE DE ATRACCIONES ESTABLES'
-            },
-            category: {
-                id: '41834644-990d-4928-983e-7ebd36a309bc',
-                code: null,
-                name: 'Categoría Única'
-            }
         });
     }
 

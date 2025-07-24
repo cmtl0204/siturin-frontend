@@ -14,7 +14,7 @@ import { BreadcrumbService } from '@layout/service';
 })
 export class AccreditationComponent {
     private readonly _breadcrumbService = inject(BreadcrumbService);
-    protected activeStep: number = 1;
+    protected activeStep: number = 2;
 
     constructor() {
         this._breadcrumbService.setItems([{ label: 'Proceso de Acreditación de Actividades Turísticas' }]);
