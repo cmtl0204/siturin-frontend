@@ -4,7 +4,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { HttpResponseInterface } from '@modules/auth/interfaces';
 import { CustomMessageService } from '@utils/services/custom-message.service';
-import { ProjectInterface } from '@modules/core/interfaces';
 
 @Injectable({
     providedIn: 'root'
@@ -56,30 +55,6 @@ export class AgencyHttpService {
 
         return this._httpClient.get<HttpResponseInterface>(url).pipe(
             map((response) => {
-                return response.data;
-            })
-        );
-    }
-
-    create(payload: ProjectInterface) {
-        const url = `${this._apiUrl}`;
-
-        return this._httpClient.post<HttpResponseInterface>(url, payload).pipe(
-            map((response) => {
-                this._customMessageService.showSuccess({ summary: response.title, detail: response.message });
-
-                return response.data;
-            })
-        );
-    }
-
-    update(id: string, payload: ProjectInterface) {
-        const url = `${this._apiUrl}/${id}`;
-
-        return this._httpClient.put<HttpResponseInterface>(url, payload).pipe(
-            map((response) => {
-                this._customMessageService.showSuccess({ summary: response.title, detail: response.message });
-
                 return response.data;
             })
         );

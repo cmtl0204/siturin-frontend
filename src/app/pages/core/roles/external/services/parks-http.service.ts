@@ -1,44 +1,47 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '@env/environment';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { map } from 'rxjs/operators';
 import { HttpResponseInterface } from '@modules/auth/interfaces';
-import { CustomMessageService } from '@utils/services/custom-message.service';
-import { TouristGuideInterface } from '@modules/core/interfaces';
-import { Observable } from 'rxjs';
+import { ParkInterface } from '@modules/core/interfaces';
+import { CustomMessageService } from '@utils/services';
+import { map } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
-export class TouristGuideHttpService {
+export class ParksHttpService {
     private readonly _httpClient = inject(HttpClient);
-    private readonly _apiUrl = `${environment.API_URL}/core/shared/tourist-guides`;
+    private readonly _apiUrl = `${environment.API_URL}/core/external/process-parks`;
     private readonly _customMessageService = inject(CustomMessageService);
 
-    findAll(page = 1, search = ''): Observable<HttpResponseInterface> {
+    findAll(page = 1, search: string | null) {
         const url = `${this._apiUrl}`;
 
         let params = new HttpParams();
-
         params = params.set('page', page);
 
         if (search) {
             params = params.set('search', search);
         }
 
-        return this._httpClient.get<HttpResponseInterface>(url, { params }).pipe(
-            map((response) => {
-                return response;
-            })
-        );
+        return this._httpClient.get<HttpResponseInterface>(url, { params }).pipe(map((response) => response));
     }
 
-    findOne(id: string): Observable<TouristGuideInterface> {
+    findOne(id: string) {
         const url = `${this._apiUrl}/${id}`;
 
         return this._httpClient.get<HttpResponseInterface>(url).pipe(
             map((response) => {
-                return response.data;
+                const data = response.data;
+
+                const startedAt = data?.startedAt ? new Date(data.startedAt) : null;
+                const endedAt = data?.endedAt ? new Date(data.endedAt) : null;
+
+                return {
+                    ...data,
+                    startedAt,
+                    endedAt
+                };
             })
         );
     }
@@ -53,13 +56,10 @@ export class TouristGuideHttpService {
         );
     }
 
-    delete(id: string) {
-        const url = `${this._apiUrl}/${id}`;
-
-        return this._httpClient.delete<HttpResponseInterface>(url).pipe(
+    createRegistration(payload: ParkInterface) {
+        const url = `${this._apiUrl}/registrations`;
+        return this._httpClient.post<HttpResponseInterface>(url, payload).pipe(
             map((response) => {
-                this._customMessageService.showSuccess({ summary: response.title, detail: response.message });
-
                 return response.data;
             })
         );

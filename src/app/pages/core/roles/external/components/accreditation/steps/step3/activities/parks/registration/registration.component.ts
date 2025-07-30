@@ -6,6 +6,7 @@ import { CoreSessionStorageService, CustomMessageService } from '@utils/services
 import { PeopleCapacityComponent } from '../shared/people-capacity/people-capacity.component';
 import { PhysicalSpaceComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/parks/shared/physical-space/physical-space.component';
 import { CoreEnum } from '@utils/enums';
+import { ParksHttpService } from '@modules/core/roles/external/services/parks-http.service';
 
 @Component({
     selector: 'app-registration',
@@ -17,6 +18,7 @@ import { CoreEnum } from '@utils/enums';
 export class RegistrationComponent implements OnInit {
     protected readonly PrimeIcons = PrimeIcons;
     private readonly coreSessionStorageService = inject(CoreSessionStorageService);
+    private readonly parksHttpService = inject(ParksHttpService);
 
     @ViewChildren(PhysicalSpaceComponent) private physicalSpaceComponent!: QueryList<PhysicalSpaceComponent>;
     @ViewChildren(PeopleCapacityComponent) private peopleCapacityComponent!: QueryList<PeopleCapacityComponent>;
@@ -30,9 +32,7 @@ export class RegistrationComponent implements OnInit {
         this.mainForm = this.formBuilder.group({});
     }
 
-    ngOnInit(): void {
-        // this.mainForm.addControl('processId', this.formBuilder.control(''));
-    }
+    ngOnInit(): void {}
 
     saveForm(childForm: FormGroup) {
         Object.keys(childForm.controls).forEach((controlName) => {
@@ -53,9 +53,15 @@ export class RegistrationComponent implements OnInit {
     }
 
     async saveProcess() {
-        const data = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
+        const sessionData = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
 
-        console.log({ ...this.mainForm.value, ...data });
+        console.log('sessionData', sessionData);
+
+        const payload = { ...this.mainForm.value, ...sessionData };
+
+        this.parksHttpService.createRegistration(payload).subscribe({
+            next: () => {}
+        });
     }
 
     checkFormErrors() {

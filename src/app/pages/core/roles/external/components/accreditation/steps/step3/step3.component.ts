@@ -56,15 +56,11 @@ export class Step3Component implements OnInit {
             const processSignal = this.coreSessionStorageService.processSignal();
 
             if (processSignal) {
-
             }
         });
     }
 
     async ngOnInit() {
-        this.process = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
-        this.geographicAreaField.patchValue(this.process.activity.geographicArea);
-
         await this.loadCatalogues();
         await this.loadActivities();
         await this.watchFormChanges();
@@ -164,6 +160,14 @@ export class Step3Component implements OnInit {
     }
 
     async loadActivities() {
+        this.process = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
+
+        this.geographicAreaField.patchValue(this.geographicAreas.find((x) => x.code === 'continent'));
+
+        if (this.process.province?.code === '20') {
+            this.geographicAreaField.patchValue(this.geographicAreas.find((x) => x.code === 'galapagos'));
+        }
+
         this.activities = await this.activityService.findActivitiesByZone(this.geographicAreaField.getRawValue().id);
     }
 

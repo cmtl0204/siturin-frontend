@@ -17,10 +17,10 @@ export class CatalogueService {
         if (sessionStorage.getItem(CoreEnum.catalogues)) {
             catalogues = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.catalogues);
             catalogues = Object.values(catalogues);
-
             catalogues = catalogues.filter((catalogue) => {
                 return catalogue.type === type;
             });
+            console.log(catalogues);
         }
 
         return catalogues;

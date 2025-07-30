@@ -1,13 +1,14 @@
 import { Component, EventEmitter, inject, Output, QueryList, ViewChildren } from '@angular/core';
 import { PrimeIcons } from 'primeng/api';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { CustomMessageService } from '@utils/services';
+import { CoreSessionStorageService, CustomMessageService } from '@utils/services';
 import { JuridicalPersonComponent } from '@modules/core/roles/external/components/accreditation/steps/step1/juridical-person/juridical-person.component';
 import { Button } from 'primeng/button';
 import { Fluid } from 'primeng/fluid';
 import { Router } from '@angular/router';
 import { MY_ROUTES } from '@routes';
 import { SriComponent } from '@modules/core/shared/components/sri/sri.component';
+import { CoreEnum } from '@utils/enums';
 
 @Component({
     selector: 'app-step1',
@@ -26,9 +27,18 @@ export class Step1Component {
     protected mainForm!: FormGroup;
 
     protected readonly customMessageService = inject(CustomMessageService);
+    protected readonly coreSessionStorageService = inject(CoreSessionStorageService);
 
     constructor() {
         this.mainForm = this.formBuilder.group({});
+
+        this.coreSessionStorageService.setEncryptedValue(CoreEnum.process, {
+            type: {
+                id: '4cc349ad-460e-4aba-8ef3-14513db7a16d',
+                code: 'registration',
+                name: 'Registro',
+            }
+        });
     }
 
     saveForm(childForm: FormGroup) {

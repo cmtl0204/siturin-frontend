@@ -20,10 +20,8 @@ export class ParksComponent {
     @Input() processTypeCode: string = 'registration';
 
     private readonly coreSessionStorageService = inject(CoreSessionStorageService);
-
-    constructor() {
-
-    }
-
     protected readonly CatalogueProcessesTypeEnum = CatalogueProcessesTypeEnum;
+
+    constructor() {}
+
 }

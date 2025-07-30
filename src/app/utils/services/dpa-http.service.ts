@@ -4,7 +4,7 @@ import { environment } from '@env/environment';
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { HttpResponseInterface } from '@modules/auth/interfaces';
 import { map } from 'rxjs/operators';
-import { ProgramInterface } from '@modules/core/interfaces';
+
 import { Observable } from 'rxjs';
 
 @Injectable({

@@ -1,14 +1,16 @@
 import { Injectable, signal } from '@angular/core';
 import { environment } from '@env/environment';
 import { CoreEnum } from '@utils/enums';
-import { CatalogueInterface } from '@utils/interfaces';
+import { CatalogueInterface, DpaInterface } from '@utils/interfaces';
+import { ActivityInterface, CategoryInterface, ClassificationInterface } from '@modules/core/shared/interfaces';
 
 export interface ProcessI {
     processId?: string;
     establishmentId?: string;
-    activity?: any;
-    classification?: any;
-    category?: any;
+    activity?: ActivityInterface;
+    classification?: ClassificationInterface;
+    category?: CategoryInterface;
+    province?: DpaInterface;
     type?: CatalogueInterface;
 }
 

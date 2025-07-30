@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-sri',
-    imports: [Message, Fluid, Button, RouterLink],
+    imports: [Message, Fluid, Button],
     templateUrl: './sri.component.html',
     styleUrl: './sri.component.scss'
 })
