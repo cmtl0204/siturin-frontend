@@ -24,7 +24,11 @@
                     label="Declaro que el establecimiento, al momento del envío de la solicitud, ha contratado Guías de Turismo">
                 </label>
 
-                <p-toggleswitch id="hasTouristGuide" formControlName="hasTouristGuide" />
+                <p-toggleswitch id="hasTouristGuide" formControlName="hasTouristGuide" >
+                    <ng-template #handle let-checked="checked">
+                        <span class="!text-xs font-semibold">{{ checked ? 'SÍ' : 'NO' }}</span>
+                    </ng-template>
+                </p-toggleswitch>
 
                 <p-message
                     appErrorMessage
@@ -39,12 +43,12 @@
 <p-fluid>
     @if (hasTouristGuideField.value) {
         <app-list-basic
+            title="Listado de Guías"
             [items]="items"
             [cols]="cols"
             [buttonActions]="buttonActions"
-            title="Listado de Guías"
-            (onSelect)="buildButtonActions($event)"
             (onCreate)="create()"
+            (onSelect)="buildButtonActions($event)"
         />
     }
 </p-fluid>
@@ -65,7 +69,7 @@
     </ng-template>
 
     <p-fluid>
-        <form [formGroup]="form" (ngSubmit)="onSubmit()"
+        <form [formGroup]="touristGuideForm" (ngSubmit)="onSubmit()"
               class="card flex flex-col gap-2 w-full">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
                 <!-- identification -->

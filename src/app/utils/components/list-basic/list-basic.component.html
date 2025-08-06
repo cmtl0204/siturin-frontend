@@ -43,7 +43,13 @@
             @for (col of columns; track col) {
                 @switch (col?.type) {
                     @case ('object') {
-                        <td>{{ item[col?.field][col?.objectName] }}</td>
+                        @if (item[col?.field][col?.objectName]) {
+                            <td>{{ item[col?.field][col?.objectName] }}</td>
+                        }
+
+                        @if (!item[col?.field][col?.objectName]) {
+                            <td>{{ item[col?.field]['name'] }}</td>
+                        }
                     }
                     @case ('date') {
                         <td>{{ item[col.field] | date }}</td>

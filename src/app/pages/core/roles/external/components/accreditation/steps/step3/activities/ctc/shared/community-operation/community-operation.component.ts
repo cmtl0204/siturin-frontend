@@ -142,7 +142,8 @@ export class CommunityOperationComponent implements OnInit {
 
         // Validación: al menos uno de los dos switches activados
         const hasModalities = this.hasModalitiesField.value;
-        const hasGuide = this.touristGuideComponent?.hasTouristGuideField?.value;
+        // const hasGuide = this.touristGuideComponent?.hasTouristGuideControl?.value;
+        const hasGuide = false;
 
         if (!hasModalities && !hasGuide) {
             errors.push('Debe seleccionar al menos una de las siguientes opciones: Modalidades de Turismo Aventura o Guías de Turismo.');

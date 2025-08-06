@@ -8,3 +8,4 @@ export * from './establishment-address.interface';
 export * from './regulation-section.interface';
 export * from './regulation-item.interface';
 export * from './regulation-response.interface';
+export * from './adventure-tourism-modality.interface';

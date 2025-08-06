@@ -1,0 +1,87 @@
+<p-fluid>
+    <p-button
+        [icon]="PrimeIcons.LIST_CHECK"
+        label=" 3. Resultados"
+        (click)="showDialog()" />
+</p-fluid>
+
+<p-dialog header="Header" [(visible)]="visible" [modal]="true"
+          [breakpoints]="{ '1199px': '90vw', '900px': '95vw', '575px': '98vw' }"
+          [style]="{ width: '80vw', minWidth: '600px', maxWidth: '95vw' }" [draggable]="false"
+          [resizable]="false"
+          [contentStyle]="{ 'padding': '1.5rem' }">
+
+    <form [formGroup]="form" class="flex flex-col gap-6 w-full">
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <div class="md:col-span-12 flex flex-col">
+                <p class="font-semibold text-xl">
+                    Seleccione la Actividad y/o Modalidad Turística; clasificación y categoría de ser el caso
+                </p>
+            </div>
+
+            <!-- Contenedor selector -->
+            <div class="md:col-span-12 flex flex-col">
+                <label
+                    appLabel
+                    for="state"
+                    label="Estado de la Inspección">
+                </label>
+
+                <p-select
+                    [options]="types"
+                    formControlName="state"
+                    optionLabel="name"
+                    placeholder="Seleccione"
+                    [style]="{ width: '100%' }" class="w-full"
+                    appendTo="body">
+                </p-select>
+            </div>
+
+            <div class="md:col-span-12 flex flex-col">
+
+                <!-- Switch Inspection Status-->
+                @switch (stateField.value?.code) {
+                    @case ('ratified') {
+                        <p class="text-blue-600 font-medium">
+                            <app-status1 [form]="status1Form"></app-status1>
+                        </p>
+                    }
+                    @case ('inactivate') {
+                        <p class="text-green-600 font-medium">
+                            <app-status2 [form]="status2Form"></app-status2>
+                        </p>
+                    }
+                    @case ('temporary_suspension') {
+                        <p class="text-yellow-600 font-medium">
+                            <app-status3 [form]="status3Form"></app-status3>
+
+                        </p>
+                    }
+                    @case ('recategorized') {
+                        <p class="text-purple-600 font-medium">
+                            <app-status4 [form]="status4Form"></app-status4>
+                        </p>
+                    }
+                    @case ('reclassified') {
+                        <p class="text-gray-600 font-medium">
+                            <app-status5 [form]="status5Form"></app-status5>
+                        </p>
+                    }
+                    @default {
+                        <p class="text-slate-600 font-medium">
+                        </p>
+                    }
+                }
+            </div>
+
+            <div class="md:col-span-6 flex flex-col">
+                <p-button label="Cancelar" [icon]="PrimeIcons.ARROW_LEFT" severity="warn" styleClass="w-full" />
+            </div>
+
+            <div class="md:col-span-6 flex flex-col">
+                <p-button label="Guardar" [icon]="PrimeIcons.SAVE" styleClass="w-full" (click)="sendForm()" />
+            </div>
+        </div>
+    </form>
+</p-dialog>

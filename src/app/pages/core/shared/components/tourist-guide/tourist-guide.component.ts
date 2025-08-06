@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Fluid } from 'primeng/fluid';
 import { ConfirmationService, MenuItem, PrimeIcons } from 'primeng/api';
 import { ToggleSwitch } from 'primeng/toggleswitch';
@@ -7,14 +7,13 @@ import { Message } from 'primeng/message';
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { LabelDirective } from '@utils/directives/label.directive';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
-import { ColInterface, PaginationInterface } from '@utils/interfaces';
+import { ColInterface } from '@utils/interfaces';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
 import { deleteButtonAction } from '@utils/components/button-action/consts';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { TouristGuideInterface } from '@modules/core/interfaces';
-import { TouristGuideHttpService } from '@modules/core/shared/components/adventure-tourism-modality/tourist-guide-http.service';
 import { ListBasicComponent } from '@utils/components/list-basic/list-basic.component';
 
 @Component({
@@ -29,13 +28,12 @@ export class TouristGuideComponent implements OnInit {
 
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
-    protected readonly touristGuideHttpService = inject(TouristGuideHttpService);
     private confirmationService = inject(ConfirmationService);
     protected readonly PrimeIcons = PrimeIcons;
 
     protected form!: FormGroup;
+    protected touristGuideForm!: FormGroup;
     protected buttonActions: MenuItem[] = [];
-    protected pagination!: PaginationInterface;
 
     protected isVisibleModal = false;
 
@@ -43,33 +41,41 @@ export class TouristGuideComponent implements OnInit {
     protected items: TouristGuideInterface[] = [];
 
     constructor() {
-        this.buildForm();
-        this.buildColumns();
+
     }
 
-    ngOnInit() {
+    async ngOnInit() {
+        this.buildForm();
+        this.buildColumns();
         this.loadData();
     }
 
     loadData() {}
 
     buildForm() {
-        this.form = this.formBuilder.group({
+        this.touristGuideForm = this.formBuilder.group({
             id: [null],
-            hasTouristGuide: [false, [Validators.required]],
             identification: [null, [Validators.required]],
             name: [null, [Validators.required]],
             isGuide: [false, [Validators.required]],
             touristLicences: [[]]
         });
 
+        this.form = this.formBuilder.group({
+            hasTouristGuide: false,
+            touristGuides: []
+        });
+
         this.watchFormChanges();
     }
 
     watchFormChanges() {
+        this.dataOut.emit(this.form);
+
         this.hasTouristGuideField.valueChanges.subscribe((value) => {
-            this.touristLicensesField.setValidators(Validators.required);
-            this.touristLicensesField.updateValueAndValidity();
+            this.touristGuidesField.setValue(this.items);
+
+            this.dataOut.emit(this.form);
         });
     }
 
@@ -158,14 +164,13 @@ export class TouristGuideComponent implements OnInit {
     createTouristGuide() {
         this.isGuideField.setValue(true);
 
-        this.items.push(this.form.value);
+        this.items.push(this.touristGuideForm.value);
+
         this.closeModal();
 
-        this.dataOut.emit(
-            this.formBuilder.group({
-                touristGuides: [this.items, [Validators.required]]
-            })
-        );
+        this.touristGuidesField.setValue(this.items);
+
+        this.dataOut.emit(this.form);
     }
 
     deleteTouristGuide(identification: string) {
@@ -185,14 +190,11 @@ export class TouristGuideComponent implements OnInit {
                 label: 'Sí, Eliminar'
             },
             accept: () => {
-                const index = this.items.findIndex((item) => item.identification === identification);
-                this.items.splice(index, 1);
+                this.items = this.items.filter(item => item.identification !== identification);
 
-                this.dataOut.emit(
-                    this.formBuilder.group({
-                        touristGuides: [this.items, [Validators.required]]
-                    })
-                );
+                this.touristGuidesField.setValue(this.items);
+
+                this.dataOut.emit(this.form);
             },
             key: 'confirmdialog'
         });
@@ -204,26 +206,30 @@ export class TouristGuideComponent implements OnInit {
     }
 
     get idField(): AbstractControl {
-        return this.form.controls['id'];
+        return this.touristGuideForm.controls['id'];
+    }
+
+    get identificationField(): AbstractControl {
+        return this.touristGuideForm.controls['identification'];
+    }
+
+    get nameField(): AbstractControl {
+        return this.touristGuideForm.controls['name'];
+    }
+
+    get isGuideField(): AbstractControl {
+        return this.touristGuideForm.controls['isGuide'];
+    }
+
+    get touristLicensesField(): FormArray {
+        return this.touristGuideForm.controls['touristLicences'] as FormArray;
     }
 
     get hasTouristGuideField(): AbstractControl {
         return this.form.controls['hasTouristGuide'];
     }
 
-    get identificationField(): AbstractControl {
-        return this.form.controls['identification'];
-    }
-
-    get nameField(): AbstractControl {
-        return this.form.controls['name'];
-    }
-
-    get isGuideField(): AbstractControl {
-        return this.form.controls['isGuide'];
-    }
-
-    get touristLicensesField(): FormArray {
-        return this.form.controls['touristLicences'] as FormArray;
+    get touristGuidesField(): AbstractControl {
+        return this.form.controls['touristGuides'];
     }
 }

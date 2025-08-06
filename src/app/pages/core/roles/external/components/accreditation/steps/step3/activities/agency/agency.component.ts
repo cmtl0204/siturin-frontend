@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
     RegistrationComponent
 } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/agency/registration/registration.component';

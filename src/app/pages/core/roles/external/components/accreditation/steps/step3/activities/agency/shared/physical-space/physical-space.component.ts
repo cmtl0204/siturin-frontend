@@ -10,6 +10,8 @@ import { CustomMessageService } from '@utils/services/custom-message.service';
 import { LabelDirective } from '@utils/directives/label.directive';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { CatalogueInterface } from '@utils/interfaces';
+import { CatalogueTypeEnum } from '@utils/enums';
+import { CatalogueService } from '@utils/services/catalogue.service';
 
 @Component({
     selector: 'app-physical-space',
@@ -21,30 +23,23 @@ export class PhysicalSpaceComponent implements OnInit {
     @Input() data!: string | undefined;
     @Output() dataOut = new EventEmitter<FormGroup>();
 
+    protected readonly Validators = Validators;
     protected readonly PrimeIcons = PrimeIcons;
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
 
+    private readonly catalogueService = inject(CatalogueService);
+
     protected form!: FormGroup;
 
-    protected localTypes: CatalogueInterface[] = [
-        { name: 'Option 1', code: 'Option 1' },
-        { name: 'Option 2', code: 'Option 2' },
-        { name: 'Option 3', code: 'Option 3' }
-    ];
-    protected permanentPhysicalSpaces: CatalogueInterface[] = [
-        { id: '1', name: 'Casa' },
-        {
-            id: '2',
-            name: 'Edificio'
-        }
-    ];
+    protected localTypes: CatalogueInterface[] = [];
+    protected permanentPhysicalSpaces: CatalogueInterface[] = [];
 
-    constructor() {
-        this.buildForm();
-    }
+    constructor() {}
 
     ngOnInit() {
+        this.buildForm();
+        this.loadCatalogues();
         this.loadData();
     }
 
@@ -60,6 +55,8 @@ export class PhysicalSpaceComponent implements OnInit {
     }
 
     watchFormChanges() {
+        this.dataOut.emit(this.form);
+
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
             if (this.form.valid) {
                 this.dataOut.emit(this.form);
@@ -81,8 +78,6 @@ export class PhysicalSpaceComponent implements OnInit {
 
         if (this.localTypeField.invalid) errors.push('Su local es');
 
-        if (this.permanentPhysicalSpaceField.invalid) errors.push('Espacio físico Permanente');
-
         if (this.isProtectedAreaField.invalid)
             errors.push(
                 '¿Realiza actividades autorizadas por la Autoridad Ambiental Nacional en el Subsistema Estatal del Sistema de Áreas Naturales Protegidas, de conformidad con lo establecido en los artículos 8 y 9 de la Ley de Turismo dentro del Subsistema Estatal del Sistema Nacional de Áreas Protegidas?'
@@ -100,6 +95,11 @@ export class PhysicalSpaceComponent implements OnInit {
 
     loadData() {}
 
+    async loadCatalogues() {
+        this.localTypes = await this.catalogueService.findByType(CatalogueTypeEnum.activities_geographic_area);
+        this.permanentPhysicalSpaces = await this.catalogueService.findByType(CatalogueTypeEnum.process_agency_permanent_physical_space);
+    }
+
     get localTypeField(): AbstractControl {
         return this.form.controls['localType'];
     }
@@ -115,6 +115,4 @@ export class PhysicalSpaceComponent implements OnInit {
     get hasProtectedAreaContractField(): AbstractControl {
         return this.form.controls['hasProtectedAreaContract'];
     }
-
-    protected readonly Validators = Validators;
 }

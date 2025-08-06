@@ -28,10 +28,11 @@ export class AccreditedStaffLanguageComponent implements OnInit {
     protected form!: FormGroup;
 
     constructor() {
-        this.buildForm();
+
     }
 
     ngOnInit() {
+        this.buildForm();
         this.loadData();
     }
 
@@ -45,6 +46,8 @@ export class AccreditedStaffLanguageComponent implements OnInit {
     }
 
     watchFormChanges() {
+        this.dataOut.emit(this.form);
+
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
             if (this.form.valid) {
                 this.dataOut.emit(this.form);

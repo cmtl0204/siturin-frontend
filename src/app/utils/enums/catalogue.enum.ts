@@ -8,14 +8,13 @@ export enum CatalogueTypeEnum {
     processes_legal_entity = 'processes_legal_entity',
     ctc_activities = 'ctc_activities',
     tourist_transport_companies_type = 'tourist_transport_companies_type',
-    BLOOD_TYPE = 'BLOOD_TYPE',
-    ETHNIC_ORIGIN = 'ETHNIC_ORIGIN',
-    GENDER = 'GENDER',
-    IDENTIFICATION_TYPE = 'IDENTIFICATION_TYPE',
-    MARITAL_STATUS = 'MARITAL_STATUS',
-    SEX = 'SEX',
-    YES_NO = 'YES_NO',
-    YES_NO_NA = 'YES_NO_NA'
+    cadastre_states_state = 'cadastre_states_state',
+    adventure_tourism_modalities = 'adventure_tourism_modalities',
+    adventure_tourism_modalities_air = 'adventure_tourism_modalities_air',
+    adventure_tourism_modalities_land = 'adventure_tourism_modalities_land',
+    adventure_tourism_modalities_water = 'adventure_tourism_modalities_water',
+    process_agency_permanent_physical_space = 'process_agency_permanent_physical_space',
+    processes_local_type = 'processes_local_type'
 }
 
 export enum CatalogueStateEnum {

@@ -153,7 +153,7 @@ export class AppMenu implements OnInit {
             {
                 label: 'Técnico Zonal',
                 icon: PrimeIcons.LIST,
-                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.technician.process.absolute]
             },
             {
                 label: 'Catastro Turístico',

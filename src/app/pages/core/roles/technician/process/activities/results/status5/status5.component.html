@@ -1,0 +1,52 @@
+<form [formGroup]="form" class="flex flex-col gap-6 w-full">
+    <div class="flex flex-col gap-0 w-full">
+        <p class="text-black">Clasifiaciones:</p>
+        <p-select [options]="classifications" formControlName="classification" optionLabel="code"
+            placeholder="Seleccione" [style]="{ width: '100%' }" class="w-full" appendTo="body">
+            <ng-template let-item #item>
+                <div class="flex items-center gap-2">
+                    <div>{{ item.code }}</div>
+                </div>
+            </ng-template>
+        </p-select>
+    </div>
+
+    <div class="flex flex-col gap-0 w-full">
+        <p class="text-black">Categoria:</p>
+        <p-select [options]="categories" formControlName="category" optionLabel="code" placeholder="Seleccione"
+            [style]="{ width: '100%' }" class="w-full" appendTo="body">
+            <ng-template let-item #item>
+                <div class="flex items-center gap-2">
+                    <div>{{ item.code }}</div>
+                </div>
+            </ng-template>
+        </p-select>
+    </div>
+
+    <div class="flex flex-col gap-0 mt-4">
+        <p>Formulario CheckList</p>
+        <p-button icon="pi pi-download" label="Acta de Supervision Lectoral" severity="info" styleClass="w-full" />
+    </div>
+
+    <div class="flex flex-col gap-0 w-full">
+        <p>Formulario de Requisitos(Check List):</p>
+        <p-toast />
+        <p-fileupload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload($event)"
+            [multiple]="true" accept="application/pdf" maxFileSize="1000000" mode="advanced">
+            <ng-template #empty>
+                <div>Arrastre y suelte archivos aquí para cargarlos.</div>
+            </ng-template>
+        </p-fileupload>
+    </div>
+
+    <div class="flex flex-col gap-0 w-full">
+        <p>Formulario de Requisitos Incumplimiento(Check List):</p>
+        <p-toast />
+        <p-fileupload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload($event)"
+            [multiple]="true" accept="application/pdf" maxFileSize="1000000" mode="advanced">
+            <ng-template #empty>
+                <div>Arrastre y suelte archivos aquí para cargarlos.</div>
+            </ng-template>
+        </p-fileupload>
+    </div>
+</form>

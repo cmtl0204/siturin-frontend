@@ -162,27 +162,15 @@ export const MY_ROUTES = {
             }
         },
         technician: {
-            base: 'dac',
+            base: 'technician',
             absolute: '/main/core/technician',
             dashboard: {
                 base: 'dashboard',
                 absolute: '/main/core/technician/dashboard'
             },
-            project: {
-                base: 'projects',
-                absolute: '/main/core/dac/projects',
-                list: {
-                    base: 'projects/list',
-                    absolute: '/main/core/dac/projects/list'
-                },
-                form: {
-                    base: 'projects/form',
-                    absolute: '/main/core/dac/projects/form'
-                },
-                document: {
-                    base: 'projects/document',
-                    absolute: '/main/core/dac/projects/document'
-                }
+            process: {
+                base: 'processes',
+                absolute: '/main/core/technician/processes',
             },
             program: {
                 base: 'programs',

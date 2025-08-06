@@ -110,7 +110,7 @@
                 <app-parks [processTypeCode]="process.type?.code!" (dataOut)="saveForm($event)" />
             }
             @case (CatalogueActivitiesCodeEnum.agency_continent || CatalogueActivitiesCodeEnum.agency_galapagos) {
-                <app-agency [processTypeCode]="process.type?.code!" />
+                <app-agency [processTypeCode]="process.type?.code!"/>
             }
 
             @case (CatalogueActivitiesCodeEnum.ctc_continent || CatalogueActivitiesCodeEnum.ctc_galapagos) {
