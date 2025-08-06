@@ -1,0 +1,45 @@
+<h1>Normativa</h1>
+@if (sections()) {
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <hr />
+        <div formArrayName="sections">
+            @for (section of sectionsField.controls; track section.value.id; let i = $index) {
+                <div [formGroupName]="i" class="mb-6">
+                    <p class="text-lg font-bold mb-4">
+                        {{ section.value.name }}
+                        @if (section.value.minimumItems) {
+                            <span
+                                class="text-primary text-sm font-medium ml-2">(Items mínimos requeridos {{ section.value.minimumItems }}
+                                )</span>
+                        }
+                    </p>
+
+                    <div formArrayName="items">
+                        @for (item of getRegulationItemsField(i).controls; track item.value.id; let j = $index) {
+                            <div [formGroupName]="j" class="flex items-center justify-between">
+                                <label>
+                                    {{ item.value.name }}
+                                    @if (item.value.score) {
+                                        <span class="text-sm text-primary ml-2">({{ item.value.score }} pts)</span>
+                                    }
+                                    @if (item.value.isMandatory) {
+                                        <span class="text-red-500 ml-1">*</span>
+                                    }
+                                </label>
+
+                                <p-toggleswitch formControlName="isCompliant">
+                                    <ng-template #handle let-checked="checked">
+                                        <span class="!text-xs font-bold">{{ checked ? 'SI' : 'NO' }}</span>
+                                    </ng-template>
+                                </p-toggleswitch>
+                            </div>
+                            <hr />
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <p-button type="submit">Enviar</p-button>
+    </form>
+}

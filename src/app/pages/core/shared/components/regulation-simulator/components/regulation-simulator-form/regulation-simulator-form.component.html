@@ -1,0 +1,37 @@
+<p-fluid>
+    <form [formGroup]="form" class="grid grid-cols-12 gap-6">
+        <!-- Tipo de Contribuyente -->
+        <div class="col-span-12 flex flex-col gap-2">
+            <label appLabel [label]="regulationSimulatorFormEnum.constributorType" for="contributorType"></label>
+            <p-select size="large" formControlName="contributorType" [options]="contributorTypes" placeholder="Seleccione..." class="w-full" />
+        </div>
+
+        @if (contributorTypeField.value) {
+            <!-- Zona Geográfica -->
+            <div class="col-span-6 md:col-span-3 flex flex-col gap-2">
+                <label appLabel [label]="regulationSimulatorFormEnum.geographicZone" for="geographicZone"></label>
+                <p-select size="large" formControlName="geographicZone" inputId="geographicZone" [options]="geographicZones" placeholder="Seleccione..." class="w-full" />
+            </div>
+
+            <!-- Actividad -->
+            <div class="col-span-6 md:col-span-3 flex flex-col gap-2">
+                <label appLabel [label]="regulationSimulatorFormEnum.activity" for="activity"></label>
+                <p-select size="large" formControlName="activity" [options]="activities" optionValue="code" optionLabel="name" placeholder="Seleccione..." class="w-full" />
+            </div>
+
+            @if (activityField.value) {
+                <!-- Clasificación -->
+                <div class="col-span-6 md:col-span-3 flex flex-col gap-2">
+                    <label appLabel [label]="regulationSimulatorFormEnum.classification" for="classification"></label>
+                    <p-select size="large" formControlName="classification" optionLabel="name" optionValue="code" [options]="classifications" placeholder="Seleccione..." class="w-full" />
+                </div>
+            }
+
+            <!-- Categoría -->
+            <div class="col-span-6 md:col-span-3 flex flex-col gap-2">
+                <label appLabel [label]="regulationSimulatorFormEnum.category" for="category"></label>
+                <p-select size="large" formControlName="category" [options]="categories" placeholder="Seleccione..." class="w-full" />
+            </div>
+        }
+    </form>
+</p-fluid>

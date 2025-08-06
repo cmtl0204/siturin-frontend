@@ -1,0 +1,166 @@
+<p-card>
+  <div class="space-y-4">
+    <p-panel header="Compañías de Transporte Turístico">
+      <p-message severity="info">
+        <div>
+          <h2 class="m-0 text-2xl font-semibold text-blue-800">Importante</h2>
+          <p class="m-0 text-base text-blue-650">
+            Registro de compañía de transporte turístico contratado por el establecimiento.
+          </p>
+        </div>
+      </p-message>
+
+      <br />
+      <label class="font-semibold block mb-2">
+        Declaro que el establecimiento, al momento del envío de la solicitud, ha contratado compañías de transporte turístico
+      </label>
+      <div class="flex items-center gap-2 mb-4">
+        <p-toggleSwitch [formControl]="hasTransportsField">
+          <ng-template #handle let-checked="checked">
+            <span class="text-xs font-semibold">
+              {{ checked ? 'SÍ' : 'NO' }}
+            </span>
+          </ng-template>
+        </p-toggleSwitch>
+      </div>
+
+      <div *ngIf="hasTransportsField.value">
+        <!-- Botón para abrir diálogo -->
+        <button
+          pButton
+          type="button"
+          icon="pi pi-plus"
+          label="Agregar Compañía de Transporte Turístico"
+          class="mt-3 mb-4 bg-blue-500 border-none text-white"
+          (click)="openDialog()"
+        ></button>
+      </div>
+
+      <!-- Diálogo -->
+      <p-dialog
+        header="Agregar Compañía de Transporte Turístico"
+        [(visible)]="transportDialog"
+        [modal]="true"
+        [style]="{ width: '35vw' }"
+        [closable]="false"
+      >
+        <form [formGroup]="transportForm" class="p-fluid">
+          <div class="field">
+            <label for="ruc" class="font-medium">Número de RUC:</label>
+            <input
+              id="ruc"
+              type="text"
+              pInputText
+              formControlName="ruc"
+              class="w-full mt-1"
+            />
+            <small *ngIf="rucField.invalid && rucField.touched" class="text-red-600">
+              Campo obligatorio
+            </small>
+          </div>
+
+          <div class="field mt-3">
+            <label class="font-medium">Tipo de Transporte:</label>
+            <p-select
+              [options]="types"
+              optionLabel="name"
+              formControlName="types"
+              appendTo="body"
+              placeholder="Seleccione una opción"
+            ></p-select>
+            <small *ngIf="typesField.invalid && typesField.touched" class="text-red-600">
+              Campo obligatorio
+            </small>
+          </div>
+
+          <div class="field mt-3" *ngIf="typesField.value">
+            <label class="font-medium">
+              <ng-container [ngSwitch]="typesField.value?.name">
+                <span *ngSwitchCase="'Aéreo'">
+                  Número de autorización emitida en el certificado de Operador Aéreo otorgado por la DAC:
+                </span>
+                <span *ngSwitchCase="'Marítimo Fluvial'">
+                  Número de autorización emitida en el certificado de Operador Marítimo otorgado por la DAC:
+                </span>
+                <span *ngSwitchCase="'Terrestre'">
+                  Número de autorización emitida en el certificado de Operador Terrestre otorgado por la DAC:
+                </span>
+              </ng-container>
+            </label>
+            <input
+              type="text"
+              pInputText
+              formControlName="authorizationNumber"
+              class="w-full mt-1"
+            />
+          </div>
+
+          <br />
+          <p-message severity="warn" class="mt-4">
+            <div>
+              <strong>Atención</strong><br />
+              La información presentada a continuación es proporcionada por el
+              Servicio de Rentas Internas, esta sección tiene carácter
+              informativo, por favor si desea actualizarla debe realizar el trámite
+              en la entidad correspondiente.
+              <br /><br />
+              <a
+                href="https://www.sri.gob.ec"
+                target="_blank"
+                class="text-blue-600 underline"
+                >Ir al sitio web del SRI</a
+              >
+            </div>
+          </p-message>
+
+          <div class="mt-4 text-right flex gap-2 justify-end">
+            <button
+              pButton
+              type="button"
+              label="Cancelar"
+              class="p-button-text"
+              (click)="closeDialog()"
+            ></button>
+            <button
+              pButton
+              type="button"
+              label="Agregar"
+              class="bg-blue-600 text-white border-none"
+              (click)="addTransport()"
+              [disabled]="transportForm.invalid"
+            ></button>
+          </div>
+        </form>
+      </p-dialog>
+
+      <!-- Tabla de compañías -->
+      <p-table [value]="transports" class="p-datatable-sm mt-4" *ngIf="transports.length > 0">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>RUC</th>
+            <th>Razón Social</th>
+            <th>Tipo Contribuyente</th>
+            <th>Clasificación</th>
+            <th>Opciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-trans let-i="rowIndex">
+          <tr>
+            <td>{{ trans.ruc }}</td>
+            <td>{{ trans.socialReason }}</td>
+            <td>{{ trans.rucType }}</td>
+            <td>{{ trans.types }}</td>
+            <td>
+              <button
+                pButton
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-danger p-button-sm"
+                (click)="removeTransport(i)"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-panel>
+  </div>
+</p-card>
