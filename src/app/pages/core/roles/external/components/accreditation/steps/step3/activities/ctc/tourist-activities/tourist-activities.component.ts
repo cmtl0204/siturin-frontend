@@ -18,7 +18,8 @@ import { AccommodationComponent } from '../shared/accommodation/accommodation.co
 import { CommunityOperationComponent } from '../shared/community-operation/community-operation.component';
 import { CatalogueService } from '@utils/services/catalogue.service';
 import { CatalogueInterface } from '@utils/interfaces';
-import { CatalogueTypeEnum } from '@utils/enums';
+import { CatalogueActivitiesCodeEnum, CatalogueTypeEnum } from '@utils/enums';
+import { CatalogueCtcActivitiesCodeEnum, CatalogueCtcClassificationsCodeEnum } from '@/pages/core/shared/components/regulation-simulator/enum';
 
 interface Activity {
     id: string;
@@ -127,6 +128,16 @@ export class TouristActivitiesComponent implements OnInit {
             console.log(this.form.value);
             if (this.form.valid) {
                 this.dataOut.emit(this.form);
+            }
+        });
+
+        this.activitiesField.valueChanges.pipe(debounceTime(300)).subscribe((value) => {
+            const activities: CatalogueInterface[] = value;
+
+            const existCommunityOperation = activities.some((activity) => activity.code === CatalogueCtcActivitiesCodeEnum.community_operation);
+
+            if (!existCommunityOperation) {
+                this.communityOperationField.reset();
             }
         });
     }

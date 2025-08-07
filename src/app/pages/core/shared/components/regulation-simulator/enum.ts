@@ -23,6 +23,13 @@ export enum CatalogueActivitiesCodeEnum {
     transport_galapagos = 'transport_galapagos'
 }
 
+export enum CatalogueCtcActivitiesCodeEnum {
+    accommodation = 'accommodation',
+    community_operation = 'community_operation',
+    food_drink = 'food_drink',
+    transport = 'transport',
+}
+
 export enum CatalogueAccommodationClassificationsCodeEnum {
     hotel = 'hotel',
     hostel = 'hostel',
@@ -36,6 +43,7 @@ export enum CatalogueAccommodationClassificationsCodeEnum {
     tourist_accommodation_buildings = 'tourist_accommodation_buildings',
     tourism_revenue = 'tourism_revenue'
 }
+
 export enum CatalogueAgencyClassificationsCodeEnum {
     wholesale_travel_agency = 'wholesale_travel_agency',
     international_travel_agency = 'international_travel_agency',
@@ -71,6 +79,7 @@ export enum CatalogueParkClassificationsCodeEnum {
     beach_resorts = 'beach_resorts',
     tourist_recreation_centers = 'tourist_recreation_centers'
 }
+
 export enum CatalogueTouristTransportClassificationsCodeEnum {
     tourist_air_transport = 'tourist_air_transport',
     tourist_maritime_transport = 'tourist_maritime_transport',

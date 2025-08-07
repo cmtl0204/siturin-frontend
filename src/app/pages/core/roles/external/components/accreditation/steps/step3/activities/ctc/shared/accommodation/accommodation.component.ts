@@ -35,7 +35,7 @@ export class AccommodationComponent implements OnInit{
   constructor() {
     this.buildForm();
   }
-  
+
   ngOnInit(): void {
     this.loadData()
   }
@@ -79,7 +79,6 @@ export class AccommodationComponent implements OnInit{
   }
 
   // Getters
-
   get totalRoomsField(): AbstractControl {
     return this.form.controls['totalRooms'];
   }

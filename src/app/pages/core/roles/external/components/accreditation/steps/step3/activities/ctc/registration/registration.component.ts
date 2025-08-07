@@ -28,7 +28,6 @@ export class RegistrationComponent {
     @ViewChildren(AccommodationComponent) private accommodationComponent!: QueryList<AccommodationComponent>;
     @ViewChildren(CommunityOperationComponent) private communityOperationComponent!: QueryList<CommunityOperationComponent>;
     @ViewChildren(TouristTransportCompanyComponent) private touristTransportCompanyComponent!: QueryList<TouristTransportCompanyComponent>;
-    @ViewChildren(TouristGuideComponent) private touristGuideComponent!: QueryList<TouristGuideComponent>;
 
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
@@ -43,7 +42,6 @@ export class RegistrationComponent {
     }
 
     saveForm(childForm: FormGroup): void {
-        console.log(childForm.value);
         Object.keys(childForm.controls).forEach((controlName) => {
             if (!this.mainForm.contains(controlName)) {
                 this.mainForm.addControl(controlName, this.formBuilder.control(childForm.get(controlName)?.value));
@@ -85,7 +83,6 @@ export class RegistrationComponent {
             ...this.accommodationComponent.toArray().flatMap((c) => c.getFormErrors()),
             ...this.communityOperationComponent.toArray().flatMap((c) => c.getFormErrors()),
             ...this.touristTransportCompanyComponent.toArray().flatMap((c) => c.getFormErrors()),
-            ...this.touristGuideComponent.toArray().flatMap((c) => c.getFormErrors())
         ];
 
         if (errors.length > 0) {
