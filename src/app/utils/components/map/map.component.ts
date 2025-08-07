@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { MenuItem, PrimeIcons } from 'primeng/api';
+import { PrimeIcons } from 'primeng/api';
 import { GoogleMapsModule } from '@angular/google-maps';
 
 interface Coordinate {
@@ -14,7 +14,7 @@ interface Coordinate {
     imports: [GoogleMapsModule],
     standalone: true
 })
-export class MapComponent implements OnChanges {
+export class MapComponent implements OnInit, OnChanges {
     @Input({ required: true }) latitude: number = -0.22985;
     @Input({ required: true }) longitude: number = -78.52495;
     @Output() dataOut: EventEmitter<Coordinate> = new EventEmitter<Coordinate>(false);
@@ -22,10 +22,24 @@ export class MapComponent implements OnChanges {
     protected readonly PrimeIcons = PrimeIcons;
 
     protected zoom = 15;
-    protected center: google.maps.LatLngLiteral = { lat: -0.22985, lng: -78.52495 };
-    protected markerPosition: google.maps.LatLngLiteral = { lat: -0.22985, lng: -78.52495 };
+    protected center: Coordinate = { lat: -0.22985, lng: -78.52495 };
+    protected markerPosition: Coordinate = { lat: -0.22985, lng: -78.52495 };
+    protected apiLoaded = false;
 
     constructor() {}
+
+    ngOnInit(): void {
+        if (!this.apiLoaded) {
+            const script = document.createElement('script');
+            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCGUwCcM-LKjRK4rjbBJ06_GLmX2LaYzfg';
+            script.async = true;
+            script.defer = true;
+            script.onload = () => {
+                this.apiLoaded = true;
+            };
+            document.head.appendChild(script);
+        }
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
         if ((changes['latitude'] || changes['longitude']) && this.latitude && this.longitude) {
