@@ -19,7 +19,7 @@ import { CommunityOperationComponent } from '../shared/community-operation/commu
 import { CatalogueService } from '@utils/services/catalogue.service';
 import { CatalogueInterface } from '@utils/interfaces';
 import { CatalogueActivitiesCodeEnum, CatalogueTypeEnum } from '@utils/enums';
-import { CatalogueCtcActivitiesCodeEnum, CatalogueCtcClassificationsCodeEnum } from '@/pages/core/shared/components/regulation-simulator/enum';
+import { CatalogueCtcActivitiesCodeEnum, CatalogueCtcClassificationsCodeEnum } from '@modules/core/shared/components/regulation-simulator/enum';
 
 interface Activity {
     id: string;

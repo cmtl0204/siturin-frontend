@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import {
     RegistrationComponent
-} from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/ctc/registration/registration.component';
+} from '@modules/core/roles/external/components/accreditation/steps/step3/activities/ctc/registration/registration.component';
 
 @Component({
     selector: 'app-ctc',

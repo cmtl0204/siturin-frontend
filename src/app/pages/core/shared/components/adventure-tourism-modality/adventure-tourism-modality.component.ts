@@ -19,7 +19,7 @@ import { deleteButtonAction } from '@utils/components/button-action/consts';
 import { CustomMessageService } from '@utils/services';
 import { CatalogueTypeEnum } from '@utils/enums';
 import { CatalogueService } from '@utils/services/catalogue.service';
-import { AdventureTourismModalityInterface } from '@/pages/core/shared/interfaces';
+import { AdventureTourismModalityInterface } from '@modules/core/shared/interfaces';
 
 @Component({
     selector: 'app-adventure-tourism-modality',

@@ -96,7 +96,7 @@ export class PhysicalSpaceComponent implements OnInit {
     loadData() {}
 
     async loadCatalogues() {
-        this.localTypes = await this.catalogueService.findByType(CatalogueTypeEnum.activities_geographic_area);
+        this.localTypes = await this.catalogueService.findByType(CatalogueTypeEnum.processes_local_type);
         this.permanentPhysicalSpaces = await this.catalogueService.findByType(CatalogueTypeEnum.process_agency_permanent_physical_space);
     }
 

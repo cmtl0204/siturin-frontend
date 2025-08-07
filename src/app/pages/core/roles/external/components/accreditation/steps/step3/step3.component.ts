@@ -6,7 +6,6 @@ import { LabelDirective } from '@utils/directives/label.directive';
 import { Message } from 'primeng/message';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { PrimeIcons } from 'primeng/api';
-import { ParksComponent } from './activities/parks/parks.component';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { CatalogueInterface } from '@utils/interfaces';
 import { CatalogueService } from '@utils/services/catalogue.service';
@@ -16,9 +15,16 @@ import { ActivityInterface, CategoryInterface, ClassificationInterface } from '@
 import { ActivityService } from '@modules/core/shared/services';
 import { ProcessI } from '@utils/services/core-session-storage.service';
 import { AgencyComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/agency/agency.component';
+import { CtcComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/ctc/ctc.component';
+import { AccommodationComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/accommodation/accommodation.component';
+import { EventComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/event/event.component';
+import { TransportComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/transport/transport.component';
 import {
-    CtcComponent
-} from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/ctc/ctc.component';
+    ParkComponent
+} from '@modules/core/roles/external/components/accreditation/steps/step3/activities/park/park.component';
+import {
+    FoodDrinkComponent
+} from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/food-drink/food-drink.component';
 
 interface CatalogMode {
     code: 'registration' | 'update' | 'reclassification' | 'readmission' | string;
@@ -28,7 +34,7 @@ interface CatalogMode {
 @Component({
     selector: 'app-step3',
     standalone: true,
-    imports: [Select, FormsModule, Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, ParksComponent, AgencyComponent, CtcComponent],
+    imports: [Select, FormsModule, Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, AgencyComponent, CtcComponent, AccommodationComponent, EventComponent, TransportComponent, ParkComponent, FoodDrinkComponent],
     templateUrl: './step3.component.html',
     styleUrl: './step3.component.scss'
 })

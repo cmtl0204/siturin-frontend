@@ -13,10 +13,10 @@ import { CardModule } from 'primeng/card';
 import { PanelModule } from 'primeng/panel';
 import { PrimeIcons } from 'primeng/api';
 import { CustomMessageService } from '@utils/services/custom-message.service';
-import { TouristGuideComponent } from '@/pages/core/shared';
+import { TouristGuideComponent } from '@modules/core/shared';
 import {
     AdventureTourismModalityComponent
-} from '@/pages/core/shared/components/adventure-tourism-modality/adventure-tourism-modality.component';
+} from '@modules/core/shared/components/adventure-tourism-modality/adventure-tourism-modality.component';
 
 @Component({
     selector: 'app-community-operation',

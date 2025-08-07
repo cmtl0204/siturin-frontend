@@ -106,15 +106,26 @@
 
     @if (activityField.value && classificationField.value && categoryField.value) {
         @switch (activityField.value.code) {
-            @case (CatalogueActivitiesCodeEnum.park_continent || CatalogueActivitiesCodeEnum.park_galapagos) {
-                <app-parks [processTypeCode]="process.type?.code!" (dataOut)="saveForm($event)" />
+            @case (CatalogueActivitiesCodeEnum.accommodation_continent || CatalogueActivitiesCodeEnum.accommodation_galapagos) {
+                <app-accommodation [processTypeCode]="process.type?.code!" />
             }
             @case (CatalogueActivitiesCodeEnum.agency_continent || CatalogueActivitiesCodeEnum.agency_galapagos) {
-                <app-agency [processTypeCode]="process.type?.code!"/>
+                <app-agency [processTypeCode]="process.type?.code!" />
             }
-
             @case (CatalogueActivitiesCodeEnum.ctc_continent || CatalogueActivitiesCodeEnum.ctc_galapagos) {
                 <app-ctc [processTypeCode]="process.type?.code!" />
+            }
+            @case (CatalogueActivitiesCodeEnum.event_continent || CatalogueActivitiesCodeEnum.event_galapagos) {
+                <app-event [processTypeCode]="process.type?.code!" />
+            }
+            @case (CatalogueActivitiesCodeEnum.food_drink_continent || CatalogueActivitiesCodeEnum.food_drink_galapagos) {
+                <app-food-drink [processTypeCode]="process.type?.code!" />
+            }
+            @case (CatalogueActivitiesCodeEnum.park_continent || CatalogueActivitiesCodeEnum.park_galapagos) {
+                <app-park [processTypeCode]="process.type?.code!" />
+            }
+            @case (CatalogueActivitiesCodeEnum.transport_continent || CatalogueActivitiesCodeEnum.transport_galapagos) {
+                <app-transport [processTypeCode]="process.type?.code!" />
             }
         }
     }

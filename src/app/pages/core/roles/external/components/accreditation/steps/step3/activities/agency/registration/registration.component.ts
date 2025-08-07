@@ -8,10 +8,16 @@ import { CustomMessageService } from '@utils/services';
 import { TouristGuideComponent } from '@modules/core/shared';
 import { AdventureTourismModalityComponent } from '@modules/core/shared/components/adventure-tourism-modality/adventure-tourism-modality.component';
 import { Fluid } from 'primeng/fluid';
+import {
+    SalesRepresentativeComponent
+} from '@/pages/core/shared/components/sales-representative/sales-representative.component';
+import {
+    TouristTransportCompanyComponent
+} from '@/pages/core/shared/components/tourist-transport-company/tourist-transport-company.component';
 
 @Component({
     selector: 'app-registration',
-    imports: [PhysicalSpaceComponent, AccreditedStaffLanguageComponent, Button, TouristGuideComponent, AdventureTourismModalityComponent, Fluid],
+    imports: [PhysicalSpaceComponent, AccreditedStaffLanguageComponent, Button, TouristGuideComponent, AdventureTourismModalityComponent, Fluid, SalesRepresentativeComponent, TouristTransportCompanyComponent],
     templateUrl: './registration.component.html',
     styleUrl: './registration.component.scss'
 })

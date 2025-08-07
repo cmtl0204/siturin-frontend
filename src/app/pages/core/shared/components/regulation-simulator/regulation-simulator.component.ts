@@ -14,7 +14,7 @@ import { ParkGalapagosComponent } from './components/park-galapagos/park-galapag
 import { TouristTransportComponent } from './components/tourist-transport/tourist-transport.component';
 import { CatalogueActivitiesCodeEnum } from './enum';
 import { EventComponent } from './components/event/event.component';
-import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
+import { RegulationComponent } from '@modules/core/shared/components/regulation/regulation.component';
 
 @Component({
     selector: 'app-regulation-simulator',
