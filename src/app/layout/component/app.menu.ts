@@ -88,7 +88,7 @@ export class AppMenu implements OnInit {
             {
                 label: 'Manuales de Usuario',
                 icon: PrimeIcons.BOOK,
-                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.dac.cadastre.absolute]
             }
         ];
     }
@@ -103,17 +103,17 @@ export class AppMenu implements OnInit {
             {
                 label: 'Catastro Turístico (GAD)',
                 icon: PrimeIcons.LIST_CHECK,
-                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.gad.project.list.absolute]
             },
             {
                 label: 'Bitácora',
                 icon: PrimeIcons.HISTORY,
-                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.gad.project.list.absolute]
             },
             {
                 label: 'Manuales de Usuario',
                 icon: PrimeIcons.BOOK,
-                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.gad.project.list.absolute]
             }
         ];
     }
@@ -128,17 +128,17 @@ export class AppMenu implements OnInit {
             {
                 label: 'Catastro Turístico (DAC)',
                 icon: PrimeIcons.LIST_CHECK,
-                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.dac.cadastre.absolute]
             },
             {
                 label: 'Bitácora',
                 icon: PrimeIcons.HISTORY,
-                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.gad.project.list.absolute]
             },
             {
                 label: 'Manuales de Usuario',
                 icon: PrimeIcons.BOOK,
-                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.gad.project.list.absolute]
             }
         ];
     }
@@ -158,17 +158,17 @@ export class AppMenu implements OnInit {
             {
                 label: 'Catastro Turístico',
                 icon: PrimeIcons.LIST_CHECK,
-                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.gad.project.list.absolute]
             },
             {
                 label: 'Bitácora',
                 icon: PrimeIcons.HISTORY,
-                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.gad.project.list.absolute]
             },
             {
                 label: 'Manuales de Usuario',
                 icon: PrimeIcons.BOOK,
-                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.gad.project.list.absolute]
             }
         ];
     }
@@ -183,22 +183,22 @@ export class AppMenu implements OnInit {
             {
                 label: 'Especialista Zonal',
                 icon: PrimeIcons.LIST,
-                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.gad.project.list.absolute]
             },
             {
                 label: 'Catastro Turístico',
                 icon: PrimeIcons.LIST_CHECK,
-                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.gad.project.list.absolute]
             },
             {
                 label: 'Bitácora',
                 icon: PrimeIcons.HISTORY,
-                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.gad.project.list.absolute]
             },
             {
                 label: 'Manuales de Usuario',
                 icon: PrimeIcons.BOOK,
-                routerLink: [MY_ROUTES.corePages.dac.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.gad.project.list.absolute]
             }
         ];
     }

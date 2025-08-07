@@ -32,21 +32,9 @@ export const MY_ROUTES = {
                 base: 'dashboard',
                 absolute: '/main/core/dac/dashboard'
             },
-            project: {
-                base: 'projects',
-                absolute: '/main/core/dac/projects',
-                list: {
-                    base: 'projects/list',
-                    absolute: '/main/core/dac/projects/list'
-                },
-                form: {
-                    base: 'projects/form',
-                    absolute: '/main/core/dac/projects/form'
-                },
-                document: {
-                    base: 'projects/document',
-                    absolute: '/main/core/dac/projects/document'
-                }
+            cadastre: {
+                base: 'cadastres',
+                absolute: '/main/core/dac/cadastres'
             },
             program: {
                 base: 'programs',
@@ -170,7 +158,7 @@ export const MY_ROUTES = {
             },
             process: {
                 base: 'processes',
-                absolute: '/main/core/technician/processes',
+                absolute: '/main/core/technician/processes'
             },
             program: {
                 base: 'programs',

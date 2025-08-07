@@ -61,7 +61,7 @@ export class PhysicalSpaceComponent implements OnInit {
 
         this.isProtectedAreaField.valueChanges.subscribe((value) => {
             this.hasProtectedAreaContractField.clearValidators();
-            this.hasProtectedAreaContractField.reset();
+            this.hasProtectedAreaContractField.setValue(false);
 
             if (value) {
                 this.hasProtectedAreaContractField.setValidators(Validators.required);
@@ -92,7 +92,7 @@ export class PhysicalSpaceComponent implements OnInit {
     loadData() {}
 
     async loadCatalogues() {
-        this.localTypes = await this.catalogueService.findByType(CatalogueTypeEnum.activities_geographic_area);
+        this.localTypes = await this.catalogueService.findByType(CatalogueTypeEnum.processes_local_type);
     }
 
     get localTypeField(): AbstractControl {
