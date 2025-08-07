@@ -1,0 +1,30 @@
+<p-fluid>
+    <form [formGroup]="form">
+        <h2 class="md:col-span-12 font-semibold text-xl">Persona de contacto</h2>
+        <div class="grid grid-cols-12 gap-6">
+            <!-- Persona de contacto -->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Nombre"> </label>
+                <input pInputText type="text" formControlName="name" />
+            </div>
+
+            <!--Correo electrónico de la persona de contacto-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Correo electrónico de la persona de contacto"> </label>
+                <input pInputText type="text" formControlName="email" />
+            </div>
+
+            <!--Teléfono principal -->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Teléfono principal"> </label>
+                <input pInputText type="text" formControlName="phone" />
+            </div>
+
+            <!--Teléfono secundario-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Teléfono secundario"> </label>
+                <input pInputText type="text" formControlName="secondaryPhone" />
+            </div>
+        </div>
+    </form>
+</p-fluid>

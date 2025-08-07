@@ -1,0 +1,96 @@
+<p-fluid>
+    <form [formGroup]="form">
+        <!-- Componente Registro de turismo -->
+        <h2 class="md:col-span-12 font-semibold text-xl">Establecimiento</h2>
+        <div class="grid grid-cols-12 gap-6">
+            <!-- RUC-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="RUC"></label>
+                <input pInputText type="text" formControlName="ruc" />
+            </div>
+
+            <!-- Código de Establecimiento RUC-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Código de establecimiento RUC"> </label>
+                <input pInputText type="text" formControlName="code" />
+            </div>
+
+            <!-- Estado RUC-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Estado RUC"> </label>
+                <input pInputText type="text" formControlName="state" />
+            </div>
+
+            <!-- Nombre Comercial-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Nombre Comercial"> </label>
+                <input pInputText type="text" formControlName="tradeName" />
+            </div>
+
+            <!-- Tipo de Establecimieto-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Tipo de Establecimiento"></label>
+                <p-select optionLabel="label" formControlName="establishments" placeholder="Seleccione una opción"> </p-select>
+            </div>
+
+            <!-- Nombre(Franquicia o Cadena)-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Nombre"> </label>
+                 <input pInputText type="text" formControlName="name" />
+            </div>
+
+            <!-- Tipo de Personería-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Tipo de Personería"> </label>
+                <p-select optionLabel="label" formControlName="type" placeholder="Seleccione una opción"> </p-select>
+            </div>
+
+            <!-- Personería Jurídica-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Personería jurídica"> </label>
+                 <p-select optionLabel="label" formControlName="legalEntity" placeholder="Seleccione una opción"> </p-select>
+            </div>
+
+            <!-- Correo electrónico-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Correo electrónico"> </label>
+                <input pInputText type="text" formControlName="email" />
+            </div>
+
+            <!-- Página Web -->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Página Web "> </label>
+                <input pInputText type="text" formControlName="webPage" />
+            </div>
+
+            <!-- Estado Registro del establecimiento-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Estado Registro del establecimiento"> </label>
+                 <p-select optionLabel="label" formControlName="state" placeholder="Seleccione una opción"> </p-select>
+            </div>
+
+            <!-- no mostrar -->
+            <!-- Sistema de origen-->
+            <!--  <div class="col-span-4 flex flex-col gap-2">
+                    <label appLabel label="Sistema de origen"> </label>
+                    <input pInputText type="text" formControlName="systemOrigin" />
+                </div> -->
+
+            <!-- Estado del Registro con deuda -->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Estado Registro con Deuda"> </label>
+                <p-toggleswitch formControlName="hasDebt" [readonly]="true">
+                    <ng-template #handle let-checked="checked">
+                        <span class="!text-xs font-semibold">{{ checked ? 'Si' : 'No' }}</span>
+                    </ng-template>
+                </p-toggleswitch>
+            </div>
+
+            <!-- Número -->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Número"> </label>
+                <input pInputText type="text" formControlName="number" />
+            </div>
+        </div>
+    </form>
+</p-fluid>

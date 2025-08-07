@@ -1,0 +1,26 @@
+<p-fluid>
+    <form [formGroup]="form">
+        <!-- Componente Registro de turismo -->
+        <h2 class="md:col-span-12 font-semibold text-xl">Datos del castro</h2>
+
+        <div class="grid grid-cols-12 gap-6">
+            <!-- Número de Registro-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Número de Registro"></label>
+                <input pInputText type="text" formControlName="registerNumber" />
+            </div>
+
+            <!-- Fecha de registro -->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Fecha de registro"></label>
+                <p-datepicker type="date" formControlName="registeredAt" />
+            </div>
+
+            <!-- Estado del Registro-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Estado del Registro"></label>
+                <input pInputText type="text" formControlName="state" />
+            </div>
+        </div>
+    </form>
+</p-fluid>

@@ -1,0 +1,33 @@
+<p-fluid>
+    <form [formGroup]="form">
+        <h2 class="md:col-span-12 font-semibold text-xl">Personal del establecimiento</h2>
+        <div class="grid grid-cols-12 gap-6">
+             <!-- Total de trabajadores Hombres  -->
+                <div class="col-span-6 flex flex-col gap-2">
+                    <label appLabel label="Total de hombres, que trabajan en el establecimiento"> </label>
+                    <input pInputText type="number" formControlName="totalMen" />
+                </div>
+
+                <!-- Total de trabajadores Hombres con discapacidad  -->
+               <div class="col-span-6 flex flex-col gap-2">
+                   <label appLabel label="Del total hombres, cuantos tienen discapacidad"> </label>
+                   <p-inputNumber id="totalAccreditedStaffLanguage"
+                                  formControlName="totalMenDisability"
+                                  [showButtons]="true" buttonLayout="horizontal">
+                    </p-inputNumber>
+               </div>
+                
+                <!-- Total de trabajadores Mujeres -->
+                <div class="col-span-6 flex flex-col gap-2">
+                    <label appLabel label="Total de mujeres, que trabajan en el establecimiento"> </label>
+                    <input pInputText type="number" formControlName="totalWomen" />
+                </div>
+
+                 <!-- Total de trabajadores Mujeres con discapacidad -->
+                <div class="col-span-6 flex flex-col gap-2">
+                    <label appLabel label="Del total mujeres, cuantas tienen discapacidad"> </label>
+                    <input pInputText type="number" formControlName="totalWomenDisability" />
+                </div>
+        </div>
+    </form>
+</p-fluid>

@@ -1,0 +1,21 @@
+<p-fluid>
+    <form [formGroup]="form">
+        <h2 class="md:col-span-12 font-semibold text-xl">Capacidad del establecimiento</h2>
+        <div class="grid grid-cols-12 gap-6">
+            <div class="col-span-12 flex flex-col gap-2">
+                <!-- totalCapacities  [required]="form.controls['capacidadPersonas']">-->
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <label appLabel for="totalCapacities" label="Capacidad en número de personas"> </label>
+
+                    <p-inputNumber inputId="totalCapacities" formControlName="totalCapacities" [showButtons]="true" [min]="1" />
+
+                    <!-- <p-message
+                    appErrorMessage
+                    [errors]="form.controls['totalCapacities'].errors"
+                    [touched]="form.controls['totalCapacities'].touched"
+                    [dirty]="form.controls['totalCapacities'].dirty" /> -->
+                </div>
+            </div>
+        </div>
+    </form>
+</p-fluid>

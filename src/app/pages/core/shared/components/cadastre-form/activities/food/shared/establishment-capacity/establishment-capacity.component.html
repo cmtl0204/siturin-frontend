@@ -1,0 +1,31 @@
+<p-fluid>
+    <form [formGroup]="form">
+        <!-- Establishment Capacity -->
+
+        <h2 class="md:col-span-12 font-semibold text-xl">Capacidad del establecimiento</h2>
+        <div class="grid grid-cols-12 gap-6">
+            <!-- Agregar el required [required]="capacityField"-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel for="tables" label="Mesas"></label>
+
+                <p-inputNumber id="tables" formControlName="tables" [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="100" />
+
+                <!-- <p-message appErrorMessage 
+                [errors]="tablesField.errors" 
+                [touched]="tablesField.touched"
+                [dirty]="tablesField.dirty" /> -->
+            </div>
+            <!-- Agregar el required  [required]="capacityField"-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel for="capacity" label="Capacidad en número de personas"> </label>
+
+                <p-inputNumber id="capacity" formControlName="capacity" [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="100" />
+
+                <!-- <p-message appErrorMessage 
+                [errors]="capacityField.errors" 
+                [touched]="capacityField.touched"
+                [dirty]="capacityField.dirty" /> -->
+            </div>
+        </div>
+    </form>
+</p-fluid>

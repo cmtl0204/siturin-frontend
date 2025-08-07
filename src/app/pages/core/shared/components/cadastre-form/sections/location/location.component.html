@@ -1,0 +1,47 @@
+<p-fluid>
+    <form [formGroup]="form">
+        <div class="md:col-span-12 font-semibold text-xl">Ubicación del Establecimiento</div>
+        <br>
+        <div class="grid grid-cols-12 gap-6">
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Provincia"> </label>
+                 <p-select optionLabel="label" formControlName="province" placeholder="Seleccione una opción"> </p-select>
+            </div>
+
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Cantón"> </label>
+                 <p-select optionLabel="label" formControlName="canton" placeholder="Seleccione una opción"> </p-select>
+            </div>
+
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Parroquia"> </label>
+                 <p-select optionLabel="label" formControlName="parish" placeholder="Seleccione una opción"> </p-select>
+            </div>
+
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Tipo de Parroquia"> </label>
+                <input pInputText type="text" formControlName="parishType" />
+            </div>
+
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Dirección"> </label>
+                <input pInputText type="text" formControlName="address" />
+            </div>
+
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Calle de Referencia"> </label>
+                <input pInputText type="text" formControlName="referenceStreet" />
+            </div>
+
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Latitud"> </label>
+                <input pInputText type="text" formControlName="latitude" />
+            </div>
+
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Longitud"> </label>
+                <input pInputText type="text" formControlName="longitude" />
+            </div>
+        </div>
+    </form>
+</p-fluid>

@@ -1,0 +1,31 @@
+<p-fluid>
+    <p-panel>
+        <app-procedure 
+        (dataOut)="saveForm($event, 'procedure')"/>
+        <p-divider />
+        <app-establishment
+        (dataOut)="saveForm($event, 'establishment')"/>
+        <p-divider />
+        <app-location
+        (dataOut)="saveForm($event, 'location')"/>
+        <p-divider />
+        <app-contact-person
+        (dataOut)="saveForm($event, 'contact-person')"/>
+        <p-divider />
+         <app-establishment-staff 
+         (dataOut)="saveForm($event, 'establishment-staff')"/>          
+        <p-divider />
+        <app-cadastre
+        (dataOut)="saveForm($event, 'cadastre')"/>
+        <p-divider />
+        <app-community-variables 
+         (dataOut)="saveForm($event, 'community')"/>
+        <p-divider />
+        <app-adventure-modalities 
+        (dataOut)="saveForm($event, 'adventureModalities')"/>
+        <p-divider />
+        <div class="justify-content-end align-items-right flex flex-wrap gap-2">
+            <p-button (onClick)="onSubmit()" icon="pi pi-pencil" size="small" label="Editar" [raised]="true" severity="contrast" />
+        </div>
+    </p-panel>
+</p-fluid>

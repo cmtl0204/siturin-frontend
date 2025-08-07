@@ -1,0 +1,61 @@
+<p-fluid>
+    <form [formGroup]="form">
+        <!-- Componente Registro de turismo -->
+        <h2 class="md:col-span-12 font-semibold text-xl">Tramite</h2>
+
+        <div class="grid grid-cols-12 gap-6">
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Número de Registro"> </label>
+                <input pInputText type="text" formControlName="registerNumber" />
+            </div>
+
+            <!-- Fecha de registro -->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Fecha de registro"> </label>
+                <p-datepicker type="date" formControlName="registeredAt" />
+            </div>
+
+            <!-- Actividad -->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Actividad"> </label>
+                <input pInputText type="text" formControlName="activities" />
+            </div>
+
+            <!-- Clasificación -->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Clasificación"> </label>
+                <input pInputText type="text" formControlName="sort" />
+            </div>
+
+            <!-- Categoría -->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Categoría"> </label>
+                <input pInputText type="text" formControlName="categorie" />
+            </div>
+
+            <!-- Razón Social-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Razón social (Propietario)"> </label>
+                <input pInputText type="text" formControlName="socialReason" />
+            </div>
+
+            <!-- Respresentante legal-->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Representante legal"> </label>
+                <input pInputText type="text" formControlName="legalName" />
+            </div>
+
+            <!--Tipo trámite -->
+            <div class="col-span-4 flex flex-col gap-2">
+                <label appLabel label="Tipo trámite"> </label>
+                <input pInputText type="text" formControlName="type" />
+            </div>
+
+            <!--Fecha de trámite -->
+            <!-- <div class="col-span-4 flex flex-col gap-2">
+                    <label appLabel label="Fecha de trámite"> </label>
+                    <p-datepicker type="date" formControlName="registeredAt" />
+                </div>  -->
+        </div>
+    </form>
+</p-fluid>
