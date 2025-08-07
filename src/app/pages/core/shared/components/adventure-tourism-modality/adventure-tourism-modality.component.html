@@ -84,7 +84,8 @@
                         id="classModality"
                         formControlName="className"
                         [options]="classModalities"
-                        optionLabel="name" />
+                        optionLabel="name"
+                        appendTo="body" />
 
                     <p-message
                         appErrorMessage
@@ -128,3 +129,64 @@
         </form>
     </p-fluid>
 </p-dialog>
+
+
+<p-fluid>
+    <div class="card flex flex-col gap-6 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+            <!-- className -->
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <label
+                    appLabel for="className"
+                    label="Clase de Modalidad"
+                    [required]="classNameField"></label>
+
+                <p-select
+                    id="classModality"
+                    formControlName="className"
+                    [options]="classModalities"
+                    optionLabel="name"
+                    appendTo="body" />
+
+                <p-message
+                    appErrorMessage
+                    [errors]="classNameField.errors"
+                    [touched]="classNameField.touched"
+                    [dirty]="classNameField.dirty"
+                />
+            </div>
+
+            <!-- type -->
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <label
+                    appLabel
+                    for="type"
+                    label="Modalidad"
+                    [required]="typeField"></label>
+
+                <p-select
+                    id="modality"
+                    formControlName="type"
+                    [options]="availableModalities"
+                    optionLabel="name"
+                    appendTo="body" />
+
+                <p-message
+                    appErrorMessage
+                    [errors]="typeField.errors"
+                    [touched]="typeField.touched"
+                    [dirty]="typeField.dirty"
+                />
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <p-button
+                    type="submit"
+                    label="Agregar"
+                    [icon]="PrimeIcons.PLUS" />
+            </div>
+        </div>
+    </div>
+</p-fluid>

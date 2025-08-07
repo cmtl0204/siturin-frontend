@@ -31,11 +31,13 @@ import { AdventureTourismModalityInterface } from '@/pages/core/shared/interface
 export class AdventureTourismModalityComponent implements OnInit {
     @Output() dataOut = new EventEmitter<FormGroup>();
 
+    protected readonly PrimeIcons = PrimeIcons;
+
     private readonly formBuilder = inject(FormBuilder);
     private readonly confirmationService = inject(ConfirmationService);
     private readonly catalogueService = inject(CatalogueService);
+    protected readonly customMessageService = inject(CustomMessageService);
 
-    protected readonly PrimeIcons = PrimeIcons;
     protected form!: FormGroup;
     protected modalityForm!: FormGroup;
 
@@ -43,7 +45,6 @@ export class AdventureTourismModalityComponent implements OnInit {
     protected cols: ColInterface[] = [];
     protected items: AdventureTourismModalityInterface[] = [];
     protected buttonActions: MenuItem[] = [];
-    protected readonly customMessageService = inject(CustomMessageService);
 
     protected availableModalities: CatalogueInterface[] = [];
     protected classModalities: CatalogueInterface[] = [];
@@ -91,7 +92,7 @@ export class AdventureTourismModalityComponent implements OnInit {
     }
 
     watchFormChanges() {
-        this.dataOut.emit(this.form)
+        this.dataOut.emit(this.form);
 
         this.hasAdventureTourismModalityField.valueChanges.subscribe((value) => {
             this.adventureTourismModalitiesField.setValue(this.items);
@@ -124,12 +125,12 @@ export class AdventureTourismModalityComponent implements OnInit {
     }
 
     onSubmit() {
-        if (this.validateForm()) {
+        if (this.validateModalityForm()) {
             this.createAdventureTourismModality();
         }
     }
 
-    validateForm() {
+    validateModalityForm() {
         const errors: string[] = [];
 
         if (this.classNameField.invalid) errors.push('Clase');
@@ -212,6 +213,7 @@ export class AdventureTourismModalityComponent implements OnInit {
         this.modalityForm.reset();
     }
 
+    // Getter Modality Form
     get classNameField(): AbstractControl {
         return this.modalityForm.get('className')!;
     }
@@ -220,6 +222,7 @@ export class AdventureTourismModalityComponent implements OnInit {
         return this.modalityForm.get('type')!;
     }
 
+    // Getters Form
     get hasAdventureTourismModalityField(): AbstractControl {
         return this.form.controls['hasAdventureTourismModality'];
     }
