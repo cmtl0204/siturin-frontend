@@ -57,6 +57,8 @@ export class AirComponent implements OnInit {
             issueAt: [null, Validators.required],
             expirationAt: [null, Validators.required]
         });
+
+        this.watchFormChanges();
     }
 
     watchFormChanges() {

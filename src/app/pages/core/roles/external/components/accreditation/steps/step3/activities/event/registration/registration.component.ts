@@ -3,10 +3,10 @@ import { Button } from 'primeng/button';
 import { PrimeIcons } from 'primeng/api';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CoreSessionStorageService, CustomMessageService } from '@utils/services';
-import { PeopleCapacityComponent } from '../shared/people-capacity/people-capacity.component';
-import { PhysicalSpaceComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/park/shared/physical-space/physical-space.component';
 import { CoreEnum } from '@utils/enums';
 import { EventHttpService } from '@modules/core/roles/external/services';
+import { PeopleCapacityComponent } from '../shared/people-capacity/people-capacity.component';
+import { PhysicalSpaceComponent } from '../shared/physical-space/physical-space.component';
 
 @Component({
     selector: 'app-registration',
@@ -55,9 +55,15 @@ export class RegistrationComponent implements OnInit {
     }
 
     async saveProcess() {
-        const data = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
+        const sessionData = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
 
-        console.log({ ...this.mainForm.value, ...data });
+        console.log('sessionData', sessionData);
+
+        const payload = { ...this.mainForm.value, ...sessionData };
+
+        this.eventHttpService.createRegistration(payload).subscribe({
+            next: () => {}
+        });
     }
 
     checkFormErrors() {

@@ -1,4 +1,5 @@
-    <app-aprotectec (dataOut)="saveForm($event)" />
+ <app-aprotectec (dataOut)="saveForm($event)" />
+
     <!-- Renderizado condicional de los componentes hijos -->
     @if (classification?.name === 'Aereo') {
         <app-air (dataOut)="saveForm($event)"/>

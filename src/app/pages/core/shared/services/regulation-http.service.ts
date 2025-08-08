@@ -24,4 +24,14 @@ export class RegulationHttpService {
             })
         );
     }
+
+    getRegulationsAdventureTourismModalityByModelId(modelId: string): Observable<RegulationSectionInterface[]> {
+        const url = `${this._apiUrl}/cache`;
+
+        return this._httpClient.get<HttpResponseInterface>(url).pipe(
+            map((response) => {
+                return response.data;
+            })
+        );
+    }
 }

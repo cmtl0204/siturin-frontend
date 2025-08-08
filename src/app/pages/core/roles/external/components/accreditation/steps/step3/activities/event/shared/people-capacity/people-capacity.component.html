@@ -7,7 +7,7 @@
                     appLabel
                     for="totalCapacities"
                     label="Capacidad en número de personas"
-                    [required]="form.controls['capacidadPersonas']">
+                    [required]="totalCapacitiesField">
                 </label>
 
                 <p-inputNumber
@@ -18,9 +18,9 @@
 
                 <p-message
                     appErrorMessage
-                    [errors]="form.controls['totalCapacities'].errors"
-                    [touched]="form.controls['totalCapacities'].touched"
-                    [dirty]="form.controls['totalCapacities'].dirty" />
+                    [errors]="totalCapacitiesField.errors"
+                    [touched]="totalCapacitiesField.touched"
+                    [dirty]="totalCapacitiesField.dirty" />
             </div>
         </div>
     </form>

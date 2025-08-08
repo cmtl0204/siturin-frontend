@@ -11,12 +11,11 @@ import { LabelDirective } from '@utils/directives/label.directive';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { CatalogueInterface } from '@utils/interfaces';
 import { CommonModule } from '@angular/common';
-import { Divider } from 'primeng/divider';
 
 @Component({
     selector: 'app-physical-space',
     standalone: true,
-    imports: [Fluid, CommonModule, ReactiveFormsModule, LabelDirective, Select, Message, ErrorMessageDirective, ToggleSwitch, Divider],
+    imports: [Fluid, CommonModule, ReactiveFormsModule, LabelDirective, Select, Message, ErrorMessageDirective, ToggleSwitch],
     templateUrl: './physical-space.component.html',
     styleUrl: './physical-space.component.scss'
 })

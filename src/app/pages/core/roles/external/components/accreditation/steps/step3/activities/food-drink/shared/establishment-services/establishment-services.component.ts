@@ -7,7 +7,6 @@ import { Message } from 'primeng/message';
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { CatalogueInterface } from '@utils/interfaces';
-import { Divider } from 'primeng/divider';
 import { MultiSelect } from 'primeng/multiselect';
 import { CommonModule } from '@angular/common';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
@@ -15,7 +14,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 @Component({
     selector: 'app-establishment-services',
     standalone: true,
-    imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, Divider, MultiSelect, CommonModule],
+    imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, MultiSelect, CommonModule],
     templateUrl: './establishment-services.component.html',
     styleUrl: './establishment-services.component.scss'
 })
@@ -86,5 +85,4 @@ export class EstablishmentServicesComponent implements OnInit {
     get serviceTypesField(): AbstractControl {
         return this.form.controls['serviceTypes'];
     }
-
 }

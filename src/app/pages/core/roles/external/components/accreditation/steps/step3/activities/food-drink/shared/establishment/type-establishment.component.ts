@@ -10,15 +10,13 @@ import { CustomMessageService } from '@utils/services/custom-message.service';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { CatalogueInterface } from '@utils/interfaces';
 import { InputText } from 'primeng/inputtext';
-import { Divider } from 'primeng/divider';
 import { CommonModule } from '@angular/common';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { CatalogueProcessesTypeEnum, CatalogueProcessFoodDrinksEstablishmentTypeEnum } from '@utils/enums';
 
 @Component({
     selector: 'app-type-establishment',
     standalone: true,
-    imports: [Fluid, ReactiveFormsModule, LabelDirective, Select, Message, ErrorMessageDirective, ToggleSwitch, InputText, Divider, CommonModule],
+    imports: [Fluid, ReactiveFormsModule, LabelDirective, Select, Message, ErrorMessageDirective, ToggleSwitch, InputText, CommonModule],
     templateUrl: './type-establishment.component.html',
     styleUrl: './type-establishment.component.scss'
 })
@@ -87,7 +85,7 @@ export class TypeEstablishmentComponent implements OnInit {
         this.form = this.formBuilder.group({
             typeEstablishment: [null, [Validators.required]], //establishmentTypeId
             establishmentName: [null, [Validators.required]],
-            franchiseCertificate: [null, [Validators.required]], //hasFranchiseGrantCertificate
+            franchiseCertificate: [null, [Validators.required]] //hasFranchiseGrantCertificate
             // tables: [null, [Validators.required, Validators.min(1), Validators.max(100)]],
             // capacity: [null, [Validators.required, Validators.min(1), Validators.max(100)]],
             // serviceTypes: [[], [Validators.required]],
@@ -178,5 +176,4 @@ export class TypeEstablishmentComponent implements OnInit {
     get kitchenTypesField(): AbstractControl {
         return this.form.controls['kitchenTypes'];
     }
-
 }
