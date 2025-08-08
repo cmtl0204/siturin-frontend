@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, signal } from '@angular/core';
 import { DividerModule } from 'primeng/divider';
 import { RegulationSimulatorFormComponent } from './components/regulation-simulator-form/regulation-simulator-form.component';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
@@ -10,11 +10,13 @@ import { AccommodationContinentComponent } from './components/accommodation-cont
 import { FoodDrinkContinentComponent } from './components/food-drink-continent/food-drink-continent.component';
 import { FoodDrinkGalapagosComponent } from './components/food-drink-galapagos/food-drink-galapagos.component';
 import { AgencyComponent } from './components/agency/agency.component';
-import { ParkGalapagosComponent } from './components/park-galapagos/park-galapagos.component';
+import { ParkComponent } from './components/park/park.component';
 import { TouristTransportComponent } from './components/tourist-transport/tourist-transport.component';
-import { CatalogueActivitiesCodeEnum } from './enum';
+import { CatalogueActivitiesCodeEnum, ContributorTypeEnum } from './enum';
 import { EventComponent } from './components/event/event.component';
-import { RegulationComponent } from '@modules/core/shared/components/regulation/regulation.component';
+import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
+import { CatalogueInterface } from '@/utils/interfaces';
+import { ActivityInterface, CategoryInterface, ClassificationInterface } from '../../interfaces';
 
 @Component({
     selector: 'app-regulation-simulator',
@@ -29,7 +31,7 @@ import { RegulationComponent } from '@modules/core/shared/components/regulation/
         FoodDrinkGalapagosComponent,
         AgencyComponent,
         TouristTransportComponent,
-        ParkGalapagosComponent,
+        ParkComponent,
         AccommodationContinentComponent,
         EventComponent,
         RegulationComponent
@@ -38,15 +40,15 @@ import { RegulationComponent } from '@modules/core/shared/components/regulation/
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegulationSimulatorComponent {
-    protected activity = signal<string>('');
-    protected classification = signal<string>('');
-    protected geographicZone = signal<string>('');
-    protected person = signal<string>('');
-    protected category = signal<string>('');
+    protected activity = signal<ActivityInterface | null>(null);
+    protected classification = signal<ClassificationInterface | null>(null);
+    protected geographicZone = signal<CatalogueInterface | null>(null);
+    protected contributorType = signal<ContributorTypeEnum>(ContributorTypeEnum.natural_person);
+    protected category = signal<CategoryInterface | null>(null);
     protected catalogueActivitiesCodeEnum = CatalogueActivitiesCodeEnum;
+    protected modelId = signal<string | undefined>('');
 
-    prueba = false;
-    changeNumber = '2';
+    isProtectedArea = false;
     onRegulationSubmitted(event: FormSubmission) {
         console.log(event);
     }
@@ -54,8 +56,14 @@ export class RegulationSimulatorComponent {
     onFormValueChanges(event: any) {
         this.activity.set(event.activity);
         this.classification.set(event.classification);
+        if (this.classification() && this.classification()?.hasRegulation) {
+            this.modelId.set(this.classification()?.id);
+        }
         this.geographicZone.set(event.geographicZone);
-        this.person.set(event.contributorType);
+        this.contributorType.set(event.contributorType);
         this.category.set(event.category);
+        if (this.category() && this.category()?.hasRegulation) {
+            this.modelId.set(this.category()?.id);
+        }
     }
 }

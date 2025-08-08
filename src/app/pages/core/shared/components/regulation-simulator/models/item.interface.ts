@@ -1,3 +1,5 @@
+import { ContributorTypeEnum } from "../enum";
+
 export interface HeaderRegulation {
     classification?: string;
     definition: string;
@@ -7,5 +9,5 @@ export interface HeaderRegulation {
 
 export interface Item {
     label: string;
-    person: 'natural' | 'juridica' | 'ambos';
+    person: ContributorTypeEnum;
 }

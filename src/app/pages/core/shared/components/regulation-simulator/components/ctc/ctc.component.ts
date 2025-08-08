@@ -5,6 +5,8 @@ import { ButtonModule } from 'primeng/button';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Panel } from 'primeng/panel';
 import { data, items } from './data';
+import { ClassificationInterface } from '@/pages/core/shared/interfaces';
+import { ContributorTypeEnum } from '../../enum';
 
 @Component({
     selector: 'app-ctc',
@@ -13,24 +15,20 @@ import { data, items } from './data';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CtcComponent {
-    itemForm!: FormGroup;
+    public contributorType = input.required<ContributorTypeEnum>();
     private readonly fb = inject(FormBuilder);
-    public classificationInput = input();
+    public classificationInput = input<ClassificationInterface | null>();
     protected classification = signal<HeaderRegulation | null>(null);
     form!: FormGroup;
 
     buildForm = effect(() => {
         if (!this.classificationInput()) return;
-        console.log(this.classificationInput());
         
-        this.classification.set(data.find((item) => item.codeClassification === this.classificationInput()) ?? null);
-
-        console.log(this.classification());
-
+        this.classification.set(data.find((item) => item.codeClassification === this.classificationInput()?.code) ?? null);
+        const validatedItems = items.filter((item) => item.person === this.contributorType());
         this.form = this.fb.group({
-            items: this.fb.array(items.map((item) => this.createItemGroup(item)))
+            items: this.fb.array(validatedItems.map((item) => this.createItemGroup(item)))
         });
-        console.log(this.form.value);
     });
 
     createItemGroup(item: Item): FormGroup {

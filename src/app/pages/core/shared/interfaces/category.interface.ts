@@ -6,4 +6,5 @@ export interface CategoryInterface {
     classification?: ClassificationInterface;
     code?: string;
     name?: string;
+    hasRegulation?: boolean;
 }

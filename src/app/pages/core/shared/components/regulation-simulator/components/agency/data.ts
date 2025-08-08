@@ -1,4 +1,4 @@
-import { CatalogueAgencyClassificationsCodeEnum } from '../../enum';
+import { CatalogueAgencyClassificationsCodeEnum, ContributorTypeEnum } from '../../enum';
 import { HeaderRegulation, Item } from '../../models/item.interface';
 
 export const data: HeaderRegulation[] = [
@@ -26,14 +26,14 @@ export const data: HeaderRegulation[] = [
 export const items: Item[] = [
     {
         label: 'Al momento de la inspección presentará el Registro Único de Contribuyentes (RUC).',
-        person: 'juridica'
+        person: ContributorTypeEnum.juridical_person
     },
     {
         label: 'Al momento de la inspección presentará el Documento constitutivo de la compañía debidamente aprobada por la autoridad competente.',
-        person: 'juridica'
+        person: ContributorTypeEnum.juridical_person
     },
     {
         label: 'Al momento de la inspección presentará el Nombramiento vigente del o los representantes legales, debidamente inscrito ante la autoridad competente.',
-        person: 'juridica'
+        person: ContributorTypeEnum.juridical_person
     }
 ];

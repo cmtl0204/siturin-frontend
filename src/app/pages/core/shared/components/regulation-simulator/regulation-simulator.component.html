@@ -4,31 +4,31 @@
 <app-regulation-simulator-form (outputFormValue)="onFormValueChanges($event)" />
 <p-divider />
 
-@switch (activity()) {
+@switch (activity()?.code) {
     @case (catalogueActivitiesCodeEnum.ctc_continent) {
-        <app-ctc [classificationInput]="classification()" />
+        <app-ctc [classificationInput]="classification()" [contributorType]="contributorType()" />
     }
     @case (catalogueActivitiesCodeEnum.accommodation_continent) {
-        <app-continent-accommodation [classificationInput]="classification()" />
+        <app-continent-accommodation [classificationInput]="classification()" [contributorType]="contributorType()" />
     }
     @case (catalogueActivitiesCodeEnum.food_drink_continent || catalogueActivitiesCodeEnum.food_drink_galapagos) {
-        @if (geographicZone() == 'Galápagos') {
-            <app-food-drink-galapagos [classificationInput]="classification()" />
+        @if (geographicZone()?.code == 'galapagos') {
+            <app-food-drink-galapagos [classificationInput]="classification()" [contributorType]="contributorType()" />
         } @else {
-            <app-food-drink-continent [classificationInput]="classification()" />
+            <app-food-drink-continent [classificationInput]="classification()" [contributorType]="contributorType()" />
         }
     }
     @case (catalogueActivitiesCodeEnum.agency_continent || catalogueActivitiesCodeEnum.agency_galapagos) {
-        <app-agency [classificationInput]="classification()" />
+        <app-agency [classificationInput]="classification()" [contributorType]="contributorType()" />
     }
-    @case (catalogueActivitiesCodeEnum.park_galapagos) {
-        <app-park-galapagos [classificationInput]="classification()" />
+    @case (catalogueActivitiesCodeEnum.park_continent || catalogueActivitiesCodeEnum.park_galapagos) {
+        <app-park [classificationInput]="classification()" [contributorType]="contributorType()" />
     }
     @case (catalogueActivitiesCodeEnum.transport_continent || catalogueActivitiesCodeEnum.transport_galapagos) {
-        <app-tourist-transport [classificationInput]="classification()" />
+        <app-tourist-transport [classificationInput]="classification()" [contributorType]="contributorType()" />
     }
     @case (catalogueActivitiesCodeEnum.event_continent || catalogueActivitiesCodeEnum.event_galapagos) {
-        <app-event [classificationInput]="classification()" />
+        <app-event [classificationInput]="classification()" [contributorType]="contributorType()" />
     }
 }
 
@@ -42,4 +42,4 @@
     </div>
 </p-message>
 
-<app-regulation [isProtectedArea]="prueba" [modelId]="changeNumber" (formSubmitted)="onRegulationSubmitted($event)" />
+<app-regulation [isProtectedArea]="isProtectedArea" [modelId]="modelId()" (formSubmitted)="onRegulationSubmitted($event)" />

@@ -1,4 +1,4 @@
-import { CatalogueAccommodationClassificationsCodeEnum } from '../../enum';
+import { CatalogueAccommodationClassificationsCodeEnum, ContributorTypeEnum } from '../../enum';
 import { HeaderRegulation, Item } from '../../models/item.interface';
 
 export const data: HeaderRegulation[] = [
@@ -15,12 +15,12 @@ export const data: HeaderRegulation[] = [
     {
         definition:
             'Hostería : establecimiento de alojamiento turístico que cuenta con instalaciones para ofrecer el servicio de hospedaje en habitaciones o cabañas privadas, con cuarto de baño y aseo privado que pueden formar bloques independientes, ocupando la totalidad de un inmueble o parte independiente del mismo; presta el servicio de alimentos y bebidas, sin perjuicio de proporcionar otros servicios complementarios. Cuenta con jardines, áreas verdes, zonas de recreación y deportes, estacionamiento. Deberá contar con un mínimo de 5 habitaciones.',
-        codeClassification: CatalogueAccommodationClassificationsCodeEnum.tourist_inn
+        codeClassification: CatalogueAccommodationClassificationsCodeEnum.inn
     },
     {
         definition:
             'Hacienda Turística: establecimiento de alojamiento turístico que cuenta con instalaciones para ofrecer el servicio de hospedaje en habitaciones privadas con cuarto de baño y aseo privado y/o compartido conforme a su categoría, localizadas dentro de parajes naturales o áreas cercanas a centros poblados. Su construcción puede tener valores patrimoniales, históricos, culturales y mantiene actividades propias del campo como siembra, huerto orgánico, cabalgatas, actividades culturales patrimoniales, vinculación con la comunidad local, entre otras; permite el disfrute en contacto directo con la naturaleza, cuenta con estacionamiento y presta servicio de alimentos y bebidas, sin perjuicio de proporcionar otros servicios complementarios. Deberá contar con un mínimo de 5 habitaciones',
-        codeClassification: CatalogueAccommodationClassificationsCodeEnum.tourist_resort
+        codeClassification: CatalogueAccommodationClassificationsCodeEnum.tourist_ranch
     },
     {
         definition:
@@ -35,7 +35,7 @@ export const data: HeaderRegulation[] = [
     {
         definition:
             'Refugio: establecimiento de alojamiento turístico que cuenta con instalaciones para ofrecer el servicio de hospedaje en habitaciones privadas y/o compartidas, con cuarto de baño y aseo privado y/o compartido; dispone de un área de estar, comedor y cocina y puede proporcionar otros servicios complementarios. Se encuentra localizado generalmente en montañas y en áreas naturales protegidas, su finalidad es servir de protección a las personas que realizan actividades de turismo activo.',
-        codeClassification: CatalogueAccommodationClassificationsCodeEnum.refuge
+        codeClassification: CatalogueAccommodationClassificationsCodeEnum.shelter
     },
     {
         definition:
@@ -50,32 +50,24 @@ export const data: HeaderRegulation[] = [
     {
         definition:
             'Inmuebles Habitacionales: bienes inmuebles de propiedad privada de personas naturales o jurídicas, destinados al recibimiento habitual y temporal de huéspedes, distintos a los establecimientos previstos en el Reglamento de Alojamiento Turístico.No se podrá denominar como inmueble habitacional a aquellos establecimientos de alojamiento turístico regulados de acuerdo a las disposiciones del Reglamento de Alojamiento Turístico.',
-        codeClassification: CatalogueAccommodationClassificationsCodeEnum.tourist_accommodation_buildings
+        codeClassification: CatalogueAccommodationClassificationsCodeEnum.residential_properties
     }
 ];
 export const items: Item[] = [
     {
         label: 'Al momento de la inspección presentará el Registro Único de Contribuyentes (RUC) o número de Régimen Simplificado para Emprendedores y Negocios Populares (RIMPE), u otro que determine la Autoridad Tributaria.',
-        person: 'natural'
+        person: ContributorTypeEnum.both
     },
     {
         label: 'Al momento de la inspección se presentará el Certificado de Informe de compatibilidad de uso de suelo.',
-        person: 'natural'
-    },
-    {
-        label: 'Al momento de la inspección presentará el Registro Único de Contribuyentes (RUC) o número de Régimen Simplificado para Emprendedores y Negocios Populares (RIMPE), u otro que determine la Autoridad Tributaria. ',
-        person: 'juridica'
+        person: ContributorTypeEnum.both
     },
     {
         label: 'Al momento de la inspección presentará el documento constitutivo de la misma debidamente aprobada por la autoridad correspondiente, en la que conste como su objeto social el desarrollo de la actividad de alojamiento turístico.',
-        person: 'juridica'
+        person: ContributorTypeEnum.juridical_person
     },
     {
         label: 'Al momento de la inspección presentará el Nombramiento vigente del o los representantes legales, debidamente inscrito ante la autoridad correspondiente.',
-        person: 'juridica'
+        person: ContributorTypeEnum.juridical_person
     },
-    {
-        label: 'Al momento de la inspección se presentará el Certificado de Informe de compatibilidad de uso de suelo.',
-        person: 'juridica'
-    }
 ];

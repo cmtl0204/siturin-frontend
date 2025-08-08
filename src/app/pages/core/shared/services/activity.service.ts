@@ -50,7 +50,7 @@ export class ActivityService {
                         id: item.id,
                         code: item.code,
                         name: item.name,
-                        hasRegulation:item.name
+                        hasRegulation: item.hasRegulation
                     };
                 });
         }
@@ -74,7 +74,7 @@ export class ActivityService {
                         id: item.id,
                         code: item.code,
                         name: item.name,
-                        hasRegulation:item.name
+                        hasRegulation: item.hasRegulation
                     };
                 });
         }

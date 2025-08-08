@@ -7,7 +7,7 @@
                 <div [formGroupName]="i" class="mb-6">
                     <p class="text-lg font-bold mb-4">
                         {{ section.value.name }}
-                        @if (section.value.minimumItems) {
+                        @if (section.value.minimumItems && section.value.validationType == validationTypeEnum.MINIMUM_ITEMS) {
                             <span
                                 class="text-primary text-sm font-medium ml-2">(Items mínimos requeridos {{ section.value.minimumItems }}
                                 )</span>

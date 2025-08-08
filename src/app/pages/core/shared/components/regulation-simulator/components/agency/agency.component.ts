@@ -4,6 +4,8 @@ import { HeaderRegulation, Item } from '../../models/item.interface';
 import { data, items } from './data';
 import { Panel } from 'primeng/panel';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { ClassificationInterface } from '@/pages/core/shared/interfaces';
+import { ContributorTypeEnum } from '../../enum';
 
 @Component({
     selector: 'app-agency',
@@ -12,24 +14,21 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AgencyComponent {
-    itemForm!: FormGroup;
     private readonly fb = inject(FormBuilder);
-    public classificationInput = input();
+    public classificationInput = input<ClassificationInterface|null>();
+    public contributorType = input.required<ContributorTypeEnum>();
     protected classification = signal<HeaderRegulation | null>(null);
     form!: FormGroup;
 
     buildForm = effect(() => {
         if (!this.classificationInput()) return;
-        console.log(this.classificationInput());
-        
-        this.classification.set(data.find((item) => item.codeClassification === this.classificationInput()) ?? null);
+        const validatedItems = items.filter((item) => item.person === this.contributorType() || item.person === ContributorTypeEnum.both);
+        this.classification.set(data.find((item) => item.codeClassification === this.classificationInput()?.code) ?? null);
 
-        console.log(this.classification());
 
         this.form = this.fb.group({
-            items: this.fb.array(items.map((item) => this.createItemGroup(item)))
+            items: this.fb.array(validatedItems.map((item) => this.createItemGroup(item)))
         });
-        console.log(this.form.value);
     });
 
     createItemGroup(item: Item): FormGroup {

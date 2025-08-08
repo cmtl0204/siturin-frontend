@@ -4,6 +4,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ButtonModule } from 'primeng/button';
 import { RegulationHttpService } from '@modules/core/shared/services/regulation-http.service';
 import { RegulationResponseInterface, RegulationSectionInterface, RegulationItemInterface } from '@modules/core/shared/interfaces';
+import { ValidationTypeEnum } from '../regulation-simulator/enum';
 
 @Component({
     selector: 'app-regulation',
@@ -13,8 +14,8 @@ import { RegulationResponseInterface, RegulationSectionInterface, RegulationItem
 export class RegulationComponent {
     private readonly regulationHttpService = inject(RegulationHttpService);
     private readonly fb = inject(FormBuilder);
-
-    public modelId = input.required<string>();
+    protected validationTypeEnum = ValidationTypeEnum;
+    public modelId = input.required<string | undefined>();
     public isProtectedArea = input.required<boolean>();
     public formSubmitted = output<RegulationResponseInterface>();
 
@@ -22,14 +23,12 @@ export class RegulationComponent {
     protected sections = signal<RegulationSectionInterface[]>([]);
     private errorMessages: string[] = [];
 
-    loadRegulations(modelId: string) {
-        this.regulationHttpService.getRegulationsByModelId(modelId).subscribe((resp) => {
+    private readonly loadRegulations = effect(() => {
+        if (!this.modelId()) return;
+        
+        this.regulationHttpService.getRegulationsByModelId(this.modelId()!).subscribe((resp) => {
             this.sections.set(resp);
         });
-    }
-
-    private readonly reloadRegulation = effect(() => {
-        this.loadRegulations(this.modelId());
     });
 
     buildForm = effect(() => {
@@ -187,10 +186,6 @@ export class RegulationComponent {
     get sectionsField(): FormArray {
         return this.form.get('sections') as FormArray;
     }
-
-    // get regulationField(): FormArray {
-    //     return this.form.get('regulation') as FormArray;
-    // }
 
     get categoryField(): AbstractControl {
         return this.form.controls['category'];

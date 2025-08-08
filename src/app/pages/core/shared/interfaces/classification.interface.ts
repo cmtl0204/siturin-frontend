@@ -6,4 +6,5 @@ export interface ClassificationInterface {
     activity?: ActivityInterface;
     code?: string;
     name?: string;
+    hasRegulation?: boolean;
 }

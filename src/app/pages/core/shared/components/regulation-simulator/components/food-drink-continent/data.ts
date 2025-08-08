@@ -1,4 +1,4 @@
-import { CatalogueFoodDrinkClassificationsCodeEnum } from '../../enum';
+import { CatalogueFoodDrinkClassificationsCodeEnum, ContributorTypeEnum } from '../../enum';
 import { HeaderRegulation, Item } from '../../models/item.interface';
 
 export const data: HeaderRegulation[] = [
@@ -19,12 +19,12 @@ export const data: HeaderRegulation[] = [
     },
     {
         definition: 'Discoteca: establecimiento para escuchar música grabada y/o en vivo. bailar y consumir bebidas alcohólicas y no alcohólicas, que cuenta con pista de baile.',
-        codeClassification: CatalogueFoodDrinkClassificationsCodeEnum.discotheque
+        codeClassification: CatalogueFoodDrinkClassificationsCodeEnum.nightclub
     },
     {
         definition:
             'Establecimiento móvil: establecimiento donde se elaboran, expenden y/o sirven alimentos preparados, pudiendo ser fríos y/o calientes y bebidas alcohólicas y no alcohólicas. Este tipo de establecimiento se caracteriza por prestar servicios itinerantes de alimentos y bebidas.Para el expendio de bebidas alcohólicas en establecimientos móviles que se encuentren en la vía pública deberán solicitar al Gobierno Autónomo Descentralizado competente la autorización correspondiente.',
-        codeClassification: CatalogueFoodDrinkClassificationsCodeEnum.mobile_restaurant
+        codeClassification: CatalogueFoodDrinkClassificationsCodeEnum.mobile_establishment
     },
     {
         definition: 'Plazas de comida: son consideradas como los sitios que agrupan diversos establecimientos turísticos de alimentos y bebidas y que no se encuentran dentro de un centro comercial.',
@@ -39,26 +39,22 @@ export const data: HeaderRegulation[] = [
 export const items: Item[] = [
     {
         label: 'Al momento de la inspección presentará el Registro Único de Contribuyentes (RUC) o número de Régimen Simplificado para Emprendedores y Negocios Populares (RIMPE), u otro que determine la Autoridad Tributaria.',
-        person: 'natural'
+        person: ContributorTypeEnum.both
     },
     {
         label: 'Al momento de la inspección se presentará el Certificado de Informe de compatibilidad de uso de suelo ',
-        person: 'natural'
-    },
-    {
-        label: 'Al momento de la inspección presentará el Registro Único de Contribuyentes (RUC) o número de Régimen Simplificado para Emprendedores y Negocios Populares (RIMPE), u otro que determine la Autoridad Tributaria. ',
-        person: 'juridica'
+        person: ContributorTypeEnum.natural_person
     },
     {
         label: 'Al momento de la inspección presentará el documento constitutivo de la misma debidamente aprobada por la autoridad correspondiente, en la que conste como su objeto social el desarrollo de la actividad de alojamiento turístico.',
-        person: 'juridica'
+        person: ContributorTypeEnum.juridical_person
     },
     {
         label: 'Al momento de la inspección presentará el nombramiento vigente del o los representantes legales, debidamente inscrito ante la autoridad correspondiente.',
-        person: 'juridica'
+        person: ContributorTypeEnum.juridical_person
     },
     {
         label: 'Al momento de la inspección se presentará el Certificado de Informe de compatibilidad de uso de suelo.',
-        person: 'juridica'
+        person: ContributorTypeEnum.juridical_person
     }
 ];

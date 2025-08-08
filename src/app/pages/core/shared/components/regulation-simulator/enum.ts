@@ -1,7 +1,7 @@
 export enum RegulationSimulatorFormEnum {
     constributorType = 'Tipo de Contribuyente',
     activity = 'Actividad',
-    geographicZone = 'Zona Geográfica',
+    geographicArea = 'Zona Geográfica',
     classification = 'Clasificación',
     category = 'Categoría'
 }
@@ -13,8 +13,8 @@ export enum CatalogueActivitiesCodeEnum {
     agency_galapagos = 'agency_galapagos',
     ctc_continent = 'ctc_continent',
     ctc_galapagos = 'ctc_galapagos',
-    event_continent = 'events_continent',
-    event_galapagos = 'events_galapagos',
+    event_continent = 'event_continent',
+    event_galapagos = 'event_galapagos',
     food_drink_continent = 'food_drink_continent',
     food_drink_galapagos = 'food_drink_galapagos',
     park_continent = 'park_continent',
@@ -23,65 +23,78 @@ export enum CatalogueActivitiesCodeEnum {
     transport_galapagos = 'transport_galapagos'
 }
 
+
 export enum CatalogueCtcActivitiesCodeEnum {
-    accommodation = 'accommodation',
-    community_operation = 'community_operation',
-    food_drink = 'food_drink',
-    transport = 'transport',
+  accommodation = 'accommodation',
+  community_operation = 'community_operation',
+  food_drink = 'food_drink',
+  transport = 'transport',
 }
 
 export enum CatalogueAccommodationClassificationsCodeEnum {
-    hotel = 'hotel',
-    hostel = 'hostel',
-    tourist_inn = 'tourist_inn',
-    tourist_resort = 'tourist_resort',
-    lodge = 'lodge',
-    resort = 'resort',
-    refuge = 'refuge',
-    tourist_camp = 'tourist_camp',
-    guest_house = 'guest_house',
-    tourist_accommodation_buildings = 'tourist_accommodation_buildings',
-    tourism_revenue = 'tourism_revenue'
+  hotel = 'hotel',
+  hostel = 'hostel',
+  inn = 'inn',
+  resort = 'resort',
+  lodge = 'lodge',
+  guest_house = 'guest_house',
+  shelter = 'shelter',
+  tourist_camp = 'tourist_camp',
+  residential_properties = 'residential_properties',
+  tourist_ranch = 'tourist_ranch',
 }
 
 export enum CatalogueAgencyClassificationsCodeEnum {
-    wholesale_travel_agency = 'wholesale_travel_agency',
-    international_travel_agency = 'international_travel_agency',
-    tour_operator = 'tour_operator',
-    dual_travel_agency = 'dual_travel_agency'
+  wholesale_travel_agency = 'wholesale_travel_agency',
+  international_travel_agency = 'international_travel_agency',
+  tour_operator = 'tour_operator',
+  dual_travel_agency = 'dual_travel_agency'
 }
 
 export enum CatalogueCtcClassificationsCodeEnum {
-    community_tourism_centers = 'community_tourism_centers'
+  ctc = 'ctc'
 }
 
 export enum CatalogueEventClassificationsCodeEnum {
-    event_organizer = 'event_organizer',
-    convention_centers = 'convention_centers',
-    reception_room_banquettes = 'reception_room_banquettes'
+  events = 'events',
+  conventions = 'conventions',
+  rooms = 'rooms'
 }
 
 export enum CatalogueFoodDrinkClassificationsCodeEnum {
-    cafeteria = 'cafeteria',
-    bar = 'bar',
-    restaurant = 'restaurant',
-    discotheque = 'discotheque',
-    mobile_restaurant = 'mobile_restaurant',
-    food_courts = 'food_courts',
-    catering_service = 'catering_service'
+  cafeteria = 'cafeteria',
+  bar = 'bar',
+  restaurant = 'restaurant',
+  nightclub = 'nightclub',
+  mobile_establishment = 'mobile_establishment',
+  food_courts = 'food_courts',
+  catering_service = 'catering_service'
 }
 
 export enum CatalogueParkClassificationsCodeEnum {
-    permanent_attraction_parks = 'permanent_attraction_parks',
-    bowling_alley = 'bowling_alley',
-    skating_rink = 'skating_rink',
-    hot_springs = 'hot_springs',
-    beach_resorts = 'beach_resorts',
-    tourist_recreation_centers = 'tourist_recreation_centers'
+  parks = 'parks',
+  bowling_alleys = 'bowling_alleys',
+  tracks = 'tracks',
+  hot_springs = 'hot_springs',
+  spas = 'spas',
+  centers = 'centers'
 }
 
 export enum CatalogueTouristTransportClassificationsCodeEnum {
-    tourist_air_transport = 'tourist_air_transport',
-    tourist_maritime_transport = 'tourist_maritime_transport',
-    tourist_land_transport = 'tourist_land_transport'
+  air_transport = 'air_transport',
+  maritime_transport = 'maritime_transport',
+  land_transport = 'land_transport'
+}
+
+
+export enum ContributorTypeEnum {
+    natural_person = 'natural_person',
+    both = 'both',
+    juridical_person = 'juridical_person'
+}
+
+export enum ValidationTypeEnum {
+    REQUIRED_ITEMS = 'REQUIRED_ITEMS',
+    MINIMUM_ITEMS = 'MINIMUM_ITEMS',
+    SCORE_BASED = 'SCORE_BASED'
 }
