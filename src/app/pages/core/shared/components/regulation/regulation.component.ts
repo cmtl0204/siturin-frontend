@@ -1,31 +1,40 @@
-import { Component, effect, inject, input, output, signal } from '@angular/core';
+import { Component, effect, EventEmitter, inject, input, OnInit, Output, output, signal } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ButtonModule } from 'primeng/button';
 import { RegulationHttpService } from '@modules/core/shared/services/regulation-http.service';
-import { RegulationResponseInterface, RegulationSectionInterface, RegulationItemInterface } from '@modules/core/shared/interfaces';
+import { RegulationItemInterface, RegulationResponseInterface, RegulationSectionInterface } from '@modules/core/shared/interfaces';
 import { ValidationTypeEnum } from '../regulation-simulator/enum';
+import { Divider } from 'primeng/divider';
+import { Fluid } from 'primeng/fluid';
+import { Message } from 'primeng/message';
+import { Tag } from 'primeng/tag';
+import { PrimeIcons } from 'primeng/api';
 
 @Component({
     selector: 'app-regulation',
-    imports: [ReactiveFormsModule, ToggleSwitchModule, ButtonModule],
+    imports: [ReactiveFormsModule, ToggleSwitchModule, ButtonModule, Divider, Fluid, Message, Tag],
     templateUrl: './regulation.component.html'
 })
-export class RegulationComponent {
+export class RegulationComponent implements OnInit {
+    dataOut = output<FormGroup>();
+
     private readonly regulationHttpService = inject(RegulationHttpService);
-    private readonly fb = inject(FormBuilder);
+    private readonly formBuilder = inject(FormBuilder);
+
     protected validationTypeEnum = ValidationTypeEnum;
-    public modelId = input.required<string | undefined>();
-    public isProtectedArea = input.required<boolean>();
-    public formSubmitted = output<RegulationResponseInterface>();
+    modelId = input.required<string | undefined>();
+    isProtectedArea = input<boolean>(false);
 
     protected form!: FormGroup;
     protected sections = signal<RegulationSectionInterface[]>([]);
     private errorMessages: string[] = [];
 
+    ngOnInit() {}
+
     private readonly loadRegulations = effect(() => {
         if (!this.modelId()) return;
-        
+
         this.regulationHttpService.getRegulationsByModelId(this.modelId()!).subscribe((resp) => {
             this.sections.set(resp);
         });
@@ -33,23 +42,34 @@ export class RegulationComponent {
 
     buildForm = effect(() => {
         const regularSections = this.sections().filter((section) => !section.isProtectedArea);
-        this.form = this.fb.group({
+
+        this.form = this.formBuilder.group({
             regulation: [[]],
-            category: [{ value: null, disabled: true }], //activo cuando sea alimentos y be
-            sections: this.fb.array(regularSections.map((section) => this.createSectionGroup(section)))
+            category: [{ value: null, disabled: true }], // activo cuando sea alimentos y bebidas
+            sections: this.formBuilder.array(regularSections.map((section) => this.createSectionGroup(section)))
+        });
+
+        this.form.valueChanges.subscribe((_) => {
+            if (this.errorMessages.length === 0) {
+                this.dataOut.emit(
+                    this.formBuilder.group({
+                        regulation: this.formattedResult
+                    })
+                );
+            }
         });
     });
 
     createSectionGroup(section: RegulationSectionInterface): FormGroup {
-        return this.fb.group({
+        return this.formBuilder.group({
             id: [section.id],
             name: [section.name],
             validationType: [section.validationType],
             isProtectedArea: [section.isProtectedArea],
             minimumItems: [section.minimumItems],
-            items: this.fb.array(
+            items: this.formBuilder.array(
                 section.items.map((item) =>
-                    this.fb.group({
+                    this.formBuilder.group({
                         id: [item.id],
                         name: [item.name],
                         isCompliant: [false],
@@ -74,6 +94,7 @@ export class RegulationComponent {
     addProtectedAreaSections(protectedSections: RegulationSectionInterface[]) {
         protectedSections.forEach((section) => {
             const exists = this.sectionsField.value.some((s: any) => s.id === section.id);
+
             if (!exists) this.sectionsField.push(this.createSectionGroup(section));
         });
     }
@@ -81,18 +102,13 @@ export class RegulationComponent {
     removeProtectedAreaSections(protectedSections: RegulationSectionInterface[]) {
         protectedSections.forEach((section) => {
             const index = this.sectionsField.controls.findIndex((control) => control.value.id === section.id);
+
             if (index !== -1) this.sectionsField.removeAt(index);
         });
     }
 
-    onSubmit() {
-        this.validateSections();
-        if (this.errorMessages.length > 0) return this.showErrors();
-        return this.formSubmitted.emit(this.formattedResult);
-    }
-
     get formattedResult(): RegulationResponseInterface {
-        const items = this.form.value.sections.flatMap((section: RegulationSectionInterface) => {
+        const regulationResponses = this.form.value.sections.flatMap((section: RegulationSectionInterface) => {
             return section.items.map((item) => ({
                 id: item.id,
                 score: item.score,
@@ -102,10 +118,10 @@ export class RegulationComponent {
 
         const category = this.categoryField.value;
 
-        return { items, category };
+        return { regulationResponses, category };
     }
 
-    validateSections() {
+    getFormErrors() {
         this.errorMessages = [];
 
         this.sectionsField.controls.forEach((sectionControl, index) => {
@@ -126,6 +142,8 @@ export class RegulationComponent {
                     break;
             }
         });
+
+        return this.errorMessages;
     }
 
     validateRequiredItems(section: RegulationSectionInterface, selectedItems: RegulationItemInterface[]): boolean {
@@ -177,12 +195,6 @@ export class RegulationComponent {
         this.categoryField.setValue(category);
     }
 
-    showErrors() {
-        if (this.errorMessages.length > 0) {
-            alert(this.errorMessages.join('\n'));
-        }
-    }
-
     get sectionsField(): FormArray {
         return this.form.get('sections') as FormArray;
     }
@@ -194,4 +206,6 @@ export class RegulationComponent {
     getRegulationItemsField(sectionIndex: number): FormArray {
         return this.sectionsField.at(sectionIndex).get('items') as FormArray;
     }
+
+    protected readonly PrimeIcons = PrimeIcons;
 }

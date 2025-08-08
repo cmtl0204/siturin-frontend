@@ -16,7 +16,7 @@ export class RegulationHttpService {
     private readonly _customMessageService = inject(CustomMessageService);
 
     getRegulationsByModelId(modelId: string): Observable<RegulationSectionInterface[]> {
-        const url = `${this._apiUrl}/cache`;
+        const url = `${this._apiUrl}/sections/${modelId}`;
 
         return this._httpClient.get<HttpResponseInterface>(url).pipe(
             map((response) => {
@@ -26,7 +26,7 @@ export class RegulationHttpService {
     }
 
     getRegulationsAdventureTourismModalityByModelId(modelId: string): Observable<RegulationSectionInterface[]> {
-        const url = `${this._apiUrl}/cache`;
+        const url = `${this._apiUrl}/sections/${modelId}/adventure`;
 
         return this._httpClient.get<HttpResponseInterface>(url).pipe(
             map((response) => {

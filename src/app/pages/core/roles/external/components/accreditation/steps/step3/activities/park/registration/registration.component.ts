@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, effect, EventEmitter, inject, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { Button } from 'primeng/button';
 import { PrimeIcons } from 'primeng/api';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -7,11 +7,12 @@ import { PeopleCapacityComponent } from '../shared/people-capacity/people-capaci
 import { PhysicalSpaceComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/park/shared/physical-space/physical-space.component';
 import { CoreEnum } from '@utils/enums';
 import { ParkHttpService } from '@modules/core/roles/external/services/park-http.service';
+import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
 
 @Component({
     selector: 'app-registration',
     standalone: true,
-    imports: [Button, PeopleCapacityComponent, PhysicalSpaceComponent],
+    imports: [Button, PeopleCapacityComponent, PhysicalSpaceComponent, RegulationComponent],
     templateUrl: './registration.component.html',
     styleUrl: './registration.component.scss'
 })
@@ -25,10 +26,20 @@ export class RegistrationComponent implements OnInit {
 
     private formBuilder = inject(FormBuilder);
     protected mainForm!: FormGroup;
+    protected modelId: string | undefined = undefined;
 
     protected readonly customMessageService = inject(CustomMessageService);
 
     constructor() {
+        effect(async () => {
+            const processSignal = this.coreSessionStorageService.processSignal();
+
+            if (processSignal) {
+                if (processSignal.classification?.hasRegulation) this.modelId = processSignal.classification.id;
+                if (processSignal.category?.hasRegulation) this.modelId = processSignal.category.id;
+            }
+        });
+
         this.mainForm = this.formBuilder.group({});
     }
 

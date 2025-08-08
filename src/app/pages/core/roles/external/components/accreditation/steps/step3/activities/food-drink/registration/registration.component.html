@@ -5,6 +5,7 @@
     <app-establishment-capacity (dataOut)="saveForm($event)"/>
     <app-establishment-services (dataOut)="saveForm($event)"/>
     <app-kitchen (dataOut)="saveForm($event)"/>
+    <app-regulation [modelId]="modelId" [isProtectedArea]="true" (dataOut)="saveForm($event)" />
 }
 <!-- <app-adventure-modalities (dataOut)="saveForm($event)"/> -->
 

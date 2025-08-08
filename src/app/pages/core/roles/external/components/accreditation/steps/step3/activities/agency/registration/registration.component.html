@@ -10,6 +10,8 @@
 
 <app-tourist-transport-company (dataOut)="saveForm($event)" />
 
+<app-regulation [modelId]="modelId" [isProtectedArea]="true" (dataOut)="saveForm($event)" />
+
 <p-fluid>
     <div class="card flex flex-col gap-6 w-full">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6">

@@ -1,6 +1,6 @@
 export interface RegulationResponseInterface {
     category: string;
-    items: {
+    regulationResponses: {
         id: string;
         isCompliant: boolean;
         score: number;

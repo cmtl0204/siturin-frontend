@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, effect, signal } from '@angular/cor
 import { DividerModule } from 'primeng/divider';
 import { RegulationSimulatorFormComponent } from './components/regulation-simulator-form/regulation-simulator-form.component';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule } from '@angular/forms';
 import { FormSubmission } from './models/regulations.model';
 import { CtcComponent } from './components/ctc/ctc.component';
 import { Message } from 'primeng/message';
@@ -49,7 +49,7 @@ export class RegulationSimulatorComponent {
     protected modelId = signal<string | undefined>('');
 
     isProtectedArea = false;
-    onRegulationSubmitted(event: FormSubmission) {
+    onRegulationSubmitted(event: FormGroup) {
         console.log(event);
     }
 

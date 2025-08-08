@@ -11,11 +11,12 @@ import { EstablishmentCapacityComponent } from '@modules/core/roles/external/com
 import { EstablishmentServicesComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-services/establishment-services.component';
 import { ClassificationInterface } from '@modules/core/shared/interfaces';
 import { KitchenComponent } from '../shared/kitchen/kitchen.component';
+import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
 
 @Component({
     selector: 'app-registration',
     standalone: true,
-    imports: [CommonModule, Button, TypeEstablishmentComponent, PhysicalSpaceComponent, EstablishmentCapacityComponent, EstablishmentServicesComponent, KitchenComponent],
+    imports: [CommonModule, Button, TypeEstablishmentComponent, PhysicalSpaceComponent, EstablishmentCapacityComponent, EstablishmentServicesComponent, KitchenComponent, RegulationComponent],
     templateUrl: './registration.component.html',
     styleUrl: './registration.component.scss'
 })
@@ -32,6 +33,7 @@ export class RegistrationComponent {
     private formBuilder = inject(FormBuilder);
 
     protected mainForm!: FormGroup;
+    protected modelId: string | undefined = undefined;
 
     protected showTypeEstablishment = false;
 
@@ -45,15 +47,17 @@ export class RegistrationComponent {
     protected readonly coreSessionStorageService = inject(CoreSessionStorageService);
 
     constructor() {
-        this.mainForm = this.formBuilder.group({});
-
         effect(async () => {
             const processSignal = this.coreSessionStorageService.processSignal();
 
             if (processSignal) {
                 this.currentClassification = processSignal.classification;
+                if (processSignal.classification?.hasRegulation) this.modelId = processSignal.classification.id;
+                if (processSignal.category?.hasRegulation) this.modelId = processSignal.category.id;
             }
         });
+
+        this.mainForm = this.formBuilder.group({});
     }
 
     saveForm(childForm: FormGroup) {
