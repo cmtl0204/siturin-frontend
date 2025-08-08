@@ -1,25 +1,14 @@
 import { Component, effect, inject, QueryList, ViewChildren } from '@angular/core';
-import {
-    PhysicalSpaceComponent
-} from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/physical-space/physical-space.component';
-import {
-    TypeEstablishmentComponent
-} from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment/type-establishment.component';
+import { PhysicalSpaceComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/physical-space/physical-space.component';
+import { TypeEstablishmentComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment/type-establishment.component';
 import { Button } from 'primeng/button';
 import { PrimeIcons } from 'primeng/api';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CoreSessionStorageService, CustomMessageService } from '@utils/services';
 import { CommonModule } from '@angular/common';
-import {
-    AdventureModalitiesComponent
-} from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/adventure-modalities/adventure-modalities.component';
-import { ClassificationService } from '../shared/services/classification.service';
-import {
-    EstablishmentCapacityComponent
-} from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-capacity/establishment-capacity.component';
-import {
-    EstablishmentServicesComponent
-} from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-services/establishment-services.component';
+import { AdventureModalitiesComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/adventure-modalities/adventure-modalities.component';
+import { EstablishmentCapacityComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-capacity/establishment-capacity.component';
+import { EstablishmentServicesComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-services/establishment-services.component';
 import { ClassificationInterface } from '@modules/core/shared/interfaces';
 import { KitchenComponent } from '../shared/kitchen/kitchen.component';
 
@@ -46,7 +35,6 @@ export class RegistrationComponent {
 
     protected showTypeEstablishment = false;
 
-    private readonly classificationService = inject(ClassificationService);
     protected currentClassification!: ClassificationInterface | undefined;
 
     protected get shouldShowTypeEstablishment(): boolean {
@@ -58,27 +46,19 @@ export class RegistrationComponent {
 
     constructor() {
         this.mainForm = this.formBuilder.group({});
+
         effect(async () => {
             const processSignal = this.coreSessionStorageService.processSignal();
 
             if (processSignal) {
-                console.log(processSignal);
                 this.currentClassification = processSignal.classification;
             }
         });
     }
-    ngOnInit() {
-        // this.subscription = this.classificationService.currentClassification.subscribe(
-        //     classification => {
-        //       this.currentClassification = classification;
-        //       console.log('Classification updated:', this.currentClassification);
-        //     }
-        //   );
-    }
 
     saveForm(childForm: FormGroup) {
         if (childForm.contains('landUse')) {
-            this.showTypeEstablishment = childForm.get('landUse')?.value === true;
+            this.showTypeEstablishment = childForm.controls['landUse'].value === true;
         }
 
         Object.keys(childForm.controls).forEach((controlName) => {
@@ -109,7 +89,6 @@ export class RegistrationComponent {
             ...this.establishmentCapacityComponent.toArray().flatMap((c) => c.getFormErrors()),
             ...this.establishmentServicesComponent.toArray().flatMap((c) => c.getFormErrors()),
             ...this.kitchenComponent.toArray().flatMap((c) => c.getFormErrors())
-            // Add tables separates
         ];
 
         if (errors.length > 0) {

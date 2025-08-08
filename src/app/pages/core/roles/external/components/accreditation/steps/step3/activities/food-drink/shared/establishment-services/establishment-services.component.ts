@@ -71,7 +71,8 @@ export class EstablishmentServicesComponent implements OnInit {
     getFormErrors(): string[] {
         const errors: string[] = [];
 
-        if (this.serviceTypesField.invalid) errors.push('Tipo de Servicio');        
+        if (this.serviceTypesField.invalid) errors.push('Tipo de Servicio');
+
         if (errors.length > 0) {
             this.form.markAllAsTouched();
             return errors;

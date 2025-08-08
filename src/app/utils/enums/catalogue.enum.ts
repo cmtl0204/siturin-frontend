@@ -43,6 +43,12 @@ export enum CatalogueProcessesTypeEnum {
     recategorization = 'recategorization'
 }
 
+export enum CatalogueProcessFoodDrinksEstablishmentTypeEnum {
+    cadena = 'cadena',
+    franquicia = 'franquicia',
+    ninguno = 'ninguno',
+}
+
 export enum CatalogueProcessesStateEnum {
     pending_1 = 'pending_1',
     pending_2 = 'pending_2',

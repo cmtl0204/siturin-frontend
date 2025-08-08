@@ -6,10 +6,12 @@
                 <label appLabel for="localType" [required]="localTypeField" label="Su local es">
                 </label>
 
-                <p-select id="localType" [options]="localTypes" formControlName="localType" optionLabel="name">
-                </p-select>
+                <p-select id="localType" [options]="localTypes" formControlName="localType" optionLabel="name" />
 
-                <p-message appErrorMessage [errors]="localTypeField.errors" [touched]="localTypeField.touched"
+                <p-message
+                    appErrorMessage
+                    [errors]="localTypeField.errors"
+                    [touched]="localTypeField.touched"
                     [dirty]="localTypeField.dirty" />
             </div>
 
@@ -19,35 +21,32 @@
                     <div class="font-semibold text-xl">
                         Certificado de Uso de Suelos o su Equivalente:
                     </div>
-                    
-                    <div class="space-y-2">
-                        <label 
-                            appLabel 
-                            for="landUse"
-                            [required]="landUseField"
-                            label="Al momento de la inspección se presentará el Certificado de Informe de compatibilidad de uso de suelo">
-                        </label>
-                
-                        <p-toggleswitch 
-                            id="landUse" 
-                            formControlName="landUse"                             
-                            >
-                            <ng-template #handle let-checked="checked">
-                                <span class="!text-xs font-semibold">{{ checked ? 'Si' : 'No' }} </span>
-                            </ng-template>
-                        </p-toggleswitch>
-                
-                        <p-message 
-                            appErrorMessage 
-                            [errors]="landUseField.errors" 
-                            [touched]="landUseField.touched"
-                            [dirty]="landUseField.dirty" />
-                    </div>
+                </div>
+
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <label
+                        appLabel
+                        for="landUse"
+                        [required]="landUseField"
+                        label="Al momento de la inspección se presentará el Certificado de Informe de compatibilidad de uso de suelo">
+                    </label>
+
+                    <p-toggleswitch
+                        id="landUse"
+                        formControlName="landUse"
+                    >
+                        <ng-template #handle let-checked="checked">
+                            <span class="!text-xs font-semibold">{{ checked ? 'Si' : 'No' }} </span>
+                        </ng-template>
+                    </p-toggleswitch>
+
+                    <p-message
+                        appErrorMessage
+                        [errors]="landUseField.errors"
+                        [touched]="landUseField.touched"
+                        [dirty]="landUseField.dirty" />
                 </div>
             }
-            <p-divider class="md:col-span-12" type="solid" />
-        
-            <!-- Discote y bar no cuenta con aventura T -->
         </div>
     </form>
 </p-fluid>

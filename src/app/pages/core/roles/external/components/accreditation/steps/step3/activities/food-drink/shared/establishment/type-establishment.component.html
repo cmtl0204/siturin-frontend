@@ -2,67 +2,62 @@
     <form [formGroup]="form" class="card flex flex-col gap-6 w-full">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
             <!-- typeEstablishment -->
-            <div class="md:col-span-12 font-semibold text-xl">
-                Tipo de Establecimiento:
-            </div>
             <div class="md:col-span-6 flex flex-col gap-2">
-                <label appLabel for="typeEstablishment" [required]="typeEstablishmentField"
-                    label="Tipo de Establecimiento">
+                <label
+                    appLabel for="typeEstablishment"
+                    label="Tipo de Establecimiento"
+                    [required]="typeEstablishmentField">
                 </label>
-                <p-select [options]="typeEstablishments" formControlName="typeEstablishment" optionLabel="name"
-                    [filter]="true" placeholder="Tipo de Establecimiento">
-                    <ng-template #selectedItem let-selectedItem>
-                        @if (selectedItem) {
-                        <div class="flex items-center gap-2">
-                            <div>{{ selectedItem.name }}</div>
-                        </div>
-                        }
-                    </ng-template>
-                    <ng-template let-item #item>
-                        <div class="flex items-center gap-2">
-                            <div>{{ item.name }}</div>
-                        </div>
-                    </ng-template>
-                </p-select>
-                <p-message appErrorMessage [errors]="typeEstablishmentField.errors"
-                    [touched]="typeEstablishmentField.touched" [dirty]="typeEstablishmentField.dirty" />
+
+                <p-select
+                    [options]="typeEstablishments"
+                    formControlName="typeEstablishment"
+                    optionLabel="name"
+                    [filter]="true" />
+
+                <p-message
+                    appErrorMessage
+                    [errors]="typeEstablishmentField.errors"
+                    [touched]="typeEstablishmentField.touched"
+                    [dirty]="typeEstablishmentField.dirty" />
             </div>
-            <ng-container [ngSwitch]="typeEstablishmentField.value">
-                <!-- Validation -->
-                @if (typeEstablishmentField.value && typeEstablishmentField.value.id !== '3') {
+
+            <!-- establishmentName -->
+            @if (establishmentNameField.hasValidator(Validators.required)) {
                 <div class="md:col-span-6 flex flex-col gap-2">
-                    <label appLabel for="establishmentName" [required]="establishmentNameField"
+                    <label
+                        appLabel for="establishmentName"
+                        [required]="establishmentNameField"
                         label="Nombre de la Franquicia o Cadena">
                     </label>
 
                     <input pInputText id="establishmentName" formControlName="establishmentName"
-                        placeholder="Nombre..." />
+                           placeholder="Nombre..." />
 
                     <p-message appErrorMessage [errors]="establishmentNameField.errors"
-                        [touched]="establishmentNameField.touched" [dirty]="establishmentNameField.dirty" />
+                               [touched]="establishmentNameField.touched" [dirty]="establishmentNameField.dirty" />
                 </div>
-                }
-                @if (typeEstablishmentField.value && typeEstablishmentField.value.id === '2') {
+            }
+
+            <!-- franchiseCertificate -->
+            @if (franchiseCertificateField.hasValidator(Validators.required)) {
                 <div class="md:col-span-12 flex flex-col gap-2">
                     <label appLabel for="franchiseCertificate"
-                        label="Al momento de la inspección se presentará la certificación de concesión de la franquicia"
-                        [required]="franchiseCertificateField">
+                           label="Al momento de la inspección se presentará la certificación de concesión de la franquicia"
+                           [required]="franchiseCertificateField">
                     </label>
 
-                    <p-toggleswitch id="franchiseCertificate" formControlName="franchiseCertificate" >
+                    <p-toggleswitch id="franchiseCertificate" formControlName="franchiseCertificate">
                         <ng-template #handle let-checked="checked">
                             <span class="!text-xs font-semibold">{{ checked ? 'Si' : 'No' }} </span>
                         </ng-template>
                     </p-toggleswitch>
 
                     <p-message appErrorMessage [errors]="franchiseCertificateField.errors"
-                        [touched]="franchiseCertificateField.touched" [dirty]="franchiseCertificateField.dirty" />
+                               [touched]="franchiseCertificateField.touched"
+                               [dirty]="franchiseCertificateField.dirty" />
                 </div>
-                }
-                <p-divider class="md:col-span-12" type="solid" />
-
-            </ng-container>
-
+            }
         </div>
     </form>
 </p-fluid>

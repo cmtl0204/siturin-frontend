@@ -13,6 +13,7 @@ import { InputText } from 'primeng/inputtext';
 import { Divider } from 'primeng/divider';
 import { CommonModule } from '@angular/common';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { CatalogueProcessesTypeEnum, CatalogueProcessFoodDrinksEstablishmentTypeEnum } from '@utils/enums';
 
 @Component({
     selector: 'app-type-establishment',
@@ -102,13 +103,22 @@ export class TypeEstablishmentComponent implements OnInit {
                 this.dataOut.emit(this.form);
             }
         });
+
         this.typeEstablishmentField.valueChanges.subscribe((value) => {
+            // if (value.id === CatalogueProcessFoodDrinksEstablishmentTypeEnum.cadena) {
             if (value.id === '2') {
-                this.franchiseCertificateField.setValidators([Validators.required]);            
+                this.franchiseCertificateField.setValidators([Validators.required]);
             }
+
             if (value.id === '1') {
                 this.franchiseCertificateField.clearValidators();
             }
+
+            if (value.id === '3') {
+                this.franchiseCertificateField.setValidators([Validators.required]);
+                this.franchiseCertificateField.clearValidators();
+            }
+
             this.franchiseCertificateField.updateValueAndValidity();
         });
     }
@@ -123,6 +133,7 @@ export class TypeEstablishmentComponent implements OnInit {
         if (this.capacityField.invalid) errors.push('Capacidad en número de personas');
         if (this.serviceTypesField.invalid) errors.push('Tipo de Servicio');
         if (this.kitchenTypesField.invalid) errors.push('Tipo de Cocina');
+
         if (errors.length > 0) {
             this.form.markAllAsTouched();
             return errors;
@@ -136,15 +147,15 @@ export class TypeEstablishmentComponent implements OnInit {
     get typeEstablishmentField(): AbstractControl {
         return this.form.controls['typeEstablishment'];
     }
-    
+
     get establishmentNameField(): AbstractControl {
         return this.form.controls['establishmentName'];
     }
-    
+
     // get typeEstablishmentField() {
     //     return this.form.get('typeEstablishment')!;
     // }
-    
+
     // get establishmentNameField() {
     //     return this.form.get('establishmentName')!;
     // }
@@ -160,11 +171,11 @@ export class TypeEstablishmentComponent implements OnInit {
         return this.form.controls['capacity'];
     }
 
-    get serviceTypesField(): AbstractControl {  
+    get serviceTypesField(): AbstractControl {
         return this.form.controls['serviceTypes'];
     }
 
-    get kitchenTypesField(): AbstractControl {  
+    get kitchenTypesField(): AbstractControl {
         return this.form.controls['kitchenTypes'];
     }
 

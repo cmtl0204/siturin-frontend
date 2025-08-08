@@ -88,7 +88,7 @@ export class EstablishmentCapacityComponent implements OnInit {
     get tablesField(): AbstractControl {
         return this.form.controls['tables'];
     }
-    
+
     get capacityField(): AbstractControl {
         return this.form.controls['capacity'];
     }
