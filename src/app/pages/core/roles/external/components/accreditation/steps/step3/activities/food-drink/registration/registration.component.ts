@@ -33,7 +33,7 @@ export class RegistrationComponent {
     private formBuilder = inject(FormBuilder);
 
     protected mainForm!: FormGroup;
-    protected modelId: string | undefined = undefined;
+    protected modelId!: string | undefined;
 
     protected showTypeEstablishment = false;
 

@@ -32,7 +32,7 @@ export class RegistrationComponent {
     private formBuilder = inject(FormBuilder);
     protected mainForm!: FormGroup;
     protected formInitialized = false;
-    protected modelId: string | undefined = undefined;
+    protected modelId!: string | undefined;
 
     protected readonly customMessageService = inject(CustomMessageService);
     protected readonly coreSessionStorageService = inject(CoreSessionStorageService);

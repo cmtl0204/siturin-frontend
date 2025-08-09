@@ -39,7 +39,7 @@
                         <p-tabpanel [value]="i">
                             @switch (tab.code) {
                                 @case ('alimentos_bebidas') {
-                                    <app-foodDrink (dataOut)="saveFoodDrinkForm($event)" />
+                                    <app-foodDrink (dataOut)="saveFoodDrinkForm($event)" [modelId]="activitiesField.value[i].id"  />
                                 }
                                 @case ('alojamiento') {
                                     <app-accommodation (dataOut)="saveAccommodationForm($event)"></app-accommodation>
