@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Fluid } from 'primeng/fluid';
@@ -30,6 +30,7 @@ import { AdventureTourismModalityInterface } from '@modules/core/shared/interfac
 })
 export class AdventureTourismModalityComponent implements OnInit {
     @Output() dataOut = new EventEmitter<FormGroup>();
+    @Input() modelId!: string | undefined;
 
     protected readonly PrimeIcons = PrimeIcons;
 
@@ -198,7 +199,7 @@ export class AdventureTourismModalityComponent implements OnInit {
                 label: 'Sí, Eliminar'
             },
             accept: () => {
-                this.items = this.items.filter(item => item.type?.id === modality.type?.id);
+                this.items = this.items.filter((item) => item.type?.id === modality.type?.id);
 
                 this.adventureTourismModalitiesField.setValue(this.items);
 

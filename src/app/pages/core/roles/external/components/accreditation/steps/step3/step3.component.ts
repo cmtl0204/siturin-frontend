@@ -16,15 +16,11 @@ import { ActivityService } from '@modules/core/shared/services';
 import { ProcessI } from '@utils/services/core-session-storage.service';
 import { AgencyComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/agency/agency.component';
 import { CtcComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/ctc/ctc.component';
-import { AccommodationComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/accommodation/accommodation.component';
 import { EventComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/event/event.component';
 import { TransportComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/transport/transport.component';
-import {
-    ParkComponent
-} from '@modules/core/roles/external/components/accreditation/steps/step3/activities/park/park.component';
-import {
-    FoodDrinkComponent
-} from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/food-drink/food-drink.component';
+import { ParkComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/park/park.component';
+import { FoodDrinkComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/food-drink/food-drink.component';
+import { AccommodationComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/accommodation/accommodation.component';
 
 interface CatalogMode {
     code: 'registration' | 'update' | 'reclassification' | 'readmission' | string;
@@ -178,7 +174,6 @@ export class Step3Component implements OnInit {
         }
 
         this.activities = await this.activityService.findActivitiesByZone(this.geographicAreaField.getRawValue().id);
-        console.log(this.activities);
     }
 
     async loadData() {

@@ -1,8 +1,9 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { Component } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'app-registration',
-    imports: [],
+    imports: [ButtonModule],
     templateUrl: './registration.component.html',
     styleUrl: './registration.component.scss'
 })

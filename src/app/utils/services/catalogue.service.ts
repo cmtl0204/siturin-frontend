@@ -24,4 +24,19 @@ export class CatalogueService {
 
         return catalogues;
     }
+
+    async findByCode(code: string, type: string): Promise<CatalogueInterface | undefined> {
+        let catalogues: CatalogueInterface[] = [];
+        let catalogue!: CatalogueInterface | undefined;
+
+        if (sessionStorage.getItem(CoreEnum.catalogues)) {
+            catalogues = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.catalogues);
+            catalogues = Object.values(catalogues);
+            catalogue = catalogues.find((catalogue) => {
+                return catalogue.code === code && catalogue.type === type;
+            });
+        }
+
+        return catalogue;
+    }
 }

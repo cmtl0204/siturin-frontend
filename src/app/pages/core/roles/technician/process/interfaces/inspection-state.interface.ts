@@ -1,11 +1,9 @@
-/* Ratificado */
-export interface RegistrationInspectionStatusInterface {
+import { CatalogueInterface } from '@utils/interfaces';
+
+export interface CreateRatifiedInspectionStateInterface {
     cadastreId: string;
     processId: string;
-    state: {
-        id: string;
-        code: string;
-    };
+    state: CatalogueInterface;
 }
 
 export interface InactivationInspectionStatusInterface {

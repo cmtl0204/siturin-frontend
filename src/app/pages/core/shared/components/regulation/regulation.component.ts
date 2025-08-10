@@ -25,6 +25,7 @@ export class RegulationComponent implements OnInit {
     protected validationTypeEnum = ValidationTypeEnum;
     modelId = input.required<string | undefined>();
     isProtectedArea = input<boolean>(false);
+    isAdventureRequirement = input<boolean>(false);
 
     protected form!: FormGroup;
     protected sections = signal<RegulationSectionInterface[]>([]);
@@ -35,9 +36,15 @@ export class RegulationComponent implements OnInit {
     private readonly loadRegulations = effect(() => {
         if (!this.modelId()) return;
 
-        this.regulationHttpService.getRegulationsByModelId(this.modelId()!).subscribe((resp) => {
-            this.sections.set(resp);
-        });
+        if (this.isAdventureRequirement()) {
+            this.regulationHttpService.getRegulationsAdventureTourismModalityByModelId(this.modelId()!).subscribe((resp) => {
+                this.sections.set(resp);
+            });
+        } else {
+            this.regulationHttpService.getRegulationsByModelId(this.modelId()!).subscribe((resp) => {
+                this.sections.set(resp);
+            });
+        }
     });
 
     buildForm = effect(() => {

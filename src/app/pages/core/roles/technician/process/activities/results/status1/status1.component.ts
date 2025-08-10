@@ -1,43 +1,44 @@
-import { Component, Input} from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { FileUpload, FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InspectionStatusService } from '@/pages/core/roles/technician/process/services/inspection-status.service';
 
 interface UploadEvent {
     originalEvent: Event;
     files: File[];
 }
 
-
 @Component({
-  selector: 'app-status1',
-  imports: [FormsModule,
-            ReactiveFormsModule,
-            ButtonModule,
-            FileUpload,
-            FileUploadModule,
-            ToastModule,
-            CommonModule],
-  templateUrl: './status1.component.html',
-  styleUrl: './status1.component.scss',
-  providers: [MessageService]
+    selector: 'app-status1',
+    imports: [FormsModule, ReactiveFormsModule, ButtonModule, FileUpload, FileUploadModule, ToastModule, CommonModule],
+    templateUrl: './status1.component.html',
+    styleUrl: './status1.component.scss',
+    providers: [MessageService]
 })
-
 export class Status1Component {
-    @Input() form!: FormGroup;
+    @Input() processId!: string;
+    @Input() stateId!: string;
+
+    private inspectionStatusService = inject(InspectionStatusService);
+    protected form!: FormGroup;
+
     uploadedFiles: any[] = [];
 
+    constructor() {}
 
-    constructor(private messageService: MessageService) {}
-
-    onUpload(event:any) {
-        for(let file of event.files) {
+    onUpload(event: any) {
+        for (let file of event.files) {
             this.uploadedFiles.push(file);
         }
+    }
 
-        this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
+    createState() {
+        this.inspectionStatusService.createRatifiedInspectionState(this.form.value).subscribe({
+            next: (res) => {}
+        });
     }
 }
