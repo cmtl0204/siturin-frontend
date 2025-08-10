@@ -199,7 +199,7 @@ export class AdventureTourismModalityComponent implements OnInit {
                 label: 'Sí, Eliminar'
             },
             accept: () => {
-                this.items = this.items.filter((item) => item.type?.id === modality.type?.id);
+                this.items = this.items.filter((item) => item.type?.id !== modality.type?.id);
 
                 this.adventureTourismModalitiesField.setValue(this.items);
 
