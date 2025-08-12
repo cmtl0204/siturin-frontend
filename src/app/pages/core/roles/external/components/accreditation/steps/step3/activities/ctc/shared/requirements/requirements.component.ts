@@ -66,14 +66,15 @@ export class RequirementsComponent implements OnInit {
   getFormErrors(): string[] {
     const errors: string[] = [];
 
-    Object.entries(this.requirementsForm.controls).forEach(([key, control]) => {
-      const group = control as FormGroup;
-      const isRequired = group.get('required')?.value;
-      const checked = group.get('checked');
-      if (isRequired && checked?.invalid) {
-        errors.push(`Debe marcar como disponible el documento: "${group.get('label')?.value}"`);
-      }
-    });
+    if (!this.requirementsForm.get('hasPropertyRegistrationCertificate')?.value) {
+      errors.push('Debe marcar como disponible el documento: "Certificado de propiedad"');
+    }
+    if (!this.requirementsForm.get('hasTechnicalReport')?.value) {
+      errors.push('Debe marcar como disponible el documento: "Informe técnico"');
+    }
+    if (!this.requirementsForm.get('hasStatute')?.value) {
+      errors.push('Debe marcar como disponible el documento: "Estatuto"');
+    }
 
     if (errors.length > 0) {
       this.requirementsForm.markAllAsTouched();

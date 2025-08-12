@@ -1,23 +1,21 @@
 import { Component, inject, QueryList, ViewChildren } from '@angular/core';
 import { CtcHttpService } from '@/pages/core/roles/external/services';
-import { CustomMessageService, CoreSessionStorageService } from '@/utils/services';
+import { CoreSessionStorageService, CustomMessageService } from '@/utils/services';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PrimeIcons } from 'primeng/api';
 import { CoreEnum } from '@/utils/enums';
-import { AdventureTourismModalityComponent } from '@/pages/core/shared/components/adventure-tourism-modality/adventure-tourism-modality.component';
 import { ButtonModule } from 'primeng/button';
 import { GroundLocalsComponent } from '../shared/ground-locals/ground-locals.component';
 import { InnactivationComponent } from '../shared/innactivation/innactivation.component';
 import { InactivationComponent } from '../inactivation/inactivation.component';
-import { EstablishmentCapabilitiesComponent } from '../shared/establishment-capabilities/establishment-capabilities.component';
-import { ComplementaryServicesComponent } from '../shared/complementary-services/complementary-services.component';
 import {
-    AccreditedStaffLanguageComponent
-} from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/agency/shared/accredited-staff-language/accredited-staff-language.component';
+    EstablishmentCapabilitiesComponent
+} from '../shared/establishment-capabilities/establishment-capabilities.component';
+import { ComplementaryServicesComponent } from '../shared/complementary-services/complementary-services.component';
 
 @Component({
     selector: 'app-registration',
-    imports: [GroundLocalsComponent, InnactivationComponent, EstablishmentCapabilitiesComponent, ComplementaryServicesComponent, AdventureTourismModalityComponent, ButtonModule],
+    imports: [GroundLocalsComponent, InnactivationComponent, EstablishmentCapabilitiesComponent, ComplementaryServicesComponent, ButtonModule],
     templateUrl: './registration.component.html',
     styleUrl: './registration.component.scss'
 })

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Fluid } from 'primeng/fluid';
 import { ConfirmationService, MenuItem, PrimeIcons } from 'primeng/api';
 import { ToggleSwitch } from 'primeng/toggleswitch';
@@ -15,11 +15,10 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { TouristGuideInterface } from '@modules/core/interfaces';
 import { ListBasicComponent } from '@utils/components/list-basic/list-basic.component';
-import { ListComponent } from '@utils/components/list/list.component';
 
 @Component({
     selector: 'app-tourist-guide',
-    imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, ToggleSwitch, TableModule, Button, Dialog, InputText, ListBasicComponent, ListComponent],
+    imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, ToggleSwitch, TableModule, Button, Dialog, InputText, ListBasicComponent],
     templateUrl: './tourist-guide.component.html',
     styleUrl: './tourist-guide.component.scss'
 })

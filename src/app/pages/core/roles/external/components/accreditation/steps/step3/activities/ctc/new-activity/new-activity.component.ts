@@ -4,7 +4,7 @@ import { Panel } from "primeng/panel";
 import { Message } from "primeng/message";
 import { MultiSelect } from "primeng/multiselect";
 import { Tabs, TabList, Tab, TabPanel } from "primeng/tabs";
-import { FoodDrinkComponent } from "../shared/food-drink/foodDrink.component";
+import { FoodDrinkComponent } from "../shared/food-drink/food_drink.component";
 import { AccommodationComponent } from "../shared/accommodation/accommodation.component";
 import { CommunityOperationComponent } from "../shared/community-operation/community-operation.component";
 import { TouristTransportCompanyComponent} from "../shared/touristTransportCompany/touristTransportCompany.component";

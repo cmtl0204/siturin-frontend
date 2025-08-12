@@ -8,8 +8,7 @@ import { Fluid } from 'primeng/fluid';
 import { Panel } from 'primeng/panel';
 import { MessageModule } from 'primeng/message';
 
-import { FoodDrinkComponent } from '../shared/food-drink/foodDrink.component';
-import { TouristTransportCompanyComponent } from '../shared/touristTransportCompany/touristTransportCompany.component';
+import { FoodDrinkComponent } from '../shared/food-drink/food_drink.component';
 
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { CustomMessageService } from '@utils/services/custom-message.service';
@@ -20,6 +19,7 @@ import { CatalogueService } from '@utils/services/catalogue.service';
 import { CatalogueInterface } from '@utils/interfaces';
 import { CatalogueActivitiesCodeEnum, CatalogueTypeEnum } from '@utils/enums';
 import { CatalogueCtcActivitiesCodeEnum, CatalogueCtcClassificationsCodeEnum } from '@modules/core/shared/components/regulation-simulator/enum';
+import { TouristTransportCompanyCtcComponent } from '../shared/touristTransportCompany/touristTransportCompany.component';
 
 interface Activity {
     id: string;
@@ -30,7 +30,7 @@ interface Activity {
 @Component({
     selector: 'app-tourist-activities',
     standalone: true,
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, CheckboxModule, TabsModule, Fluid, FoodDrinkComponent, TouristTransportCompanyComponent, CommunityOperationComponent, AccommodationComponent, Panel, MessageModule, MultiSelect],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, CheckboxModule, TabsModule, Fluid, FoodDrinkComponent, CommunityOperationComponent, AccommodationComponent, Panel, MessageModule, MultiSelect, TouristTransportCompanyCtcComponent],
     templateUrl: './tourist-activities.component.html',
     styleUrl: './tourist-activities.component.scss'
 })
@@ -43,7 +43,7 @@ export class TouristActivitiesComponent implements OnInit {
     @ViewChildren(FoodDrinkComponent) private foodDrinkComponent!: QueryList<FoodDrinkComponent>;
     @ViewChildren(AccommodationComponent) private accommodationComponent!: QueryList<AccommodationComponent>;
     @ViewChildren(CommunityOperationComponent) private communityOperationComponent!: QueryList<CommunityOperationComponent>;
-    @ViewChildren(TouristTransportCompanyComponent) private touristTransportCompanyComponent!: QueryList<TouristTransportCompanyComponent>;
+    @ViewChildren(TouristTransportCompanyCtcComponent) private touristTransportCompanyCtcComponent!: QueryList<TouristTransportCompanyCtcComponent>;
 
     protected readonly PrimeIcons = PrimeIcons;
     protected readonly customMessageService = inject(CustomMessageService);
@@ -135,9 +135,21 @@ export class TouristActivitiesComponent implements OnInit {
             const activities: CatalogueInterface[] = value;
 
             const existCommunityOperation = activities.some((activity) => activity.code === CatalogueCtcActivitiesCodeEnum.community_operation);
-
+            const existAccommodation = activities.some((activity) => activity.code === CatalogueCtcActivitiesCodeEnum.accommodation);
+            const existFoodDrink = activities.some((activity) => activity.code === CatalogueCtcActivitiesCodeEnum.food_drink);
+            const existTransport = activities.some((activity) => activity.code === CatalogueCtcActivitiesCodeEnum.transport);
+           
             if (!existCommunityOperation) {
                 this.communityOperationField.reset();
+            }
+            if (!existAccommodation) {
+                this.accommodationField.reset();
+            }
+            if (!existFoodDrink) {
+                this.foodDrinkField.reset();
+            }
+            if (!existTransport) {
+                this.touristTransportCompanyField.reset();
             }
         });
     }
@@ -160,8 +172,8 @@ export class TouristActivitiesComponent implements OnInit {
             errors.push(...this.communityOperationComponent.toArray().flatMap((c) => c.getFormErrors()));
         }
 
-        if ([...this.touristTransportCompanyComponent.toArray().flatMap((c) => c.getFormErrors())].length > 0) {
-            errors.push(...this.touristTransportCompanyComponent.toArray().flatMap((c) => c.getFormErrors()));
+        if ([...this.touristTransportCompanyCtcComponent.toArray().flatMap((c) => c.getFormErrors())].length > 0) {
+            errors.push(...this.touristTransportCompanyCtcComponent.toArray().flatMap((c) => c.getFormErrors()));
         }
 
         if (errors.length > 0) {
@@ -173,20 +185,12 @@ export class TouristActivitiesComponent implements OnInit {
 
     loadData(): void {
         // const seleccionadas = this.activities.filter(a => a.selected).map(a => a.id);
-        // this.activitiesField.setValue(seleccionadas, { emitEvent: false });
+        // this.activitiesField.setValue(seleccionadas, { emitEvent: false }); todo: metodo reutilizable new activity
     }
 
     async loadCatalogues() {
         this.activities = await this.catalogueService.findByType(CatalogueTypeEnum.ctc_activities);
     }
-
-    // async loadCatalogues() {
-    //         this.activities = await this.catalogueService.findByType(CatalogueTypeEnum.activities); todo: catalogos necesarios name
-    //     }
-
-    //  get tabsVisibles() {
-    //    return this.activities.filter(a => a.seleccionado);
-    //  }
 
     get activitiesField() {
         return this.form.controls['activities'];

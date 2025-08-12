@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { ButtonModule } from 'primeng/button';
@@ -17,11 +17,12 @@ import { TouristGuideComponent } from '@modules/core/shared';
 import {
     AdventureTourismModalityComponent
 } from '@modules/core/shared/components/adventure-tourism-modality/adventure-tourism-modality.component';
+import { RegulationComponent } from "@/pages/core/shared/components/regulation/regulation.component";
 
 @Component({
     selector: 'app-community-operation',
     standalone: true,
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, MultiSelectModule, CardModule, PanelModule, MessageModule, InputTextModule, DialogModule, TableModule, ButtonModule, TouristGuideComponent, AdventureTourismModalityComponent],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, MultiSelectModule, CardModule, PanelModule, MessageModule, InputTextModule, DialogModule, TableModule, ButtonModule, TouristGuideComponent, AdventureTourismModalityComponent, RegulationComponent],
     templateUrl: './community-operation.component.html',
     styleUrl: './community-operation.component.scss'
 })
@@ -29,6 +30,8 @@ export class CommunityOperationComponent implements OnInit {
     @Input() data!: string | undefined;
     @Output() dataOut = new EventEmitter<FormGroup>();
     @Output() fieldErrorsOut = new EventEmitter<string[]>();
+    @Input() modelId!: string | undefined;
+
 
     protected readonly PrimeIcons = PrimeIcons;
     private readonly formBuilder = inject(FormBuilder);
@@ -36,6 +39,7 @@ export class CommunityOperationComponent implements OnInit {
 
     @ViewChildren(TouristGuideComponent) private touristGuideComponent!: QueryList<TouristGuideComponent>;
     @ViewChildren(AdventureTourismModalityComponent) private adventureTourismModalityComponent!: QueryList<AdventureTourismModalityComponent>;
+     @ViewChildren(RegulationComponent) private regulationComponent!: QueryList<RegulationComponent>;
 
     protected mainForm!: FormGroup;
 
@@ -48,8 +52,11 @@ export class CommunityOperationComponent implements OnInit {
     }
 
     buildForm(): void {
-        this.mainForm = this.formBuilder.group({});
-
+        this.mainForm = this.formBuilder.group({
+            regulation:[null, Validators.required]
+        });
+        
+        
         this.watchFormChanges();
     }
 
@@ -60,6 +67,10 @@ export class CommunityOperationComponent implements OnInit {
             }
         });
     }
+
+    saveRegulation(form: FormGroup){
+    this.regulationField.patchValue({category: form.value.regulation.category, regulationResponses: form.value.regulation.regulationResponses})
+  }
 
     saveForm(childForm: FormGroup): void {
         Object.keys(childForm.controls).forEach((controlName) => {
@@ -73,7 +84,8 @@ export class CommunityOperationComponent implements OnInit {
 
     getFormErrors(): string[] {
         const errors: string[] = [];
-
+        const regulationErrors=this.regulationComponent.toArray().flatMap((c) => c.getFormErrors());
+        if(regulationErrors.length > 0) regulationErrors.forEach(error => errors.push(error))
         const touristGuideErrors: string[] = [...this.touristGuideComponent.toArray().flatMap((c) => c.getFormErrors())];
         const adventureTourismModalityErrors: string[] = [...this.adventureTourismModalityComponent.toArray().flatMap((c) => c.getFormErrors())];
 
@@ -95,4 +107,7 @@ export class CommunityOperationComponent implements OnInit {
     loadData(): void {}
 
     // Getters
+    get regulationField(): AbstractControl {
+    return this.mainForm.controls['regulation'];
+  }
 }

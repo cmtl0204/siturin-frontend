@@ -42,15 +42,15 @@
                                     <app-foodDrink (dataOut)="saveFoodDrinkForm($event)" [modelId]="activitiesField.value[i].id"  />
                                 }
                                 @case ('alojamiento') {
-                                    <app-accommodation (dataOut)="saveAccommodationForm($event)"></app-accommodation>
+                                    <app-accommodation (dataOut)="saveAccommodationForm($event)" [modelId]="activitiesField.value[i].id"/>
                                 }
                                 @case ('operacion') {
                                     <app-community-operation
-                                        (dataOut)="saveCommunityOperationForm($event)"></app-community-operation>
+                                        (dataOut)="saveCommunityOperationForm($event)" [modelId]="activitiesField.value[i].id"/>
                                 }
                                 @case ('transporte') {
                                     <app-touristTransportCompany
-                                        (dataOut)="saveTouristTransportCompanyForm($event)"></app-touristTransportCompany>
+                                        (dataOut)="saveTouristTransportCompanyForm($event)" [modelId]="activitiesField.value[i].id"/>
                                 }
                             }
                         </p-tabpanel>

@@ -10,13 +10,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Message } from 'primeng/message';
-import {
-    VehiculosComponent
-} from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/transport/shared/type-vehicles/type-vehicles.component';
 
 @Component({
     selector: 'app-land',
-    imports: [ReactiveFormsModule, FluidModule, SelectModule, LabelDirective, ErrorMessageDirective, ToggleSwitchModule, InputTextModule, DatePickerModule, InputNumberModule, Message, VehiculosComponent],
+    imports: [ReactiveFormsModule, FluidModule, SelectModule, LabelDirective, ErrorMessageDirective, ToggleSwitchModule, InputTextModule, DatePickerModule, InputNumberModule, Message],
     templateUrl: './land.component.html',
     styleUrl: './land.component.scss'
 })
