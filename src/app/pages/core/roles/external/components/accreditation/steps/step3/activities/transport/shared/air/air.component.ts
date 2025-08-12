@@ -35,7 +35,7 @@ export class AirComponent implements OnInit {
         { name: 'Oficinas Compartidas', code: 'compartidas' }
     ];
 
-    protected aerolineTypes: CatalogueInterface[] = [
+    protected airlineTypes: CatalogueInterface[] = [
         { name: 'Internacional', code: 'internacional' },
         { name: 'Nacional', code: 'nacional' }
     ];
@@ -50,19 +50,25 @@ export class AirComponent implements OnInit {
 
     buildForm(): void {
         this.form = this.formBuilder.group({
-            aerolineType: [null, Validators.required],
+            airlineType: [null, Validators.required],
             localType: [null, Validators.required],
-            isEnrollment: [null, Validators.required],
-            code: [null, Validators.required],
-            issueAt: [null, Validators.required],
-            expirationAt: [null, Validators.required]
+            certifiedCode: [null, Validators.required],
+            certified: [false, Validators.required],
+            certifiedIssueAt: [null, Validators.required],
+            certifiedExpirationAt: [null, Validators.required]
         });
 
         this.watchFormChanges();
     }
 
     watchFormChanges() {
-        this.aerolineTypeField.valueChanges.subscribe((value: boolean) => {
+        this.form.valueChanges.subscribe(() => {
+            if (this.form.valid) {
+                this.dataOut.emit(this.form);
+            }
+        });
+
+        this.airlineTypeField.valueChanges.subscribe((value: boolean) => {
             if (value) {
                 this.localTypeField.setValidators([Validators.required]);
             } else {
@@ -71,28 +77,16 @@ export class AirComponent implements OnInit {
             }
             this.localTypeField.updateValueAndValidity();
         });
-
-        this.localTypeField.valueChanges.subscribe((value: boolean) => {
-            if (value) {
-                this.isEnrollmentField.setValidators([Validators.required]);
-            } else {
-                this.isEnrollmentField.clearValidators();
-                this.isEnrollmentField.setValue(false);
-            }
-            this.isEnrollmentField.updateValueAndValidity();
-        });
-
-        this.form.valueChanges.subscribe(() => {
-            if (this.form.valid) {
-                this.dataOut.emit(this.form);
-            }
-        });
     }
 
     getFormErrors(): string[] {
         const errors: string[] = [];
 
         if (this.localTypeField.invalid) {
+            errors.push('Debe seleccionar un Tipo de Local.');
+        }
+
+        if (this.airlineTypeField.invalid) {
             errors.push('Debe seleccionar un Tipo de Local.');
         }
 
@@ -105,27 +99,29 @@ export class AirComponent implements OnInit {
 
     loadData() {}
 
-    get aerolineTypeField(): AbstractControl {
-        return this.form.controls['aerolineType'];
+    get airlineTypeField(): AbstractControl {
+        return this.form.controls['airlineType'];
     }
 
     get localTypeField(): AbstractControl {
         return this.form.controls['localType'];
     }
 
-    get isEnrollmentField(): AbstractControl {
-        return this.form.controls['isEnrollment'];
+    get certifiedCodeField(): AbstractControl {
+        return this.form.controls['certifiedCode'];
     }
 
-    get codeField(): AbstractControl {
-        return this.form.controls['code'];
+    get certifiedField(): AbstractControl {
+        return this.form.controls['certified'];
     }
 
-    get issueAtField(): AbstractControl {
-        return this.form.controls['issueAt'];
+    get certifiedIssueAtField(): AbstractControl {
+        return this.form.controls['certifiedIssueAt'];
     }
 
-    get expirationAtField(): AbstractControl {
-        return this.form.controls['expirationAt'];
+    get certifiedExpirationAtField(): AbstractControl {
+        return this.form.controls['certifiedExpirationAt'];
     }
+
+    protected readonly Validators = Validators;
 }

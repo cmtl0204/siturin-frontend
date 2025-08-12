@@ -1,136 +1,181 @@
 <p-fluid>
-    <form [formGroup]="form" class="card flex flex-col gap-6 w-full">
+    <form
+        [formGroup]="form"
+        class="card flex flex-col gap-6 w-full">
+
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-            <!-- Tipo de Local -->
-            <div class="md:col-span-6 flex flex-col gap-2">
-                <label appLabel
-                       for="localType"
-                       label="Tipo de Local"
-                       [required]="localTypeField">
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <h2>Registro Marítimo</h2>
+
+                <p-message severity="info">
+                    <div>
+                        <b>Importante:</b>
+                        <p class="mt-4">Registrar datos de la matrícula y transporte marítimo</p>
+                    </div>
+                </p-message>
+            </div>
+
+            <!-- hasmaritimotransport -->
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <label
+                    appLabel
+                    for="hasMaritimeTransport"
+                    [required]="hasMaritimeTransportField"
+                    label="Declaro que el establecimiento, al momento del envío de la solicitud, ha contratado Guías de Turismo">
                 </label>
 
-                <p-select
-                    id="localType"
-                    [options]="localTypes"
-                    formControlName="localType"
-                    optionLabel="name"
-                    placeholder="Seleccione un tipo">
-                </p-select>
+                <p-toggleswitch id="hasMaritimeTransport" formControlName="hasMaritimeTransport" >
+                    <ng-template #handle let-checked="checked">
+                        <span class="!text-xs font-semibold">{{ checked ? 'SÍ' : 'NO' }}</span>
+                    </ng-template>
+                </p-toggleswitch>
 
                 <p-message
                     appErrorMessage
-                    [errors]="localTypeField.errors"
-                    [touched]="localTypeField.touched"
-                    [dirty]="localTypeField.dirty" />
+                    [errors]="hasMaritimeTransportField.errors"
+                    [touched]="hasMaritimeTransportField.touched"
+                    [dirty]="hasMaritimeTransportField.dirty" />
             </div>
-
-            <!-- Certificado de operador aéreo -->
-            @if (localTypeField.value) {
-                <div class="md:col-span-12 flex flex-col gap-2">
-                    <label appLabel
-                           for="certified"
-                           label="Matrícula de Armador otorgada por el Ministerio de Transporte y Obras Públicas y la matrícula de cada una de las embarcaciones"
-                           [required]="certifiedField">
-                    </label>
-
-                    <p-toggleswitch id="certified" formControlName="certified"></p-toggleswitch>
-
-                    <p-message
-                        appErrorMessage
-                        [errors]="certifiedField.errors"
-                        [touched]="certifiedField.touched"
-                        [dirty]="certifiedField.dirty">
-                    </p-message>
-                </div>
-            }
-
-            <!-- Certificado -->
-            @if (certifiedField.value) {
-                <div class="md:col-span-4 flex flex-col gap-2">
-                    <label appLabel
-                           for="totalUnits"
-                           label="Número de unidades de transporte:"
-                           [required]="totalUnitsField">
-                    </label>
-
-                    <p-inputnumber mode="decimal" [showButtons]="true" formControlName="totalUnits" [min]="0" />
-
-                    <p-message
-                        appErrorMessage
-                        [errors]="totalUnitsField.errors"
-                        [touched]="totalUnitsField.touched"
-                        [dirty]="totalUnitsField.dirty" />
-                </div>
-
-                <!-- Numero de asientos -->
-                <div class="md:col-span-4 flex flex-col gap-2">
-                    <label appLabel for="totalSeats"
-                           label="Total, número de puesto (asientos)"
-                           [required]="totalSeatsField">
-                    </label>
-
-                    <p-inputnumber mode="decimal" [showButtons]="true" formControlName="totalUnits" [min]="0" />
-
-
-                    <p-message
-                        appErrorMessage
-                        [errors]="totalSeatsField.errors"
-                        [touched]="totalSeatsField.touched"
-                        [dirty]="totalSeatsField.dirty">
-                    </p-message>
-                </div>
-
-                <!-- Numero o codigo -->
-                <div class="md:col-span-12 flex flex-col gap-2">
-                    <label appLabel for="certifiedCode"
-                           label="Número o Código de la Matrícula de Armador"
-                           [required]="certifiedCodeField">
-                    </label>
-
-                    <input pInputText type="text" formControlName="certifiedCode" />
-
-                    <p-message
-                        appErrorMessage
-                        [errors]="certifiedCodeField.errors"
-                        [touched]="certifiedCodeField.touched"
-                        [dirty]="certifiedCodeField.dirty">
-                    </p-message>
-                </div>
-
-                <!-- Fecha de emision del certificado -->
-                <div class="md:col-span-12 flex flex-col gap-2">
-                    <label appLabel for="certifiedIssueAt"
-                           label="Fecha de emisión de la Matrícula de Armador"
-                           [required]="certifiedIssueAtField">
-                    </label>
-
-                    <p-datepicker formControlName="certifiedIssueAt" />
-
-                    <p-message
-                        appErrorMessage
-                        [errors]="certifiedIssueAtField.errors"
-                        [touched]="certifiedIssueAtField.touched"
-                        [dirty]="certifiedIssueAtField.dirty">
-                    </p-message>
-                </div>
-
-                <!-- Fecha de expiración del certificado -->
-                <div class="md:col-span-12 flex flex-col gap-2">
-                    <label appLabel for="certifiedExpirationAt"
-                           label="Fecha de Caducidad de la Matrícula de Armador"
-                           [required]="certifiedExpirationAtField">
-                    </label>
-
-                    <p-datepicker formControlName="certifiedExpirationAt" />
-
-                    <p-message
-                        appErrorMessage
-                        [errors]="certifiedExpirationAtField.errors"
-                        [touched]="certifiedExpirationAtField.touched"
-                        [dirty]="certifiedExpirationAtField.dirty">
-                    </p-message>
-                </div>
-            }
         </div>
     </form>
 </p-fluid>
+<p-fluid>
+    @if (hasMaritimeTransportField.value) {
+        <app-list-basic
+            title="Listado de Transportes marítimos"
+            [items]="items"
+            [cols]="cols"
+            [buttonActions]="buttonActions"
+            (onCreate)="create()"
+            (onSelect)="buildButtonActions($event)"
+        />
+    }
+</p-fluid>
+<p-dialog [(visible)]="isVisibleModal"
+          [modal]="true"
+          [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+          [style]="{ width: '25vw' }"
+          [draggable]="false"
+          (onHide)="closeModal()"
+          [resizable]="false">
+    <ng-template #header>
+        <div class="inline-flex items-center justify-center gap-2">
+            <span class="font-bold whitespace-nowrap">
+                Agregar transporte marítimo
+            </span>
+        </div>
+    </ng-template>
+<p-fluid>
+    <form [formGroup]="maritimeForm" (ngSubmit)="onSubmit()"
+          class="card flex flex-col gap-2 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+            <!-- totalUnits -->
+            <div class="md:col-span-6 flex flex-col gap-2">
+                <label
+                    appLabel
+                    for="totalUnits"
+                    [required]="totalUnitsField"
+                    label="Número de unidades de transporte">
+                </label>
+
+                <input p-inputNumber id="totalUnits" formControlName="totalUnits" type="number" min="0">
+
+                <p-message
+                    appErrorMessage
+                    [errors]="totalUnitsField.errors"
+                    [touched]="totalUnitsField.touched"
+                    [dirty]="totalUnitsField.dirty" />
+            </div>
+
+            <!-- totalSeats -->
+            <div class="md:col-span-6 flex flex-col gap-2">
+                <label
+                    appLabel
+                    for="totalSeats"
+                    [required]="totalSeatsField"
+                    label="Total, número de puesto (asientos)">
+                </label>
+
+                <input p-inputNumber id="totalSeats" formControlName="totalSeats" type="number" min="0">
+
+                <p-message
+                    appErrorMessage
+                    [errors]="totalSeatsField.errors"
+                    [touched]="totalSeatsField.touched"
+                    [dirty]="totalSeatsField.dirty" />
+            </div>
+
+            <!-- certifiedCode -->
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <label
+                    appLabel
+                    for="certifiedCode"
+                    [required]="certifiedCodeField"
+                    label="Número o Código de la Matrícula de Armador:">
+                </label>.
+
+
+                <input pInputText id="certifiedCode" formControlName="certifiedCode">
+
+                <p-message
+                    appErrorMessage
+                    [errors]="certifiedCodeField.errors"
+                    [touched]="certifiedCodeField.touched"
+                    [dirty]="certifiedCodeField.dirty" />
+            </div>
+
+            <!-- certifiedIssueAt -->
+            <div class="md:col-span-6 flex flex-col gap-2">
+                <label
+                    appLabel
+                    for="certifiedIssueAt"
+                    [required]="certifiedIssueAtField"
+                    label="Fecha de emisión de la Matrícula de Armador">
+                </label>
+
+                <p-datepicker 
+                    id="certifiedIssueAt"
+                    formControlName="certifiedIssueAt"
+                    [showIcon]="true"
+                    dateFormat="yy-mm-dd">
+                </p-datepicker>
+
+                <p-message
+                    appErrorMessage
+                    [errors]="certifiedIssueAtField.errors"
+                    [touched]="certifiedIssueAtField.touched"
+                    [dirty]="certifiedIssueAtField.dirty" />
+            </div>
+
+            <!-- certifiedExpirationAt -->
+            <div class="md:col-span-6 flex flex-col gap-2">
+                <label
+                    appLabel
+                    for="certifiedExpirationAt"
+                    [required]="certifiedExpirationAtField"
+                    label="Fecha de Caducidad de la Matrícula de Armador">
+                </label>
+
+                <p-datepicker
+                    id="certifiedExpirationAt"
+                    formControlName="certifiedExpirationAt"
+                    [showIcon]="true"
+                    dateFormat="yy-mm-dd">
+              </p-datepicker>
+
+                <p-message
+                    appErrorMessage
+                    [errors]="certifiedExpirationAtField.errors"
+                    [touched]="certifiedExpirationAtField.touched"
+                    [dirty]="certifiedExpirationAtField.dirty" />
+            </div>
+
+            <!-- actions -->
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <p-button type="submit" label="Agregar" [icon]="PrimeIcons.SAVE" />
+            </div>
+        </div>
+    </form>
+</p-fluid>
+</p-dialog>

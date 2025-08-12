@@ -15,10 +15,11 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { TouristGuideInterface } from '@modules/core/interfaces';
 import { ListBasicComponent } from '@utils/components/list-basic/list-basic.component';
+import { ListComponent } from '@utils/components/list/list.component';
 
 @Component({
     selector: 'app-tourist-guide',
-    imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, ToggleSwitch, TableModule, Button, Dialog, InputText, ListBasicComponent],
+    imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, ToggleSwitch, TableModule, Button, Dialog, InputText, ListBasicComponent, ListComponent],
     templateUrl: './tourist-guide.component.html',
     styleUrl: './tourist-guide.component.scss'
 })
@@ -40,9 +41,7 @@ export class TouristGuideComponent implements OnInit {
     protected cols: ColInterface[] = [];
     protected items: TouristGuideInterface[] = [];
 
-    constructor() {
-
-    }
+    constructor() {}
 
     async ngOnInit() {
         this.buildForm();
@@ -190,7 +189,7 @@ export class TouristGuideComponent implements OnInit {
                 label: 'Sí, Eliminar'
             },
             accept: () => {
-                this.items = this.items.filter(item => item.identification !== identification);
+                this.items = this.items.filter((item) => item.identification !== identification);
 
                 this.touristGuidesField.setValue(this.items);
 

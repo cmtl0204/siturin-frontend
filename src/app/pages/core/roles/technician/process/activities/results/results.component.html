@@ -39,7 +39,7 @@
 
                 @if (stateControl.value) {
                     <div class="md:col-span-12 flex flex-col">
-                        @switch (stateControl.value?.code) {
+                        @switch (stateControl.value.code) {
                             @case (CatalogueCadastresStateEnum.inactive) {
                                 <app-status2
                                     cadastreId="a8933f34-29f8-41a6-907d-f7f67985d3b5"

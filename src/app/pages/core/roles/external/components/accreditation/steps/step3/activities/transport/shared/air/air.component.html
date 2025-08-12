@@ -1,17 +1,17 @@
 <p-fluid>
     <form [formGroup]="form" class="card flex flex-col gap-6 w-full">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-            <!-- Tipo de Aerolinea -->
+            <!-- Tipo de airline -->
             <div class="md:col-span-6 flex flex-col gap-2">
-                <label appLabel for="aerolineType" label="Tipo de Aerolinea" [required]="aerolineTypeField"> </label>
+                <label appLabel for="airlineType" label="Tipo deairlinea" [required]="airlineTypeField"> </label>
 
-                <p-select id="aerolineType" [options]="aerolineTypes" formControlName="aerolineType" optionLabel="name" placeholder="Seleccione un tipo"> </p-select>
+                <p-select id="airlineType" [options]="airlineTypes" formControlName="airlineType" optionLabel="name" placeholder="Seleccione un tipo"> </p-select>
 
-                <p-message appErrorMessage [errors]="aerolineTypeField.errors" [touched]="aerolineTypeField.touched" [dirty]="aerolineTypeField.dirty" />
+                <p-message appErrorMessage [errors]="airlineTypeField.errors" [touched]="airlineTypeField.touched" [dirty]="airlineTypeField.dirty" />
             </div>
 
             <!-- Tipo de local -->
-            @if (aerolineTypeField.value) {
+            @if (airlineTypeField.hasValidator(Validators.required)) {
                 <div class="md:col-span-6 flex flex-col gap-2">
                     <label appLabel for="localType" label="Tipo de Local" [required]="localTypeField"> </label>
 
@@ -24,58 +24,56 @@
             <!-- Certificado de operador aéreo -->
             @if (localTypeField.value) {
                 <div class="md:col-span-12 flex flex-col gap-2">
-                    <label appLabel for="isEnrollment" label="Certificado de operador de Aréa (AOCR) emitido por la Dirección general de Aviación" [required]="isEnrollmentField"> </label>
+                    <label appLabel for="certified" label="Certificado de operador de Aréa (AOCR) emitido por la Dirección general de Aviación" [required]="certifiedField"> </label>
 
-                    <p-toggleswitch id="isEnrollment" formControlName="isEnrollment"></p-toggleswitch>
+                    <p-toggleswitch id="certified" formControlName="certified"></p-toggleswitch>
 
-                    <p-message appErrorMessage [errors]="isEnrollmentField.errors" [touched]="isEnrollmentField.touched" [dirty]="isEnrollmentField.dirty"> </p-message>
+                    <p-message appErrorMessage [errors]="certifiedField.errors" [touched]="certifiedField.touched" [dirty]="certifiedField.dirty"> </p-message>
                 </div>
 
                 <!-- Codigo del certificado de operador aéreo -->
                 <div class="md:col-span-12 flex flex-col gap-2">
                     <label
                         appLabel
-                        for="code"
-                        label="Numero o Código del Certificado de Operador Aéreo (AOC) o Reconocimiento de Certificado
-              de Operador Aéreo (AOCR)"
-                        [required]="codeField"
+                        for="certifiedCode"
+                        label="Numero o Código del Certificado de Operador Aéreo (AOC) o Reconocimiento de Certificado de Operador Aéreo (AOCR)"
+                        [required]="certifiedCodeField"
                     >
                     </label>
 
-                    <input pInputText type="text" id="code" formControlName="code" />
+                    <input pInputText type="text" id="certifiedCode" formControlName="certifiedCode" />
 
-                    <p-message appErrorMessage [errors]="codeField.errors" [touched]="codeField.touched" [dirty]="codeField.dirty"> </p-message>
+                    <p-message appErrorMessage [errors]="certifiedCodeField.errors" [touched]="certifiedCodeField.touched" [dirty]="certifiedCodeField.dirty"> </p-message>
                 </div>
 
                 <!-- Fecha de emisión del certificado -->
                 <div class="md:col-span-12 flex flex-col gap-2">
                     <label
                         appLabel
-                        for="issueAt"
-                        label="Fecha de emición del Certificado de Operador Aéreo (AOC) o Reconocimiento de Certificado
-              de Operador Aéreo (AOCR)"
-                        [required]="issueAtField"
+                        for="certifiedIssueAt"
+                        label="Fecha de emición del Certificado de Operador Aéreo (AOC) o Reconocimiento de Certificado de Operador Aéreo (AOCR)"
+                        [required]="certifiedIssueAtField"
                     >
                     </label>
 
-                    <p-datepicker formControlName="issueAt" />
+                    <p-datepicker id=certifiedIssueAt formControlName="certifiedIssueAt" />
 
-                    <p-message appErrorMessage [errors]="issueAtField.errors" [touched]="issueAtField.touched" [dirty]="issueAtField.dirty"> </p-message>
+                    <p-message appErrorMessage [errors]="certifiedIssueAtField.errors" [touched]="certifiedIssueAtField.touched" [dirty]="certifiedIssueAtField.dirty"> </p-message>
                 </div>
 
                 <!-- Fecha de expiración del certificado -->
                 <div class="md:col-span-12 flex flex-col gap-2">
                     <label
                         appLabel
-                        for="expirationAt"
+                        for="certifiedExpirationAt"
                         label="Fecha de caducidad del Certificado de Operador Aéreo (AOC) o Reconocimiento de Certificado de Operador Aéreo (AOCR)"
-                        [required]="codeField"
+                        [required]="certifiedExpirationAtField"
                     >
                     </label>
 
-                    <p-datepicker formControlName="expirationAt" />
+                    <p-datepicker id="certifiedExpirationAt" formControlName="certifiedExpirationAt" />
 
-                    <p-message appErrorMessage [errors]="expirationAtField.errors" [touched]="expirationAtField.touched" [dirty]="expirationAtField.dirty"> </p-message>
+                    <p-message appErrorMessage [errors]="certifiedExpirationAtField.errors" [touched]="certifiedExpirationAtField.touched" [dirty]="certifiedExpirationAtField.dirty"> </p-message>
                 </div>
             }
         </div>
