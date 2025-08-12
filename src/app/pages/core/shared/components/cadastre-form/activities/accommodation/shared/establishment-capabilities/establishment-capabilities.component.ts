@@ -21,16 +21,15 @@ import { TableModule } from 'primeng/table';
 import { ToggleSwitch } from 'primeng/toggleswitch';
 import { RoomGuideInterface } from '../../../../interfaces/room-guide.interface';
 
-
 @Component({
-  selector: 'app-establishment-capabilities',
-  standalone: true,
-  imports: [Fluid, ReactiveFormsModule, Message,LabelDirective, ErrorMessageDirective, ToggleSwitch, TableModule, Select, Button, Dialog, InputNumberModule, ListBasicComponent],
-  templateUrl: './establishment-capabilities.component.html',
-  styleUrl: './establishment-capabilities.component.scss'
+    selector: 'app-establishment-capabilities',
+    standalone: true,
+    imports: [Fluid, ReactiveFormsModule, Message, LabelDirective, ErrorMessageDirective, ToggleSwitch, TableModule, Select, Button, Dialog, InputNumberModule, ListBasicComponent],
+    templateUrl: './establishment-capabilities.component.html',
+    styleUrl: './establishment-capabilities.component.scss'
 })
 export class EstablishmentCapabilitiesComponent {
-  @Input() data!: string | undefined;
+    @Input() data!: string | undefined;
     @Output() dataOut = new EventEmitter<FormGroup>();
 
     private readonly formBuilder = inject(FormBuilder);
@@ -46,16 +45,13 @@ export class EstablishmentCapabilitiesComponent {
     protected cols: ColInterface[] = [];
     protected items: RoomGuideInterface[] = [];
     private readonly catalogueService = inject(CatalogueService);
-    constructor() {
-
-    }
+    constructor() {}
 
     async ngOnInit() {
         this.buildForm();
         this.buildColumns();
         this.loadData();
-        this.loadCatalogues
-
+        this.loadCatalogues;
     }
 
     loadData() {}
@@ -68,7 +64,7 @@ export class EstablishmentCapabilitiesComponent {
             totalBeds: [null, Validators.required],
             totalPlaces: [null, Validators.required],
             isRoom: [false, [Validators.required]],
-            rooms:[[]],
+            rooms: [[]],
 
             hasRoom: false,
             hasRooms: []
@@ -103,7 +99,7 @@ export class EstablishmentCapabilitiesComponent {
             { header: 'Tipo', field: 'roomType' },
             { header: 'Habitaciones', field: 'totalRooms' },
             { header: 'Camas', field: 'totalbeds' },
-            { header: 'Plazas', field: 'totalPlaces' },
+            { header: 'Plazas', field: 'totalPlaces' }
         ];
     }
 
@@ -134,16 +130,16 @@ export class EstablishmentCapabilitiesComponent {
 
         return true;
     }
-  async loadCatalogues() {
-    this.roomType = await this.catalogueService.findByType(CatalogueTypeEnum.room_entity);
-}
+    async loadCatalogues() {
+        this.roomType = await this.catalogueService.findByType(CatalogueTypeEnum.rooms_room_type);
+    }
 
     create() {
         this.idField.disable();
         this.isVisibleModal = true;
     }
 
- edit(identification: string) {
+    edit(identification: string) {
         this.idField.enable();
         this.findRoomGuide(identification);
         this.isVisibleModal = true;
@@ -200,7 +196,7 @@ export class EstablishmentCapabilitiesComponent {
                 label: 'Sí, Eliminar'
             },
             accept: () => {
-                this.items = this.items.filter(item => item.roomType !== roomType);
+                this.items = this.items.filter((item) => item.roomType !== roomType);
 
                 this.hasRoomsField.setValue(this.items);
 
@@ -210,11 +206,10 @@ export class EstablishmentCapabilitiesComponent {
         });
     }
 
-findRoomGuide(roomType: string) {
+    findRoomGuide(roomType: string) {
         const index = this.items.findIndex((item) => item.roomType === roomType);
         this.form.patchValue(this.items[index]);
     }
-
 
     get idField(): AbstractControl {
         return this.form.controls['id'];
@@ -227,9 +222,9 @@ findRoomGuide(roomType: string) {
     get totalRoomsField(): AbstractControl {
         return this.form.controls['totalRooms'];
     }
-    get totalBedsField(): AbstractControl  {
-  return this.form.controls['totalBeds']
-}
+    get totalBedsField(): AbstractControl {
+        return this.form.controls['totalBeds'];
+    }
     get totalPlacesField(): AbstractControl {
         return this.form.controls['totalPlaces'];
     }

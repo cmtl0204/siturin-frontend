@@ -1,5 +1,6 @@
 import { CatalogueInterface } from "@utils/interfaces";
 import { TouristGuideInterface } from "./tourist-guide.interface";
+import { TouristTransportCompanyInterface } from '@/pages/core/shared/interfaces/tourist-transport-company.interface';
 
 export interface CtcInterface {
   processId: string;
@@ -33,10 +34,10 @@ export interface CommunityOperationInterface {
   touristGuides: TouristGuideInterface[];
 }
 
-export interface TouristTransportCompanyInterface {
-  hasTransports: boolean;
-  transports: TransportInterface[];
-}
+// export interface TouristTransportCompanyInterface {
+//   hasTransports: boolean;
+//   transports: TransportInterface[];
+// }
 
 export interface TransportInterface {
   authorizationNumber: number;

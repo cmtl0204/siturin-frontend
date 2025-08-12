@@ -19,7 +19,9 @@ export enum CatalogueTypeEnum {
     inactivation_cause_type = 'inactivation_cause_type',
     complementary_services_model = 'complementary_services_model',
     rooms_room_type = 'rooms_room_type',
-    breach_causes = 'breach_causes'
+    breach_causes = 'breach_causes',
+complementary_services_entity = 'complementary_services_entity',
+    activities_types_kitchens_continent = 'activities_types_kitchens_continent',
 }
 
 export enum CatalogueStateEnum {
