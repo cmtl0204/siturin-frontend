@@ -6,6 +6,7 @@ import { CustomMessageService } from '@utils/services';
 import { map } from 'rxjs';
 import {
     CreateRatifiedInspectionStateInterface,
+    DefinitiveSuspensionInspectionStatusInterface,
     InactivationInspectionStatusInterface,
     RecategorizedInspectionStatusInterface,
     ReclassifiedInspectionStatusInterface,
@@ -44,6 +45,17 @@ export class InspectionStatusService {
 
     createTemporarySuspensionInspectionStatus(payload: TemporarySuspensionInspectionStatusInterface) {
         const url = `${this._apiUrl}/temporary-suspension-status`;
+        return this._httpClient.post<HttpResponseInterface>(url, payload).pipe(
+            map((response) => {
+                this._customMessageService.showSuccess({ summary: response.title, detail: response.message });
+
+                return response.data;
+            })
+        );
+    }
+
+    createDefinitiveSuspensionInspectionStatus(payload: DefinitiveSuspensionInspectionStatusInterface) {
+        const url = `${this._apiUrl}/definitive-suspension-status`;
         return this._httpClient.post<HttpResponseInterface>(url, payload).pipe(
             map((response) => {
                 this._customMessageService.showSuccess({ summary: response.title, detail: response.message });

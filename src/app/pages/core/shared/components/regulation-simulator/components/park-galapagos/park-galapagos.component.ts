@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule } from '@angular/forms';
-import { HeaderRegulation, Item } from '../../models/item.interface';
+import { HeaderRegulation, Item } from '../../../../interfaces/item.interface';
 import { Panel } from 'primeng/panel';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { data, items } from './data';
@@ -21,7 +21,7 @@ export class ParkGalapagosComponent {
     buildForm = effect(() => {
         if (!this.classificationInput()) return;
         console.log(this.classificationInput());
-        
+
         this.classification.set(data.find((item) => item.codeClassification === this.classificationInput()) ?? null);
 
         console.log(this.classification());

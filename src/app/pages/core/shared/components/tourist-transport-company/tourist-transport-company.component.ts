@@ -14,192 +14,221 @@ import { ErrorMessageDirective } from '@utils/directives/error-message.directive
 import { ListBasicComponent } from '@utils/components/list-basic/list-basic.component';
 import { DialogModule } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
-import { ColInterface } from '@utils/interfaces';
+import { CatalogueInterface, ColInterface } from '@utils/interfaces';
 import { deleteButtonAction } from '@utils/components/button-action/consts';
 import { CustomMessageService } from '@utils/services';
 import { TouristTransportCompanyInterface } from '../../interfaces/tourist-transport-company.interface';
+import { SelectModule } from 'primeng/select';
+import { CatalogueTypeEnum } from '@/utils/enums';
+import { CatalogueService } from '@/utils/services/catalogue.service';
 
 @Component({
-  selector: 'app-tourist-transport-company',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, Fluid, LabelDirective, ButtonModule, ToggleSwitch, TooltipModule, Message, ErrorMessageDirective, ToastModule, ConfirmDialogModule, ListBasicComponent, DialogModule, InputText],
-  templateUrl: './tourist-transport-company.component.html',
-  styleUrls: ['./tourist-transport-company.component.scss']
+    selector: 'app-tourist-transport-company',
+    standalone: true,
+    imports: [ReactiveFormsModule, CommonModule, Fluid, LabelDirective, ButtonModule, ToggleSwitch, TooltipModule, Message, ErrorMessageDirective, ToastModule, ConfirmDialogModule, ListBasicComponent, DialogModule, InputText, SelectModule],
+    templateUrl: './tourist-transport-company.component.html',
+    styleUrls: ['./tourist-transport-company.component.scss']
 })
 export class TouristTransportCompanyComponent implements OnInit {
-  @Output() dataOut = new EventEmitter<FormGroup>();
+    @Output() dataOut = new EventEmitter<FormGroup>();
 
-  private readonly formBuilder = inject(FormBuilder);
-  private readonly confirmationService = inject(ConfirmationService);
-  private readonly customMessageService = inject(CustomMessageService);
+    private readonly formBuilder = inject(FormBuilder);
+    private readonly confirmationService = inject(ConfirmationService);
+    private readonly customMessageService = inject(CustomMessageService);
 
-  protected readonly PrimeIcons = PrimeIcons;
-  protected form!: FormGroup;
-  protected touristTransportCompanyForm!: FormGroup;
+    protected readonly PrimeIcons = PrimeIcons;
+    protected form!: FormGroup;
+    protected touristTransportCompanyForm!: FormGroup;
+    private readonly catalogueService = inject(CatalogueService);
 
-  protected isVisibleModal = false;
-  protected cols: ColInterface[] = [];
-  protected items: TouristTransportCompanyInterface[] = [];
-  protected buttonActions: MenuItem[] = [];
+    protected isVisibleModal = false;
+    protected cols: ColInterface[] = [];
+    protected items: TouristTransportCompanyInterface[] = [];
+    protected buttonActions: MenuItem[] = [];
+    protected types: CatalogueInterface[] = [];
+    protected rucTypes: CatalogueInterface[] = [];
 
-  ngOnInit() {
-    this.buildForm();
-    this.buildColumns();
-  }
+    ngOnInit() {
+        this.buildForm();
+        this.buildColumns();
+        this.loadCatalogues();
+    }
 
-  buildForm() {
-    this.touristTransportCompanyForm = this.formBuilder.group({
-      id: [null],
-      ruc: [null, Validators.required],
-      legalName: [null, Validators.required],
-      type: [null, Validators.required]
-    });
+    buildForm() {
+        this.touristTransportCompanyForm = this.formBuilder.group({
+            id: [null],
+            ruc: [null, Validators.required],
+            legalName: [null, Validators.required],
+            rucType: [null, Validators.required],
+            authorizationNumber: [null, Validators.required],
+            type: [null, Validators.required]
+        });
 
-    this.form = this.formBuilder.group({
-      hasTouristTransportCompany: false,
-      touristTransportCompanies: []
-    });
+        this.form = this.formBuilder.group({
+            hasTouristTransportCompany: false,
+            touristTransportCompanies: []
+        });
 
-    this.watchFormChanges();
-  }
+        this.watchFormChanges();
+    }
 
-  watchFormChanges() {
-    this.dataOut.emit(this.form);
+    watchFormChanges() {
+        this.dataOut.emit(this.form);
 
-    this.hasTouristTransportCompanyField.valueChanges.subscribe((value) => {
-      this.touristTransportCompaniesField.setValue(this.items);
+        this.hasTouristTransportCompanyField.valueChanges.subscribe((value) => {
+            this.touristTransportCompaniesField.setValue(this.items);
 
-      this.dataOut.emit(this.form);
-    });
-  }
+            this.dataOut.emit(this.form);
+        });
+    }
 
-  buildButtonActions(item: TouristTransportCompanyInterface) {
-    this.buttonActions = [
-      {
-        ...deleteButtonAction,
-        command: () => {
-          if (item) this.deleteTouristTransportCompany(item);
+    buildButtonActions(item: TouristTransportCompanyInterface) {
+        this.buttonActions = [
+            {
+                ...deleteButtonAction,
+                command: () => {
+                    if (item) this.deleteTouristTransportCompany(item);
+                }
+            }
+        ];
+    }
+
+    buildColumns() {
+        this.cols = [
+            { header: 'RUC', field: 'ruc' },
+            { header: 'Razón Social', field: 'legalName' },
+            { header: 'Tipo Contribuyente', field: 'rucType', type: 'object' },
+            { header: 'Tipo', field: 'type', type: 'object' },
+            { header: 'Autorizacion', field: 'authorizationNumber' }
+        ];
+    }
+
+    getFormErrors() {
+        const errors: string[] = [];
+
+        if (this.hasTouristTransportCompanyField.value && this.items.length === 0) errors.push('Compañias de Transporte Turístico');
+
+        if (errors.length > 0) {
+            this.form.markAllAsTouched();
+            return errors;
         }
-      }
-    ];
-  }
 
-  buildColumns() {
-    this.cols = [
-      { header: 'RUC', field: 'ruc' },
-      { header: 'Razón Social', field: 'legalName' },
-      { header: 'Tipo Contribuyente', field: 'type' }
-    ];
-  }
-
-  getFormErrors() {
-    const errors: string[] = [];
-
-    if (this.hasTouristTransportCompanyField.value && this.items.length === 0) errors.push('Compañias de Transporte Turístico'); 
-
-    if (errors.length > 0) {
-      this.form.markAllAsTouched();
-      return errors;
+        return [];
     }
 
-    return [];
-  }
+    validateForm() {
+        const errors: string[] = [];
 
-  validateForm() {
-    const errors: string[] = [];
+        if (this.rucField.invalid) errors.push('RUC');
+        if (this.legalNameField.invalid) errors.push('Razón Social');
+        if (this.ructypeField.invalid) errors.push('Tipo Contribuyente');
+        if (this.authorizationNumberField.invalid) errors.push('Autorizacion');
+        if (this.typeField.invalid) errors.push('Tipo');
 
-    if (this.rucField.invalid) errors.push('RUC');
-    if (this.legalNameField.invalid) errors.push('Razón Social');
-    if (this.typeField.invalid) errors.push('Tipo Contribuyente');
+        if (errors.length > 0) {
+            this.form.markAllAsTouched();
+            this.customMessageService.showFormErrors(errors);
+            return false;
+        }
 
-    if (errors.length > 0) {
-      this.form.markAllAsTouched();
-      this.customMessageService.showFormErrors(errors);
-      return false;
+        return true;
     }
 
-    return true;
-  }
-
-  onSubmit(){
-    if (this.validateForm()) {
-      this.createTouristTransportCompany();
-    }
-  }
-
-  createTouristTransportCompany(){
-    const exists = this.items.some(item => item.ruc === this.rucField.value);
-
-    if (exists) {
-      this.customMessageService.showError({
-        summary: 'Aviso',
-        detail: 'La compañia ya fue agregada'
-      });
-      return;
+    onSubmit() {
+        if (this.validateForm()) {
+            this.createTouristTransportCompany();
+        }
     }
 
-    this.items.push({
-      ruc: this.rucField.value,
-      legalName: this.legalNameField.value,
-      type: this.typeField.value
-    });
+    createTouristTransportCompany() {
+        const exists = this.items.some((item) => item.ruc === this.rucField.value);
 
-    this.touristTransportCompaniesField.setValue(this.items);
+        if (exists) {
+            this.customMessageService.showError({
+                summary: 'Aviso',
+                detail: 'La compañia ya fue agregada'
+            });
+            return;
+        }
 
-    this.dataOut.emit(this.form);
-
-    this.closeModal();
-  }
-
-  deleteTouristTransportCompany(company: TouristTransportCompanyInterface) {
-    this.isVisibleModal = false;
-
-    this.confirmationService.confirm({
-      message: '¿Está seguro de eliminar?',
-      header: 'Eliminar',
-      icon: PrimeIcons.TRASH,
-      rejectButtonStyleClass: 'p-button-text',
-      rejectButtonProps: {
-        label: 'Cancelar',
-        severity: 'danger',
-        text: true
-      },
-      acceptButtonProps: {
-        label: 'Sí, Eliminar'
-      },
-      accept: () => {
-        this.items = this.items.filter(item => item.ruc !== company.ruc);
+        this.items.push({
+            ruc: this.rucField.value,
+            rucType: this.ructypeField.value,
+            legalName: this.legalNameField.value,
+            authorizationNumber: this.authorizationNumberField.value,
+            type: this.typeField.value
+        });
 
         this.touristTransportCompaniesField.setValue(this.items);
 
         this.dataOut.emit(this.form);
-      },
-      key: 'confirmdialog'
-    });
-  }
 
-  closeModal() {
-    this.isVisibleModal = false;
-    this.touristTransportCompanyForm.reset();
-  }
+        this.closeModal();
+    }
 
-  get rucField(): AbstractControl {
-    return this.touristTransportCompanyForm.get('ruc')!;
-  }
+    deleteTouristTransportCompany(company: TouristTransportCompanyInterface) {
+        this.isVisibleModal = false;
 
-  get legalNameField(): AbstractControl {
-    return this.touristTransportCompanyForm.get('legalName')!;
-  }
+        this.confirmationService.confirm({
+            message: '¿Está seguro de eliminar?',
+            header: 'Eliminar',
+            icon: PrimeIcons.TRASH,
+            rejectButtonStyleClass: 'p-button-text',
+            rejectButtonProps: {
+                label: 'Cancelar',
+                severity: 'danger',
+                text: true
+            },
+            acceptButtonProps: {
+                label: 'Sí, Eliminar'
+            },
+            accept: () => {
+                this.items = this.items.filter((item) => item.ruc !== company.ruc);
 
-  get typeField(): AbstractControl {
-    return this.touristTransportCompanyForm.get('type')!;
-  }
+                this.touristTransportCompaniesField.setValue(this.items);
 
-  get hasTouristTransportCompanyField(): AbstractControl {
-    return this.form.controls['hasTouristTransportCompany'];
-  }
+                this.dataOut.emit(this.form);
+            },
+            key: 'confirmdialog'
+        });
+    }
 
-  get touristTransportCompaniesField(): AbstractControl {
-    return this.form.controls['touristTransportCompanies'];
-  }
+    async loadCatalogues() {
+        this.types = await this.catalogueService.findByType(CatalogueTypeEnum.tourist_transport_companies_type);
+        console.log(this.types);
+        this.rucTypes = await this.catalogueService.findByType(CatalogueTypeEnum.adventure_tourism_modalities);
+    }
+
+    closeModal() {
+        this.isVisibleModal = false;
+        this.touristTransportCompanyForm.reset();
+    }
+
+    get rucField(): AbstractControl {
+        return this.touristTransportCompanyForm.get('ruc')!;
+    }
+
+    get ructypeField(): AbstractControl {
+        return this.touristTransportCompanyForm.get('rucType')!;
+    }
+
+    get authorizationNumberField(): AbstractControl {
+        return this.touristTransportCompanyForm.get('authorizationNumber')!;
+    }
+
+    get legalNameField(): AbstractControl {
+        return this.touristTransportCompanyForm.get('legalName')!;
+    }
+
+    get typeField(): AbstractControl {
+        return this.touristTransportCompanyForm.get('type')!;
+    }
+
+    get hasTouristTransportCompanyField(): AbstractControl {
+        return this.form.controls['hasTouristTransportCompany'];
+    }
+
+    get touristTransportCompaniesField(): AbstractControl {
+        return this.form.controls['touristTransportCompanies'];
+    }
 }

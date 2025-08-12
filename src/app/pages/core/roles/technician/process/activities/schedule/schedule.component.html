@@ -18,15 +18,16 @@
 
     <form [formGroup]="form" (ngSubmit)="inspectionAssignment()" class="flex flex-col gap-6 w-full">
 
-        <p class="text-blue-700">
-            Referencia al art 5, del Acuerdo Ministerial Nro. 2023 - 016 , señala:
-            "En caso de que no se hayan realizado las inspecciones agendadas por el usuario dentro de los plazos
-            establecidos para los trámites de registro, reingreso, recategorización y reclasificación, la Autoridad
-            Nacional de Turismo o el Gobierno Autónomo Descentralizado al que se le haya conferido dicha atribución,
-            ejecutarán las inspecciones que correspondan, en un plazo máximo de 30 (treinta) días, posteriores a la
-            fecha de vencimiento determinada para el agendamiento."
-        </p>
+        <p-message>
+            <div>
+                <p class="font-bold">Nota informativa al Técnico Zonal</p>
 
+                <p>
+                    "Recuerde que se debera revisar los requisitos documentales, mismos que deben ser parte del expediente
+                    fisico y digital por establecimiento, de su jurisdiccion."
+                </p>
+            </div>
+        </p-message>
         <div class="flex justify-content-end mb-4">
             <p-button
                 [icon]="PrimeIcons.SAVE"

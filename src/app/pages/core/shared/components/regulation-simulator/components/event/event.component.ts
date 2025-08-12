@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, ReactiveFormsModule } from '@angular/forms';
-import { HeaderRegulation, Item } from '../../models/item.interface';
+import { HeaderRegulation, Item } from '../../../../interfaces/item.interface';
 import { PanelModule } from 'primeng/panel';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { data, items } from './data';
@@ -22,12 +22,12 @@ export class EventComponent {
 
     buildForm = effect(() => {
         console.log('event component');
-        
+
         if (!this.classificationInput()) return;
-        
+
         this.classification.set(data.find((item) => item.codeClassification === this.classificationInput()?.code) ?? null);
         console.log(this.contributorType());
-        
+
         const validatedItems = items.filter((item) => item.person === this.contributorType() || item.person === ContributorTypeEnum.both);
         this.form = this.fb.group({
             items: this.fb.array(validatedItems.map((item) => this.createItemGroup(item)))

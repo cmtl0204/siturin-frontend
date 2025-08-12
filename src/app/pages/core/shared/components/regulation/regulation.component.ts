@@ -1,4 +1,4 @@
-import { Component, effect, EventEmitter, inject, input, OnInit, Output, output, signal } from '@angular/core';
+import { Component, effect, inject, input, output, signal } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ButtonModule } from 'primeng/button';
@@ -10,41 +10,49 @@ import { Fluid } from 'primeng/fluid';
 import { Message } from 'primeng/message';
 import { Tag } from 'primeng/tag';
 import { PrimeIcons } from 'primeng/api';
+import { CatalogueActivitiesCodeEnum } from '@/utils/enums';
+import { CategoryConfigurationsHttpService } from '../../services/category-configurations.http.service';
+import { CategoryConfigurationInterface } from '../../interfaces/category-configuration.interface';
 
 @Component({
     selector: 'app-regulation',
     imports: [ReactiveFormsModule, ToggleSwitchModule, ButtonModule, Divider, Fluid, Message, Tag],
     templateUrl: './regulation.component.html'
 })
-export class RegulationComponent implements OnInit {
+export class RegulationComponent {
     dataOut = output<FormGroup>();
 
     private readonly regulationHttpService = inject(RegulationHttpService);
     private readonly formBuilder = inject(FormBuilder);
+    private readonly categoryConfigurationsHttpService = inject(CategoryConfigurationsHttpService);
 
     protected validationTypeEnum = ValidationTypeEnum;
-    modelId = input.required<string | undefined>();
-    isProtectedArea = input<boolean>(false);
-    isAdventureRequirement = input<boolean>(false);
+    public modelId = input.required<string | undefined>();
+    public isProtectedArea = input<boolean>(false);
+    public activityCode = input<string | undefined>(undefined);
 
     protected form!: FormGroup;
     protected sections = signal<RegulationSectionInterface[]>([]);
+    protected categoryConfigurations: CategoryConfigurationInterface[] = [];
     private errorMessages: string[] = [];
 
-    ngOnInit() {}
-
     private readonly loadRegulations = effect(() => {
-        if (!this.modelId()) return;
+        if (this.modelId()?.length === 0) return this.sections.set([]);
 
-        if (this.isAdventureRequirement()) {
-            this.regulationHttpService.getRegulationsAdventureTourismModalityByModelId(this.modelId()!).subscribe((resp) => {
-                this.sections.set(resp);
-            });
-        } else {
-            this.regulationHttpService.getRegulationsByModelId(this.modelId()!).subscribe((resp) => {
-                this.sections.set(resp);
-            });
-        }
+        this.regulationHttpService.getRegulationsByModelId(this.modelId()!).subscribe((resp) => {
+            this.sections.set(resp);
+        });
+    });
+
+    private readonly loadCategories = effect(() => {
+        if (!this.activityCode() || (this.activityCode() !== CatalogueActivitiesCodeEnum.food_drink_continent && this.activityCode() !== CatalogueActivitiesCodeEnum.food_drink_galapagos)) return (this.categoryConfigurations = []);
+
+        if (this.modelId()?.length === 0) return (this.categoryConfigurations = []);
+
+        return this.categoryConfigurationsHttpService.findByClassificationId(this.modelId()!).subscribe((resp) => {
+            this.categoryConfigurations = resp;
+            if (this.categoryConfigurations.length === 0) this.setCategory('CATEGORÍA ÚNICA');
+        });
     });
 
     buildForm = effect(() => {
@@ -178,22 +186,22 @@ export class RegulationComponent implements OnInit {
     }
 
     validateScoreBased(selectedItems: RegulationItemInterface[]) {
-        if (selectedItems.length <= 0) {
-            this.errorMessages.push('Debe seleccionar al menos un item para determinar la categoría');
-            return;
-        }
         const totalScore = selectedItems.reduce((sum, item) => sum + (item.score ?? 0), 0);
 
-        switch (true) {
-            case totalScore < 15:
-                this.setCategory('Category 1');
-                break;
-            case totalScore < 20:
-                this.setCategory('Category 2');
-                break;
-            default:
-                this.setCategory('Category 3');
-                break;
+        const sortedCategories = [...this.categoryConfigurations].sort((a, b) => a.min - b.min);
+
+        let selectedCategory = null;
+
+        for (const categoryConfig of sortedCategories) {
+            if (totalScore >= categoryConfig.min) {
+                selectedCategory = categoryConfig.category.name;
+            }
+        }
+
+        if (selectedCategory) {
+            this.setCategory(selectedCategory);
+        } else {
+            this.errorMessages.push('No es suficiente para aplicar por una categoría de turismo.');
         }
     }
 

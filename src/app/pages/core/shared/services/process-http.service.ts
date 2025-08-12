@@ -14,10 +14,10 @@ export class ProcessHttpService {
     private readonly _apiUrl = `${environment.API_URL}/core/shared/processes`;
     private readonly _customMessageService = inject(CustomMessageService);
 
-    createFilesInspectionStatus(modelId: string, payload: FormData): Observable<HttpResponseInterface> {
+    createFilesInspectionStatus(modelId: string, payload: FormData, folder: string): Observable<HttpResponseInterface> {
         const url = `${this._apiUrl}/inspection-status/uploads`;
 
-        const params = new HttpParams().append('modelId', modelId);
+        const params = new HttpParams().append('modelId', modelId).append('folder', folder);
 
         return this._httpClient.post<HttpResponseInterface>(url, payload, { params }).pipe(
             map((response) => {

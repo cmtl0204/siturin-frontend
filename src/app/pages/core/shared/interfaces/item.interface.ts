@@ -1,4 +1,4 @@
-import { ContributorTypeEnum } from "../enum";
+import { ContributorTypeEnum } from "../components/regulation-simulator/enum";
 
 export interface HeaderRegulation {
     classification?: string;

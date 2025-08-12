@@ -1,5 +1,5 @@
 import { CatalogueFoodDrinkClassificationsCodeEnum, ContributorTypeEnum } from '../../enum';
-import { HeaderRegulation, Item } from '../../models/item.interface';
+import { HeaderRegulation, Item } from '../../../../interfaces/item.interface';
 
 export const data: HeaderRegulation[] = [
     {
@@ -27,7 +27,7 @@ export const data: HeaderRegulation[] = [
             'Plazas de comida: Son consideradas como los sitios que agrupan diversos establecimientos turísticos de servicios de alimentos y bebidas que no se encuentran dentro de un centro comercial.',
         codeClassification: CatalogueFoodDrinkClassificationsCodeEnum.food_courts
     },
-    
+
 ];
 export const items: Item[] = [
     {

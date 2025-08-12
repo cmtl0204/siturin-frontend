@@ -36,6 +36,15 @@ export interface TemporarySuspensionInspectionStatusInterface {
     }[];
 }
 
+export interface DefinitiveSuspensionInspectionStatusInterface {
+    cadastreId: string;
+    processId: string;
+    state: {
+        id: string;
+        code: string;
+    };
+}
+
 export interface RecategorizedInspectionStatusInterface {
     cadastreId: string;
     processId: string;

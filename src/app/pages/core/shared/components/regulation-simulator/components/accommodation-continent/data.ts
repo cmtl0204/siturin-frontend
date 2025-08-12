@@ -1,5 +1,5 @@
 import { CatalogueAccommodationClassificationsCodeEnum, ContributorTypeEnum } from '../../enum';
-import { HeaderRegulation, Item } from '../../models/item.interface';
+import { HeaderRegulation, Item } from '../../../../interfaces/item.interface';
 
 export const data: HeaderRegulation[] = [
     {

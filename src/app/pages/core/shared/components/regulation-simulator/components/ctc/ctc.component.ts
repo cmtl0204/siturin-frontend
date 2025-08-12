@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, OnInit, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { HeaderRegulation, Item } from '../../models/item.interface';
+import { HeaderRegulation, Item } from '../../../../interfaces/item.interface';
 import { ButtonModule } from 'primeng/button';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Panel } from 'primeng/panel';
@@ -23,7 +23,7 @@ export class CtcComponent {
 
     buildForm = effect(() => {
         if (!this.classificationInput()) return;
-        
+
         this.classification.set(data.find((item) => item.codeClassification === this.classificationInput()?.code) ?? null);
         const validatedItems = items.filter((item) => item.person === this.contributorType());
         this.form = this.fb.group({

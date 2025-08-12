@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
-import { HeaderRegulation, Item } from '../../models/item.interface';
+import { HeaderRegulation, Item } from '../../../../interfaces/item.interface';
 import { Panel } from 'primeng/panel';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -23,7 +23,7 @@ export class TouristTransportComponent {
 
     buildForm = effect(() => {
         if (!this.classificationInput()) return;
-        
+
         this.classification.set(data.find((item) => item.codeClassification === this.classificationInput()?.code) ?? null);
         const validatedItems = items.filter((item) => item.person === this.contributorType() || item.person === ContributorTypeEnum.both);
 

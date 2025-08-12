@@ -113,15 +113,66 @@
           />
         </div>
 
-        <!-- Tipo Contribuyente -->
+        <!-- Número de Autorización -->
         <div class="md:col-span-12 flex flex-col gap-2">
           <label 
-          appLabel 
-          for="type"
-          label="Tipo Contribuyente" 
-          [required]="typeField"></label>
+            appLabel 
+            for="authorizationNumber" 
+            label="Número de Autorización" 
+            [required]="authorizationNumberField"
+          ></label>
 
-          <input pInputText id="type" formControlName="type">
+          <input pInputText id="authorizationNumber" formControlName="authorizationNumber">
+
+          <p-message
+            appErrorMessage
+            [errors]="authorizationNumberField.errors"
+            [touched]="authorizationNumberField.touched"
+            [dirty]="authorizationNumberField.dirty"
+          />
+        </div>
+
+        <!-- Tipo Contribuyente -->
+      <div class="md:col-span-12 flex flex-col gap-2">
+        <label 
+          appLabel 
+          for="rucType"
+          label="Tipo Contribuyente" 
+          [required]="ructypeField">
+        </label>
+
+        <p-select 
+          id="rucType" 
+          [options]="rucTypes" 
+          optionLabel="name"
+          formControlName="rucType"
+          placeholder="Seleccione tipo de contribuyente">
+        </p-select>
+
+        <p-message
+          appErrorMessage
+          [errors]="ructypeField.errors"
+          [touched]="ructypeField.touched"
+          [dirty]="ructypeField.dirty"
+        />
+      </div>
+
+      <!-- Tipo de Transporte -->
+        <div class="md:col-span-12 flex flex-col gap-2">
+          <label 
+            appLabel 
+            for="type"
+            label="Tipo de Transporte" 
+            [required]="typeField">
+          </label>
+
+          <p-select 
+            id="type" 
+            [options]="types" 
+            optionLabel="name"
+            formControlName="type"
+            placeholder="Seleccione tipo de transporte">
+          </p-select>
 
           <p-message
             appErrorMessage

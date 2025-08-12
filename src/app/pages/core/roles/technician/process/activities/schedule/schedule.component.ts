@@ -9,10 +9,11 @@ import { InternalInspectionInterface } from '../../interfaces/internal-inspectio
 import { InternalInspectionService } from '../../services/internal-inspection.service';
 import { PrimeIcons } from 'primeng/api';
 import { Fluid } from 'primeng/fluid';
+import { Message } from 'primeng/message';
 
 @Component({
     selector: 'app-schedule',
-    imports: [FormsModule, Dialog, ButtonModule, DatePickerModule, DividerModule, CardModule, ReactiveFormsModule, Fluid],
+    imports: [FormsModule, Dialog, ButtonModule, DatePickerModule, DividerModule, CardModule, ReactiveFormsModule, Fluid, Message],
     templateUrl: './schedule.component.html',
     styleUrl: './schedule.component.scss'
 })
