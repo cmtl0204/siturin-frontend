@@ -65,7 +65,7 @@ export class TouristTransportCompanyComponent implements OnInit {
         });
 
         this.form = this.formBuilder.group({
-            hasTouristTransportCompany: false,
+            hasTouristTransportCompanies: false,
             touristTransportCompanies: []
         });
 
