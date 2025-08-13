@@ -34,7 +34,7 @@ export class ScheduleComponent {
 
     buildForm() {
         this.form = this.formBuilder.group({
-            processId: ['b258335f-d3c4-474f-bfc1-6783e3bd2bd2'],
+            processId: ['4d2ace64-0701-4dfb-8abc-f12058882f4d'],
             inspectionAt: [this.date, [Validators.required]]
         });
     }

@@ -2,21 +2,19 @@ import { CatalogueInterface } from '@utils/interfaces';
 
 export interface CreateRatifiedInspectionStateInterface {
     cadastreId: string;
-    processId: string;
     state: CatalogueInterface;
 }
 
 export interface InactivationInspectionStatusInterface {
     cadastreId: string;
-    processId: string;
     state: {
         id: string;
         code: string;
     };
-  /* causeInactivationType: {
+    causeInactivationType: {
         id: string;
         code: string;
-    }; */
+    };
     inactivationCauses: {
         code: string;
         name: string;
@@ -25,7 +23,6 @@ export interface InactivationInspectionStatusInterface {
 
 export interface TemporarySuspensionInspectionStatusInterface {
     cadastreId: string;
-    processId: string;
     state: {
         id: string;
         code: string;
@@ -38,7 +35,6 @@ export interface TemporarySuspensionInspectionStatusInterface {
 
 export interface DefinitiveSuspensionInspectionStatusInterface {
     cadastreId: string;
-    processId: string;
     state: {
         id: string;
         code: string;
@@ -47,7 +43,6 @@ export interface DefinitiveSuspensionInspectionStatusInterface {
 
 export interface RecategorizedInspectionStatusInterface {
     cadastreId: string;
-    processId: string;
     state: {
         id: string;
         code: string;
@@ -60,7 +55,6 @@ export interface RecategorizedInspectionStatusInterface {
 
 export interface ReclassifiedInspectionStatusInterface {
     cadastreId: string;
-    processId: string;
     state: {
         id: string;
         code: string;

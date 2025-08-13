@@ -6,8 +6,6 @@
                 <label appLabel for="breachCauses" [required]="breachCausesField" label="Causad de Ruptura">
                 </label>
 
-                {{breachCausesType |json}}
-
                 <p-multiselect id="causesSelect" [options]="breachCausesType" formControlName="breachCauses"
                     placeholder="Select Causes" optionLabel="name" display="chip" class="w-full" appendTo="body">
                 </p-multiselect>

@@ -20,11 +20,11 @@ export class ProcessComponent {
     @ViewChildren(DownloadDocumentsComponent) private downloadDocumentsComponent!: QueryList<DownloadDocumentsComponent>;
 
     products = [
-        { code: 'P1001', name: 'Laptop', category: 'Electronics', quantity: 10 },
-        { code: 'P1002', name: 'Phone', category: 'Electronics', quantity: 25 },
-        { code: 'P1003', name: 'Desk', category: 'Furniture', quantity: 5 },
-        { code: 'P1004', name: 'Chair', category: 'Furniture', quantity: 12 },
-        { code: 'P1005', name: 'Notebook', category: 'Stationery', quantity: 100 }
+        { code: 'P1001', name: 'Juan Lopez', description: 'En espera de inspeccion' },
+        { code: 'P1002', name: 'Raul Cando', description: 'En espera de inspeccion' },
+        { code: 'P1003', name: 'Gloria Gonzaless', description: 'En espera de inspeccion' },
+        { code: 'P1004', name: 'Maria Benitez', description: 'En espera de inspeccion'},
+        { code: 'P1005', name: 'Bryan Castro', description: 'En espera de inspeccion'}
     ];
 
     protected readonly PrimeIcons = PrimeIcons;

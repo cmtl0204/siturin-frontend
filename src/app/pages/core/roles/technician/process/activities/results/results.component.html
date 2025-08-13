@@ -24,22 +24,22 @@
                 <div class="md:col-span-12 flex flex-col">
                     @switch (stateControl.value.code) {
                     @case (CatalogueCadastresStateEnum.ratified) {
-                    <app-ratified-status cadastreId="a8933f34-29f8-41a6-907d-f7f67985d3b5"
+                    <app-ratified-status cadastreId="928d55e9-96e0-4ecd-85c2-b9bd525db8a2"
                         [state]="stateControl.value"
                         (formEmitted)="closeModal()" />
                     }
                     @case (CatalogueCadastresStateEnum.inactive) {
-                    <app-inactive-status cadastreId="a8933f34-29f8-41a6-907d-f7f67985d3b5"
+                    <app-inactive-status cadastreId="928d55e9-96e0-4ecd-85c2-b9bd525db8a2"
                         [state]="stateControl.value"
                         (formEmitted)="closeModal()" />
                     }
                     @case (CatalogueCadastresStateEnum.temporary_suspension) {
-                    <app-temporary-suspension-status cadastreId="a8933f34-29f8-41a6-907d-f7f67985d3b5"
+                    <app-temporary-suspension-status cadastreId="928d55e9-96e0-4ecd-85c2-b9bd525db8a2"
                         [state]="stateControl.value"
                         (formEmitted)="closeModal()" />
                     }
                     @case (CatalogueCadastresStateEnum.definitive_suspension) {
-                    <app-definitive-suspension-status cadastreId="f6d32cf5-4ea8-4079-b6a5-b95c864c24a8"
+                    <app-definitive-suspension-status cadastreId="928d55e9-96e0-4ecd-85c2-b9bd525db8a2"
                         activityId="f67ee043-ccf4-4d13-b773-152281ac7103"
                         classificationId="53cdc421-ee96-4448-a2da-910dc37bddf1"
                         categoryId="df9547c1-947b-43e4-9279-10e893da25f6"
@@ -48,7 +48,7 @@
                         (formEmitted)="closeModal()" />
                     }
                     @case (CatalogueCadastresStateEnum.recategorized) {
-                    <app-recategorized-status cadastreId="a8933f34-29f8-41a6-907d-f7f67985d3b5"
+                    <app-recategorized-status cadastreId="928d55e9-96e0-4ecd-85c2-b9bd525db8a2"
                         activityId="f67ee043-ccf4-4d13-b773-152281ac7103"
                         classificationId="53cdc421-ee96-4448-a2da-910dc37bddf1"
                         categoryId="df9547c1-947b-43e4-9279-10e893da25f6"
@@ -56,7 +56,7 @@
                         (formEmitted)="closeModal()" />
                     }
                     @case (CatalogueCadastresStateEnum.reclassified) {
-                    <app-reclassified-status cadastreId="f6d32cf5-4ea8-4079-b6a5-b95c864c24a8"
+                    <app-reclassified-status cadastreId="928d55e9-96e0-4ecd-85c2-b9bd525db8a2"
                         activityId="f67ee043-ccf4-4d13-b773-152281ac7103"
                         classificationId="53cdc421-ee96-4448-a2da-910dc37bddf1"
                         categoryId="df9547c1-947b-43e4-9279-10e893da25f6"
