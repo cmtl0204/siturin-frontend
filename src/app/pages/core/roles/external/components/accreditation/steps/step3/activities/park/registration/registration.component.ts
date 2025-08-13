@@ -66,8 +66,6 @@ export class RegistrationComponent implements OnInit {
     async saveProcess() {
         const sessionData = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
 
-        console.log('sessionData', sessionData);
-
         const payload = { ...this.mainForm.value, ...sessionData };
 
         this.parksHttpService.createRegistration(payload).subscribe({
