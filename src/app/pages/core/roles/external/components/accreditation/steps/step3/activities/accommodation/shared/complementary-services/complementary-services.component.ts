@@ -8,8 +8,8 @@ import { CatalogueInterface, ColInterface } from '@/utils/interfaces';
 import { CustomMessageService } from '@/utils/services';
 import { CatalogueService } from '@/utils/services/catalogue.service';
 import { Component, EventEmitter, inject, Input, model, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray, ReactiveFormsModule } from '@angular/forms';
-import { ConfirmationService, PrimeIcons, MenuItem } from 'primeng/api';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ConfirmationService, MenuItem, PrimeIcons } from 'primeng/api';
 import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { Fluid } from 'primeng/fluid';
@@ -33,24 +33,24 @@ export class ComplementaryServicesComponent implements OnInit {
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
     private confirmationService = inject(ConfirmationService);
-    protected readonly PrimeIcons = PrimeIcons;
+    private readonly catalogueService = inject(CatalogueService);
 
+    protected readonly PrimeIcons = PrimeIcons;
     protected complementaryServiceForm!: FormGroup;
     protected form!: FormGroup;
-    protected buttonActions: MenuItem[] = [];
 
+    protected buttonActions: MenuItem[] = [];
     protected isVisibleModal = false;
     protected models: CatalogueInterface[] = [];
     protected cols: ColInterface[] = [];
     protected items: ComplementaryServiceInterface[] = [];
-    private readonly catalogueService = inject(CatalogueService);
     constructor() {}
 
     async ngOnInit() {
         this.buildForm();
         this.buildColumns();
         this.loadData();
-        this.loadCatalogues;
+        this.loadCatalogues();
     }
 
     loadData() {}
@@ -85,7 +85,7 @@ export class ComplementaryServicesComponent implements OnInit {
             {
                 ...deleteButtonAction,
                 command: () => {
-                    if (item?.modelId) this.delete(item.modelId);
+                    if (item?.model?.id) this.delete(item.model.id);
                 }
             }
         ];
@@ -93,7 +93,7 @@ export class ComplementaryServicesComponent implements OnInit {
 
     buildColumns() {
         this.cols = [
-            { header: 'Clasificacion', field: 'modelId' },
+            { header: 'Clasificacion', field: 'model', type: 'object' },
             { header: 'Capacidad en numero de personas', field: 'capacity' }
         ];
     }
@@ -148,7 +148,9 @@ export class ComplementaryServicesComponent implements OnInit {
 
     closeModal() {
         this.isVisibleModal = false;
-        this.form.reset();
+        this.idField.setValue(null);
+        this.capacityField.setValue(null);
+        this.modelField.setValue(null);
     }
 
     onSubmit() {
@@ -184,7 +186,7 @@ export class ComplementaryServicesComponent implements OnInit {
                 label: 'Sí, Eliminar'
             },
             accept: () => {
-                this.items = this.items.filter((item) => item.modelId !== modelId);
+                this.items = this.items.filter((item) => item.model?.id !== modelId);
 
                 this.complementaryServicesField.setValue(this.items);
 
@@ -195,7 +197,7 @@ export class ComplementaryServicesComponent implements OnInit {
     }
 
     findTouristGuide(modelId: string) {
-        const index = this.items.findIndex((item) => item.modelId === modelId);
+        const index = this.items.findIndex((item) => item.model?.id === modelId);
         this.complementaryServiceForm.patchValue(this.items[index]);
     }
 

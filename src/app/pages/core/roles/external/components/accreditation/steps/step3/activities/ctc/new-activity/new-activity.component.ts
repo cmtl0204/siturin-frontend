@@ -4,17 +4,17 @@ import { Panel } from "primeng/panel";
 import { Message } from "primeng/message";
 import { MultiSelect } from "primeng/multiselect";
 import { Tabs, TabList, Tab, TabPanel } from "primeng/tabs";
-import { FoodDrinkComponent } from "../shared/food-drink/food_drink.component";
+import { FoodDrinkComponent } from "../shared/food-drink/food-drink.component";
 import { AccommodationComponent } from "../shared/accommodation/accommodation.component";
 import { CommunityOperationComponent } from "../shared/community-operation/community-operation.component";
-import { TouristTransportCompanyComponent} from "../shared/touristTransportCompany/touristTransportCompany.component";
+import { TouristTransportCompanyComponent} from "@/pages/core/roles/external/components/accreditation/steps/step3/activities/ctc/shared/transport/transport.component";
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { RequirementsComponent } from "../shared/requirements/requirements.component";
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { PrimeIcons } from 'primeng/api';
-import { TouristActivitiesComponent } from '../tourist-activities/tourist-activities.component';
+import { TouristActivitiesComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/ctc/shared/tourist-activities/tourist-activities.component';
 import { TouristGuideComponent } from '@modules/core/shared';
 import { ButtonModule } from "primeng/button";
 
@@ -26,7 +26,7 @@ import { ButtonModule } from "primeng/button";
 })
 export class NewActivityComponent implements OnInit {
   protected readonly PrimeIcons = PrimeIcons;
-  
+
   @ViewChildren(RequirementsComponent) private requirementsComponent!: QueryList<RequirementsComponent>;
   @ViewChildren(TouristActivitiesComponent) private touristActivitiesComponent!: QueryList<TouristActivitiesComponent>;
   @ViewChildren(FoodDrinkComponent) private foodComponent!: QueryList<FoodDrinkComponent>;
@@ -34,7 +34,7 @@ export class NewActivityComponent implements OnInit {
   @ViewChildren(CommunityOperationComponent) private communityOperationComponent!: QueryList<CommunityOperationComponent>;
   @ViewChildren(TouristTransportCompanyComponent) private touristTransportCompanyComponent!: QueryList<TouristTransportCompanyComponent>;
   @ViewChildren(TouristGuideComponent) private touristGuideComponent!: QueryList<TouristGuideComponent>;
- 
+
    private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
     protected activities: any[] = []
@@ -78,19 +78,19 @@ export class NewActivityComponent implements OnInit {
             ...this.touristTransportCompanyComponent.toArray().flatMap((c) => c.getFormErrors()),
             ...this.touristGuideComponent.toArray().flatMap((c) => c.getFormErrors())
         ];
-      
+
         if (errors.length > 0) {
             this.customMessageService.showFormErrors(errors);
             return false;
         }
-      
+
         return true;
-    } 
+    }
     ngOnInit(): void {
         this.loadStoredData();
-    } 
+    }
         loadStoredData(): void {
         }
 
-  
+
 }

@@ -1,6 +1,8 @@
+import { CatalogueInterface } from '@utils/interfaces';
+
 export interface ComplementaryServiceInterface {
     id?: string;
-    modelId?: string;
+    model?: CatalogueInterface;
     capacity?: Number;
     services?: String;
 }

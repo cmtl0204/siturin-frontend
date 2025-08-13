@@ -8,18 +8,18 @@ import { Fluid } from 'primeng/fluid';
 import { Panel } from 'primeng/panel';
 import { MessageModule } from 'primeng/message';
 
-import { FoodDrinkComponent } from '../shared/food-drink/food_drink.component';
+import { FoodDrinkComponent } from '../food-drink/food-drink.component';
 
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { MultiSelect } from 'primeng/multiselect';
-import { AccommodationComponent } from '../shared/accommodation/accommodation.component';
-import { CommunityOperationComponent } from '../shared/community-operation/community-operation.component';
+import { AccommodationComponent } from '../accommodation/accommodation.component';
+import { CommunityOperationComponent } from '../community-operation/community-operation.component';
 import { CatalogueService } from '@utils/services/catalogue.service';
 import { CatalogueInterface } from '@utils/interfaces';
 import { CatalogueActivitiesCodeEnum, CatalogueTypeEnum } from '@utils/enums';
-import { CatalogueCtcActivitiesCodeEnum, CatalogueCtcClassificationsCodeEnum } from '@modules/core/shared/components/regulation-simulator/enum';
-import { TouristTransportCompanyCtcComponent } from '../shared/touristTransportCompany/touristTransportCompany.component';
+import { CatalogueCtcActivitiesCodeEnum, CatalogueCtcClassificationsCodeEnum } from '@/pages/core/shared/components/regulation-simulator/enum';
+import { TouristTransportCompanyCtcComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/ctc/shared/transport/transport.component';
 
 interface Activity {
     id: string;
@@ -138,7 +138,7 @@ export class TouristActivitiesComponent implements OnInit {
             const existAccommodation = activities.some((activity) => activity.code === CatalogueCtcActivitiesCodeEnum.accommodation);
             const existFoodDrink = activities.some((activity) => activity.code === CatalogueCtcActivitiesCodeEnum.food_drink);
             const existTransport = activities.some((activity) => activity.code === CatalogueCtcActivitiesCodeEnum.transport);
-           
+
             if (!existCommunityOperation) {
                 this.communityOperationField.reset();
             }
@@ -215,4 +215,6 @@ export class TouristActivitiesComponent implements OnInit {
     get activitiesAvailable() {
         return this.activities.filter((a) => !this.userSelectedActivities.some((ua) => ua.id === a.id));
     }
+
+    protected readonly CatalogueCtcActivitiesCodeEnum = CatalogueCtcActivitiesCodeEnum;
 }

@@ -38,18 +38,18 @@
                     @for (tab of activitiesField.value; track tab; let i = $index) {
                         <p-tabpanel [value]="i">
                             @switch (tab.code) {
-                                @case ('alimentos_bebidas') {
-                                    <app-foodDrink (dataOut)="saveFoodDrinkForm($event)" [modelId]="activitiesField.value[i].id"  />
+                                @case (CatalogueCtcActivitiesCodeEnum.food_drink) {
+                                    <app-food-drink (dataOut)="saveFoodDrinkForm($event)" [modelId]="activitiesField.value[i].id"  />
                                 }
-                                @case ('alojamiento') {
+                                @case (CatalogueCtcActivitiesCodeEnum.accommodation) {
                                     <app-accommodation (dataOut)="saveAccommodationForm($event)" [modelId]="activitiesField.value[i].id"/>
                                 }
-                                @case ('operacion') {
+                                @case (CatalogueCtcActivitiesCodeEnum.community_operation) {
                                     <app-community-operation
                                         (dataOut)="saveCommunityOperationForm($event)" [modelId]="activitiesField.value[i].id"/>
                                 }
-                                @case ('transporte') {
-                                    <app-touristTransportCompany
+                                @case (CatalogueCtcActivitiesCodeEnum.transport) {
+                                    <app-transport
                                         (dataOut)="saveTouristTransportCompanyForm($event)" [modelId]="activitiesField.value[i].id"/>
                                 }
                             }

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { RequirementsComponent } from "../shared/requirements/requirements.component";
 import { ButtonModule } from "primeng/button";
 import { PrimeIcons } from 'primeng/api';
-import { TouristActivitiesComponent } from '../tourist-activities/tourist-activities.component';
+import { TouristActivitiesComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/ctc/shared/tourist-activities/tourist-activities.component';
 
 @Component({
   selector: 'app-update',
@@ -16,18 +16,18 @@ export class UpdateComponent {
   protected readonly PrimeIcons = PrimeIcons;
 
   storedDataJson = localStorage.getItem('registrationData') ?? '';
-  
+
   constructor(private formBuilder: FormBuilder) {
     this.mainForm = this.formBuilder.group({});
   }
 
   ngOnInit(): void {
-    this.loadStoredData(); 
+    this.loadStoredData();
   }
 
   saveForm(data: FormGroup): void {
 
-    const key = Object.keys(data.controls)[0]; 
+    const key = Object.keys(data.controls)[0];
     if (!this.mainForm.contains(key)) {
       this.mainForm.addControl(key, data.get(key)!);
     } else {

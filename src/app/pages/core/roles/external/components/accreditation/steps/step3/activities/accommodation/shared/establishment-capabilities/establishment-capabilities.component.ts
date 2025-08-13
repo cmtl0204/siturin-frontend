@@ -159,10 +159,11 @@ export class EstablishmentCapabilitiesComponent {
 
     closeModal() {
         this.isVisibleModal = false;
-        this.roomTypeField.reset();
-        this.totalRoomsField.reset();
-        this.totalBedsField.reset();
-        this.totalPlacesField.reset();
+        this.idField.setValue(null);
+        this.roomTypeField.setValue(null);
+        this.totalRoomsField.setValue(null);
+        this.totalBedsField.setValue(null);
+        this.totalPlacesField.setValue(null);
     }
 
     onSubmit() {

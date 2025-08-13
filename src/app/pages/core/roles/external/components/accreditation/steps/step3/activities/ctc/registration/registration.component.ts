@@ -3,15 +3,15 @@ import { Button } from 'primeng/button';
 import { PrimeIcons } from 'primeng/api';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CoreSessionStorageService, CustomMessageService } from '@utils/services';
-import { TouristActivitiesComponent } from '../tourist-activities/tourist-activities.component';
-import { FoodDrinkComponent } from '../shared/food-drink/food_drink.component';
+import { TouristActivitiesComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/ctc/shared/tourist-activities/tourist-activities.component';
+import { FoodDrinkComponent } from '../shared/food-drink/food-drink.component';
 import { RequirementsComponent } from '../shared/requirements/requirements.component';
 import { AccommodationComponent } from '../shared/accommodation/accommodation.component';
 import { CommunityOperationComponent } from '../shared/community-operation/community-operation.component';
 import { TouristGuideComponent } from '@modules/core/shared/components/tourist-guide/tourist-guide.component';
 import { CtcHttpService } from '@modules/core/roles/external/services/ctc-http.service';
 import { CoreEnum } from '@utils/enums';
-import { TouristTransportCompanyCtcComponent } from '../shared/touristTransportCompany/touristTransportCompany.component';
+import { TouristTransportCompanyCtcComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/ctc/shared/transport/transport.component';
 import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
 
 @Component({

@@ -15,11 +15,11 @@ import { TouristTransportCompanyComponent } from "@/pages/core/shared/components
 import { RegulationComponent } from "@/pages/core/shared/components/regulation/regulation.component";
 
 @Component({
-    selector: 'app-touristTransportCompany',
+    selector: 'app-transport',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, CardModule, PanelModule, MessageModule, ButtonModule, DialogModule, InputTextModule, TableModule, FormsModule, TouristTransportCompanyComponent],
-    templateUrl: './touristTransportCompany.component.html',
-    styleUrl: './touristTransportCompany.component.scss'
+    templateUrl: './transport.component.html',
+    styleUrl: './transport.component.scss'
 })
 export class TouristTransportCompanyCtcComponent implements OnInit {
     @Input() data!: string | undefined;
@@ -35,21 +35,21 @@ export class TouristTransportCompanyCtcComponent implements OnInit {
     @ViewChildren(TouristTransportCompanyComponent) private touristTransportCompanyComponent!: QueryList<TouristTransportCompanyComponent>;
 
     protected mainForm!: FormGroup;
-    
+
         constructor() {
             this.buildForm();
         }
-    
+
         ngOnInit(): void {
             this.loadData();
         }
-    
+
         buildForm(): void {
             this.mainForm = this.formBuilder.group({});
-    
+
             this.watchFormChanges();
         }
-    
+
         watchFormChanges(): void {
             this.mainForm.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(() => {
                 if (this.mainForm.valid) {
@@ -57,7 +57,7 @@ export class TouristTransportCompanyCtcComponent implements OnInit {
                 }
             });
         }
-    
+
         saveForm(childForm: FormGroup): void {
             Object.keys(childForm.controls).forEach((controlName) => {
                 if (!this.mainForm.contains(controlName)) {
