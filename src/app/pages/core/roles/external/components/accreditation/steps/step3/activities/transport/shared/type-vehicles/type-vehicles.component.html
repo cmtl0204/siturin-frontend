@@ -1,199 +1,197 @@
 <p-fluid>
-    <div class="card flex flex-col gap-6 w-full">
-        <div class="mb-4">
-            <h3 class="text-xl font-bold">Capacidades</h3>
-            <h4 class="text-lg font-semibold text-gray-700">Tipos de vehículos</h4>
+    <form [formGroup]="form" class="card flex flex-col gap-6 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <h2>Capacidades</h2>
+                <h4 class="text-lg font-semibold text-gray-700">Tipos de vehículos</h4>
+                <p-message severity="info">
+                    <div>
+                        <b>Importante:</b>
+                        <p class="mt-4">Registrar los vehículos del establecimiento.</p>
+                    </div>
+                </p-message>
+            </div>
+
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <label
+                    appLabel
+                    for="hasLandTransports"
+                    [required]="hasLandTransportsField"
+                    label="Declaro que el establecimiento, al momento del envío de la solicitud, cuenta con vehículos."
+                ></label>
+
+                <p-toggleswitch id="hasLandTransports" formControlName="hasLandTransports">
+                    <ng-template #handle let-checked="checked">
+                        <span class="!text-xs font-semibold">{{ checked ? 'SÍ' : 'NO' }}</span>
+                    </ng-template>
+                </p-toggleswitch>
+
+                <p-message
+                    appErrorMessage
+                    [errors]="hasLandTransportsField.errors"
+                    [touched]="hasLandTransportsField.touched"
+                    [dirty]="hasLandTransportsField.dirty"
+                ></p-message>
+            </div>
         </div>
-
-        <div class="flex justify-end mb-4">
-            <p-button
-                label="Agregar Tipo de Vehículo"
-                icon="pi pi-plus"
-                (onClick)="openNewDialog()"
-                styleClass="p-button-success"
-            ></p-button>
-        </div>
-
-        <p-table [value]="vehiclesArray.controls" styleClass="p-datatable-gridlines">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Tipo</th>
-                    <th>Placa</th>
-                    <th>Formulario Matrícula</th>
-                    <th>Fecha de emisión de la matrícula</th>
-                    <th>Fecha de caducidad de la matrícula</th>
-                    <th>Capacidad de la Unidad</th>
-                    <th>Opciones</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-vehicleControl let-i="rowIndex">
-                <tr>
-                    <td>{{ vehicleControl.get('type')?.value.name }}</td>
-                    <td>{{ vehicleControl.get('plate')?.value }}</td>
-                    <td>{{ vehicleControl.get('registrationForm')?.value }}</td>
-                    <td>{{ vehicleControl.get('issueDate')?.value | date: 'longDate' }}</td>
-                    <td>{{ vehicleControl.get('expiryDate')?.value | date: 'longDate' }}</td>
-                    <td>{{ vehicleControl.get('capacity')?.value }}</td>
-                    <td>
-                        <p-button
-                            icon="pi pi-pencil"
-                            (onClick)="editVehicle(i)"
-                            styleClass="p-button-rounded p-button-warning mr-2"
-                        ></p-button>
-                        <p-button
-                            icon="pi pi-trash"
-                            (onClick)="deleteVehicle(i)"
-                            styleClass="p-button-rounded p-button-danger"
-                        ></p-button>
-                    </td>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                    <td colspan="7" class="text-center">No se encontraron registros.</td>
-                </tr>
-            </ng-template>
-        </p-table>
-
-        <p-dialog
-            header="Agregar Tipo de Vehículo"
-            [(visible)]="showDialog"
-            [modal]="true"
-            [style]="{ width: '70vw' }"
-            [draggable]="false"
-            [resizable]="false"
-        >
-            <form [formGroup]="vehicleForm">
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
-                    <div class="md:col-span-12 flex flex-col gap-2">
-                        <label for="type">Tipo: (*)</label>
-                        <p-select
-                            formControlName="type"
-                            [options]="vehicleTypes"
-                            optionLabel="name"
-                            placeholder="Seleccionar tipo"
-                            id="type"
-                        >
-                            <ng-template pTemplate="selectedItem" let-selectedItem>
-                                @if (selectedItem) {
-                                    <div class="flex items-center gap-2">
-                                        <div>{{ selectedItem.name }}</div>
-                                    </div>
-                                }
-                            </ng-template>
-
-                            <ng-template let-item pTemplate="item">
-                                <div class="flex items-center gap-2">
-                                    <div>{{ item.name }}</div>
-                                </div>
-                            </ng-template>
-                        </p-select>
-                        <p-message
-                            appErrorMessage
-                            [errors]="typeField.errors"
-                            [touched]="typeField.touched"
-                            [dirty]="typeField.dirty"
-                        />
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                    <div class="flex flex-col gap-2">
-                        <label for="plate">Placa: (*)</label>
-                        <input id="plate" type="text" pInputText formControlName="plate" />
-                        <p-message
-                            appErrorMessage
-                            [errors]="plateField.errors"
-                            [touched]="plateField.touched"
-                            [dirty]="plateField.dirty"
-                        />
-                    </div>
-
-                    <div class="flex flex-col gap-2">
-                        <label for="registrationForm">Formulario Matrícula: (*)</label>
-                        <p-inputnumber
-                            mode="decimal"
-                            [showButtons]="true"
-                            id="registrationForm"
-                            formControlName="registrationForm"
-                            [min]="0"
-                        />
-                        <p-message
-                            appErrorMessage
-                            [errors]="registrationFormField.errors"
-                            [touched]="registrationFormField.touched"
-                            [dirty]="registrationFormField.dirty"
-                        />
-                    </div>
-
-                    <div class="flex flex-col gap-2">
-                        <label for="capacity">Capacidad de la Unidad: (*)</label>
-                        <p-inputNumber
-                            formControlName="capacity"
-                            inputId="capacity"
-                            [min]="1"
-                            [showButtons]="true"
-                            [buttonLayout]="'horizontal'"
-                            decrementButtonClass="p-button-danger"
-                            incrementButtonClass="p-button-success"
-                            incrementButtonIcon="pi pi-plus"
-                            decrementButtonIcon="pi pi-minus"
-                        ></p-inputNumber>
-                        <p-message
-                            appErrorMessage
-                            [errors]="capacityField.errors"
-                            [touched]="capacityField.touched"
-                            [dirty]="capacityField.dirty"
-                        />
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                    <div class="flex flex-col gap-2">
-                        <label for="issueDate">Fecha de emisión de la matrícula: (*)</label>
-                        <p-datepicker
-                            class="max-w-full"
-                            [inline]="true"
-                            [showWeek]="true"
-                            formControlName="issueDate"
-                        />
-                        <p-message
-                            appErrorMessage
-                            [errors]="issueDateField.errors"
-                            [touched]="issueDateField.touched"
-                            [dirty]="issueDateField.dirty"
-                        />
-                    </div>
-
-                    <div class="flex flex-col gap-2">
-                        <label for="expiryDate">Fecha de caducidad de la matrícula: (*)</label>
-                        <p-datepicker
-                            class="max-w-full"
-                            [inline]="true"
-                            [showWeek]="true"
-                            formControlName="expiryDate"
-                        />
-                        <p-message
-                            appErrorMessage
-                            [errors]="expiryDateField.errors"
-                            [touched]="expiryDateField.touched"
-                            [dirty]="expiryDateField.dirty"
-                        />
-                    </div>
-                </div>
-            </form>
-
-            <ng-template pTemplate="footer">
-                <div class="flex justify-end mt-4">
-                    <p-button
-                        label="Guardar"
-                        icon="pi pi-check"
-                        (onClick)="saveVehicle()"
-                        [disabled]="vehicleForm.invalid"
-                        styleClass="p-button-primary"
-                    ></p-button>
-                </div>
-            </ng-template>
-        </p-dialog>
-    </div>
+    </form>
 </p-fluid>
+
+<p-fluid>
+    @if(hasLandTransportsField.value){
+        <app-list-basic
+            title="Listado de Vehículos"
+            [items]="items"
+            [cols]="cols"
+            [buttonActions]="buttonActions"
+            (onSelect)="buildButtonActions($event)"
+            (onCreate)="create()"/>
+    }
+</p-fluid>
+
+<p-dialog
+    [(visible)]="isVisibleModal"
+    [modal]="true"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [style]="{ width: '70vw' }"
+    [draggable]="false"
+    (onHide)="closeModal()"
+    [resizable]="false"
+>
+    <ng-template pTemplate="header">
+        <div class="inline-flex items-center justify-center gap-2">
+            <span class="font-bold whitespace-nowrap">Agregar Vehículo</span>
+        </div>
+    </ng-template>
+
+    <p-fluid>
+        <form [formGroup]="landTransportTypeForm" (ngSubmit)="onSubmit()" class="card flex flex-col gap-2 w-full">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <!-- Tipo con selectButton -->
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <label appLabel for="type" [required]="typeField" label="Tipo: (*)"></label>
+                    <p-select
+                        id="type"
+                        [options]="types"
+                        formControlName="type"
+                        optionLabel="name"
+                        placeholder="Seleccione un tipo"
+                        class="w-full md:w-56"
+                    ></p-select>
+                    <p-message
+                        appErrorMessage
+                        [errors]="typeField.errors"
+                        [touched]="typeField.touched"
+                        [dirty]="typeField.dirty"
+                    ></p-message>
+                </div>
+
+                <!-- Placa -->
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <label appLabel for="plate" [required]="plateField" label="Placa: (*)"></label>
+                    <input pInputText id="plate" formControlName="plate" />
+                    <p-message
+                        appErrorMessage
+                        [errors]="plateField.errors"
+                        [touched]="plateField.touched"
+                        [dirty]="plateField.dirty"
+                    ></p-message>
+                </div>
+
+                <!-- Formulario Matrícula -->
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <label appLabel for="registration" [required]="registrationField" label="Formulario Matrícula: (*)"></label>
+                    <input pInputText id="registration" formControlName="registration" />
+                    <p-message
+                        appErrorMessage
+                        [errors]="registrationField.errors"
+                        [touched]="registrationField.touched"
+                        [dirty]="registrationField.dirty"
+                    ></p-message>
+                </div>
+
+                <!-- Capacidad -->
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <label appLabel for="capacity" [required]="capacityField" label="Capacidad de la Unidad: (*)"></label>
+                    <p-inputNumber
+                        id="capacity"
+                        formControlName="capacity"
+                        [min]="1"
+                        [showButtons]="true"
+                        buttonLayout="horizontal"
+                        decrementButtonClass="p-button-danger"
+                        incrementButtonClass="p-button-success"
+                        incrementButtonIcon="pi pi-plus"
+                        decrementButtonIcon="pi pi-minus"
+                    ></p-inputNumber>
+                    <p-message
+                        appErrorMessage
+                        [errors]="capacityField.errors"
+                        [touched]="capacityField.touched"
+                        [dirty]="capacityField.dirty"
+                    ></p-message>
+                </div>
+
+                <!-- certifiedCode -->
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <label
+                        appLabel
+                        for="certifiedCode"
+                        [required]="certifiedCodeField"
+                        label="Código de Certificación">
+                    </label>
+
+                    <input pInputText id="certifiedCode" formControlName="certifiedCode">
+
+                    <p-message
+                        appErrorMessage
+                        [errors]="certifiedCodeField.errors"
+                        [touched]="certifiedCodeField.touched"
+                        [dirty]="certifiedCodeField.dirty" />
+                </div>
+
+                <!-- certifiedIssueAt -->
+                <div class="md:col-span-6 flex flex-col gap-2">
+                    <label
+                        appLabel
+                        for="certifiedIssueAt"
+                        [required]="certifiedIssueAtField"
+                        label="Fecha de Emisión">
+                    </label>
+
+                    <p-datepicker class="max-w-full" formControlName="certifiedIssueAt" [inline]="true" [showWeek]="true" />
+
+
+                    <p-message
+                        appErrorMessage
+                        [errors]="certifiedIssueAtField.errors"
+                        [touched]="certifiedIssueAtField.touched"
+                        [dirty]="certifiedIssueAtField.dirty" />
+                </div>
+
+                <!-- certifiedExpirationAt -->
+                <div class="md:col-span-6 flex flex-col gap-2">
+                    <label
+                        appLabel
+                        for="certifiedExpirationAt"
+                        [required]="certifiedExpirationAtField"
+                        label="Fecha de Expiración">
+                    </label>
+
+                    <p-datepicker class="max-w-full" formControlName="certifiedExpirationAt" [inline]="true" [showWeek]="true" />
+
+
+                    <p-message
+                        appErrorMessage
+                        [errors]="certifiedExpirationAtField.errors"
+                        [touched]="certifiedExpirationAtField.touched"
+                        [dirty]="certifiedExpirationAtField.dirty" />
+                </div>
+
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <button pButton type="submit" label="Agregar" icon="pi pi-save"></button>
+                </div>
+            </div>
+        </form>
+    </p-fluid>
+</p-dialog>

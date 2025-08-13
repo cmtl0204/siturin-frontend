@@ -6,26 +6,20 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { PrimeIcons } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CustomMessageService } from '@/utils/services';
-import { VehicleTypeComponent } from './shared/type-vehicles/type-vehicles.component';
+import { TypeVehiclesComponent } from './shared/type-vehicles/type-vehicles.component';
 
 @Component({
     selector: 'app-transport',
-    imports: [
-    FluidModule,
-    PanelModule,
-    DividerModule,
-    ButtonModule,
-    VehicleTypeComponent
-],
-        
+    imports: [FluidModule, PanelModule, DividerModule, ButtonModule, TypeVehiclesComponent],
+
     templateUrl: './transport.component.html',
     styleUrl: './transport.component.scss'
 })
 export class TransportComponent {
     protected readonly PrimeIcons = PrimeIcons;
 
-    @ViewChildren(VehicleTypeComponent) private vehicleTypeComponent!: QueryList<VehicleTypeComponent>;
-   
+    @ViewChildren(TypeVehiclesComponent) private vehicleTypeComponent!: QueryList<TypeVehiclesComponent>;
+
     private formBuilder = inject(FormBuilder);
 
     protected mainForm!: FormGroup;
@@ -39,14 +33,13 @@ export class TransportComponent {
     }
 
     saveForm(childForm: FormGroup) {
-        Object.keys(childForm.controls).forEach(controlName => {
+        Object.keys(childForm.controls).forEach((controlName) => {
             if (!this.mainForm.contains(controlName)) {
                 this.mainForm.addControl(controlName, this.formBuilder.control(childForm.get(controlName)?.value));
             } else {
                 this.mainForm.get(controlName)?.patchValue(childForm.get(controlName)?.value);
             }
         });
-
     }
 
     onSubmit() {
@@ -60,9 +53,7 @@ export class TransportComponent {
     }
 
     checkFormErrors() {
-        const errors: string[] = [
-            ...this.vehicleTypeComponent.toArray().flatMap((c) => c.getFormErrors()),
-        ];
+        const errors: string[] = [...this.vehicleTypeComponent.toArray().flatMap((c) => c.getFormErrors())];
 
         if (errors.length > 0) {
             this.customMessageService.showFormErrors(errors);
@@ -72,6 +63,5 @@ export class TransportComponent {
         return true;
     }
 
-    loadData(){}
-
+    loadData() {}
 }

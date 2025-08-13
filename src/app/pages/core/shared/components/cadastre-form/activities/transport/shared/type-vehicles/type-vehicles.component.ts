@@ -34,7 +34,7 @@ interface LandTransportInterface {
   styleUrls: ['./type-vehicles.component.scss'],
   imports: [Message, ButtonModule,DatePicker, ListBasicComponent, InputTextModule,SelectModule ,LabelDirective, ErrorMessageDirective, FluidModule, ReactiveFormsModule, ToggleButtonModule, Dialog, ListBasicComponent, InputNumberModule],
 })
-export class VehicleTypeComponent implements OnInit {
+export class TypeVehiclesComponent implements OnInit {
   @Input() data!: string | undefined;
   @Output() dataOut = new EventEmitter<FormGroup>();
 

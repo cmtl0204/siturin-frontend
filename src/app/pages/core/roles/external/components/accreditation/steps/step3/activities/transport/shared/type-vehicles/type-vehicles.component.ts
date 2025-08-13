@@ -1,168 +1,230 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { TableModule } from 'primeng/table';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { DatePicker } from 'primeng/datepicker';
-import { SelectModule } from 'primeng/select';
-import { FluidModule } from 'primeng/fluid';
-import { CatalogueInterface } from '@utils/interfaces';
-import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
-import { DatePickerModule } from 'primeng/datepicker';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ConfirmationService, MenuItem, PrimeIcons } from 'primeng/api';
+import { CustomMessageService } from '@utils/services/custom-message.service';
+import { CatalogueInterface, ColInterface } from '@utils/interfaces';
 import { Message } from 'primeng/message';
+import { DatePicker } from 'primeng/datepicker';
+import { LabelDirective } from '@/utils/directives/label.directive';
+import { ErrorMessageDirective } from '@/utils/directives/error-message.directive';
+import { FluidModule } from 'primeng/fluid';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { Dialog } from 'primeng/dialog';
+import { ListBasicComponent } from '@/utils/components/list-basic/list-basic.component';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { SelectModule } from 'primeng/select';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { ToggleSwitch } from 'primeng/toggleswitch';
+import { CatalogueTypeEnum } from '@utils/enums';
+import { CatalogueService } from '@utils/services/catalogue.service';
+import { AdventureTourismModalityInterface } from '@/pages/core/shared/interfaces';
+import { deleteButtonAction } from '@utils/components/button-action/consts';
+
+interface LandTransportInterface {
+    type: string;
+    plate: string;
+    registration: string;
+    capacity: number;
+    registrationAt: Date | null;
+    registrationExpirationAt: Date | null;
+    certifiedCode: string;
+    certifiedIssueAt: Date | null;
+    certifiedExpirationAt: Date | null;
+}
 
 @Component({
     selector: 'app-type-vehicles',
-    standalone: true,
-    imports: [CommonModule, DatePicker, ReactiveFormsModule, ButtonModule, DialogModule, ErrorMessageDirective, TableModule, InputTextModule, InputNumberModule, SelectModule, FluidModule, DatePickerModule, Message],
     templateUrl: './type-vehicles.component.html',
-    styleUrls: ['./type-vehicles.component.scss']
+    styleUrls: ['./type-vehicles.component.scss'],
+    imports: [
+        Message,
+        ButtonModule,
+        DatePicker,
+        ListBasicComponent,
+        InputTextModule,
+        SelectModule,
+        LabelDirective,
+        ErrorMessageDirective,
+        FluidModule,
+        ReactiveFormsModule,
+        ToggleButtonModule,
+        Dialog,
+        ListBasicComponent,
+        InputNumberModule,
+        ToggleSwitch
+    ]
 })
-export class VehicleTypeComponent implements OnInit {
-    protected readonly formBuilder = inject(FormBuilder);
-    @Output() vehiclesData = new EventEmitter<FormArray>();
-
-    // El formulario principal de este componente, que contiene el FormArray
-    protected form!: FormGroup;
-    // Un formulario temporal para el modal de agregar/editar un solo vehículo
-    protected vehicleForm!: FormGroup;
-    protected showDialog: boolean = false;
-    protected selectedVehicleIndex: number | null = null;
+export class TypeVehiclesComponent implements OnInit {
+    @Input() data!: string | undefined;
     @Output() dataOut = new EventEmitter<FormGroup>();
 
-    // Se ha actualizado la estructura para usar 'name' para p-select
-    protected vehicleTypes: CatalogueInterface[] = [
-        { name: 'Bus', code: 'Bus' },
-        { name: 'Auto', code: 'Auto' },
-        { name: 'Camioneta', code: 'Camioneta' }
-    ];
+    private readonly formBuilder = inject(FormBuilder);
+    protected readonly customMessageService = inject(CustomMessageService);
+    private confirmationService = inject(ConfirmationService);
+    protected readonly PrimeIcons = PrimeIcons;
+    private readonly catalogueService = inject(CatalogueService);
+
+    protected form!: FormGroup;
+    protected landTransportTypeForm!: FormGroup;
+    protected buttonActions: MenuItem[] = [];
+
+    protected isVisibleModal = false;
+    protected cols: ColInterface[] = [];
+    protected items: LandTransportInterface[] = [];
+    protected types: CatalogueInterface[] = [];
 
     ngOnInit(): void {
         this.buildForm();
-        this.buildVehicleForm();
+        this.buildColumns();
+        this.loadCatalogues();
     }
 
-    /**
-     * Construye el formulario principal con el FormArray para la lista de vehículos.
-     * Esto encapsula toda la lógica de gestión de la lista dentro de este componente.
-     */
     buildForm(): void {
-        this.form = this.formBuilder.group({
-            vehicles: this.formBuilder.array([], Validators.required)
-        });
-    }
-
-    /**
-     * Construye el formulario temporal que se usa en el modal.
-     * Este formulario representa un único vehículo.
-     */
-    buildVehicleForm(): void {
-        this.vehicleForm = this.formBuilder.group({
-            // Se espera un objeto completo del p-select
+        this.landTransportTypeForm = this.formBuilder.group({
             type: ['null', Validators.required],
-            plate: ['', Validators.required],
-            registrationForm: ['', Validators.required],
-            capacity: ['null', [Validators.required, Validators.min(1)]],
-            issueDate: ['null', Validators.required],
-            expiryDate: ['null', Validators.required]
+            plate: [null, [Validators.required, Validators.maxLength(20)]],
+            registration: [null, Validators.required],
+            capacity: [null, [Validators.required, Validators.min(1)]],
+            certifiedCode: [null, Validators.required],
+            certifiedIssueAt: [null, Validators.required],
+            certifiedExpirationAt: [null, Validators.required]
+        });
+
+        this.form = this.formBuilder.group({
+            hasLandTransports: [false],
+            landTransportTypes: [[]]
         });
     }
 
-    private createVehicleFormGroup(vehicleData?: any): FormGroup {
-        return this.formBuilder.group({
-            type: [vehicleData?.type || null, Validators.required],
-            plate: [vehicleData?.plate || '', Validators.required],
-            registrationForm: [vehicleData?.registrationForm || '', Validators.required],
-            capacity: [vehicleData?.capacity || null, [Validators.required, Validators.min(1)]],
-            issueDate: [vehicleData?.issueDate || null, Validators.required],
-            expiryDate: [vehicleData?.expiryDate || null, Validators.required]
+    buildColumns(): void {
+        this.cols = [
+            { field: 'type', header: 'Tipo', type: 'object' },
+            { field: 'plate', header: 'Placa' },
+            { field: 'registration', header: 'Formulario Matrícula' },
+            { field: 'capacity', header: 'Capacidad' },
+            { field: 'certifiedCode', header: 'Código de Certificación' },
+            { field: 'certifiedIssueAt', header: 'Fecha de Emisión' },
+            { field: 'certifiedExpirationAt', header: 'Fecha de Expiración' }
+        ];
+    }
+
+    buildButtonActions(item: LandTransportInterface) {
+        this.buttonActions = [
+            {
+                ...deleteButtonAction,
+                command: () => {
+                    if (item) this.deleteLandTransport(item);
+                }
+            }
+        ];
+    }
+
+    getFormErrors(): string[] {
+        const errors: string[] = [];
+
+        if (this.typeField.invalid) errors.push('Tipo');
+        if (this.plateField.invalid) errors.push('Placa');
+        if (this.registrationField.invalid) errors.push('Formulario Matrícula');
+        if (this.capacityField.invalid) errors.push('Capacidad');
+        if (this.certifiedCodeField.invalid) errors.push('Código de Certificación');
+        if (this.certifiedIssueAtField.invalid) errors.push('Fecha de Emisión');
+        if (this.certifiedExpirationAtField.invalid) errors.push('Fecha de Expiración');
+
+        if (errors.length > 0) {
+            this.landTransportTypeForm.markAllAsTouched();
+            this.customMessageService.showFormErrors(errors);
+        }
+
+        return errors;
+    }
+
+    create(): void {
+        this.landTransportTypeForm.reset();
+        this.isVisibleModal = true;
+    }
+
+    closeModal(): void {
+        this.isVisibleModal = false;
+    }
+
+    onSubmit(): void {
+        this.hasLandTransportsField.setValue(true);
+
+        if (this.getFormErrors()) {
+            this.createLandTransportType();
+        }
+    }
+
+    createLandTransportType(): void {
+        this.hasLandTransportsField.setValue(true);
+
+        this.items.push(this.landTransportTypeForm.value);
+
+        this.closeModal();
+
+        this.landTransportTypesField.setValue(this.items);
+
+        this.dataOut.emit(this.form);
+    }
+
+    editLandTransport(item: LandTransportInterface): void {
+        this.landTransportTypeForm.patchValue(item);
+        this.isVisibleModal = true;
+    }
+
+    deleteLandTransport(item: LandTransportInterface): void {
+        this.confirmationService.confirm({
+            key: 'confirmdialog',
+            message: '¿Está seguro de eliminar?',
+            header: 'Eliminar',
+            icon: this.PrimeIcons.TRASH,
+            rejectButtonStyleClass: 'p-button-text',
+            accept: () => {
+                this.items = this.items.filter((i) => i.certifiedCode !== item.certifiedCode);
+                this.landTransportTypesField.setValue(this.items);
+                this.dataOut.emit(this.form);
+            }
         });
     }
 
-    get vehiclesArray(): FormArray {
-        return this.form.get('vehicles') as FormArray;
+    async loadCatalogues() {
+        this.types = await this.catalogueService.findByType(CatalogueTypeEnum.transporte_tipo_vehiculos);
+    }
+
+    get hasLandTransportsField(): AbstractControl {
+        return this.form.controls['hasLandTransports'];
+    }
+
+    get landTransportTypesField(): AbstractControl {
+        return this.form.controls['landTransportTypes'];
     }
 
     get typeField(): AbstractControl {
-        return this.vehicleForm.controls['type'];
+        return this.landTransportTypeForm.controls['type'];
     }
 
     get plateField(): AbstractControl {
-        return this.vehicleForm.controls['plate'];
+        return this.landTransportTypeForm.controls['plate'];
     }
 
-    get registrationFormField(): AbstractControl {
-        return this.vehicleForm.controls['registrationForm'];
+    get registrationField(): AbstractControl {
+        return this.landTransportTypeForm.controls['registration'];
     }
 
     get capacityField(): AbstractControl {
-        return this.vehicleForm.controls['capacity'];
+        return this.landTransportTypeForm.controls['capacity'];
     }
 
-    get issueDateField(): AbstractControl {
-        return this.vehicleForm.controls['issueDate'];
+    get certifiedCodeField(): AbstractControl {
+        return this.landTransportTypeForm.controls['certifiedCode'];
     }
 
-    get expiryDateField(): AbstractControl {
-        return this.vehicleForm.controls['expiryDate'];
+    get certifiedIssueAtField(): AbstractControl {
+        return this.landTransportTypeForm.controls['certifiedIssueAt'];
     }
 
-    openNewDialog(): void {
-        this.selectedVehicleIndex = null;
-        this.vehicleForm.reset();
-        this.showDialog = true;
-    }
-
-    /**
-     * Abre el modal para editar un vehículo existente.
-     * @param index El índice del vehículo en el FormArray.
-     */
-    editVehicle(index: number): void {
-        this.selectedVehicleIndex = index;
-        const vehicleToEdit = this.vehiclesArray.at(index).value;
-        this.vehicleForm.patchValue(vehicleToEdit);
-        this.showDialog = true;
-    }
-
-    /**
-     * Guarda un vehículo (nuevo o editado) en el FormArray.
-     */
-    saveVehicle(): void {
-        if (this.vehicleForm.invalid) {
-            this.vehicleForm.markAllAsTouched();
-            return;
-        }
-
-        if (this.selectedVehicleIndex !== null) {
-            // Edita un vehículo existente en el FormArray
-            this.vehiclesArray.at(this.selectedVehicleIndex).patchValue(this.vehicleForm.value);
-        } else {
-            // Agrega un nuevo vehículo al FormArray
-            const newVehicleFormGroup = this.createVehicleFormGroup(this.vehicleForm.value);
-            this.vehiclesArray.push(newVehicleFormGroup);
-        }
-
-        this.showDialog = false;
-        // Emite el FormArray completo para que el componente padre lo gestione.
-        this.emitVehiclesData();
-    }
-
-    /**
-     * Elimina un vehículo del FormArray.
-     * @param index El índice del vehículo a eliminar.
-     */
-    deleteVehicle(index: number): void {
-        this.vehiclesArray.removeAt(index);
-        this.emitVehiclesData();
-    }
-
-    /**
-     * Emite los datos del FormArray de vehículos al componente padre.
-     */
-    private emitVehiclesData(): void {
-        this.vehiclesData.emit(this.vehiclesArray);
+    get certifiedExpirationAtField(): AbstractControl {
+        return this.landTransportTypeForm.controls['certifiedExpirationAt'];
     }
 }

@@ -3,7 +3,7 @@
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
 
             <!-- Primer toggle -->
-            <div class="md:col-span-6 flex flex-col gap-2">
+            <div class="md:col-span-12 flex flex-col gap-2">
                 <label appLabel for="isProtectedArea"
                     label="Su establecimiento se encuentra dentro del Subsistema Estatal del Sistema Nacional de Áreas Protegidas:"
                     [required]="isProtectedAreaField">
@@ -18,7 +18,7 @@
 
             <!-- Segundo toggle (visible solo si el primero está activo) -->
             @if (isProtectedAreaField.value) {
-                <div class="md:col-span-6 flex flex-col gap-2">
+                <div class="md:col-span-12 flex flex-col gap-2">
                     <label appLabel for="hasProtectedAreaContract"
                         label="Al momento de la inspección se presentará la delegación por contrato, convenio de cooperación de infraestructura o permisos correspondientes emitido por la Autoridad Ambiental Nacional o su equivalente:"
                         [required]="hasProtectedAreaContractField">

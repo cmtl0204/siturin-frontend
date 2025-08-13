@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, inject, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { Fluid } from 'primeng/fluid';
 import { SelectModule } from 'primeng/select';
@@ -8,84 +8,75 @@ import { ErrorMessageDirective } from '@utils/directives/error-message.directive
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { DatePickerModule } from 'primeng/datepicker';
-import { AprotectecComponent } from '../aprotectec/aprotectec.component';
-
-interface CatalogueInterface {
-    name: string;
-    code: string;
-}
+import { CatalogueTypeEnum } from '@/utils/enums';
+import { CatalogueService } from '@/utils/services/catalogue.service';
+import { CatalogueInterface } from '@/utils/interfaces';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-air',
     standalone: true,
-    imports: [Fluid, ReactiveFormsModule, SelectModule, Message, LabelDirective, ErrorMessageDirective, ToggleSwitchModule, InputTextModule, DatePickerModule],
+    imports: [Fluid, ReactiveFormsModule, SelectModule, Message, LabelDirective, ErrorMessageDirective, ToggleSwitchModule, InputTextModule, DatePickerModule, NgIf],
     templateUrl: './air.component.html',
     styleUrl: './air.component.scss'
 })
 export class AirComponent implements OnInit {
     protected readonly formBuilder = inject(FormBuilder);
+    private readonly catalogueService = inject(CatalogueService);
+
+    @Input() isAirTransport = false;
+    @Input() subClassification: string | undefined;
+
     @Output() dataOut = new EventEmitter<FormGroup>();
 
     protected form!: FormGroup;
-
-    protected localTypes: CatalogueInterface[] = [
-        { name: 'Islas de Centros Comerciales', code: 'islas' },
-        { name: 'Local Comercial', code: 'comercial' },
-        { name: 'Oficinas', code: 'oficinas' },
-        { name: 'Oficinas Compartidas', code: 'compartidas' }
-    ];
-
-    protected aerolineTypes: CatalogueInterface[] = [
-        { name: 'Internacional', code: 'internacional' },
-        { name: 'Nacional', code: 'nacional' }
-    ];
+    protected aerolinea_tipos: CatalogueInterface[] = [];
 
     constructor() {
         this.buildForm();
     }
 
     ngOnInit() {
-        this.loadData();
+        this.loadCatalogues();
+
+        if (this.subClassification === 'Aerolínea') {
+            this.airlineTypeField.setValidators([Validators.required]);
+            this.airlineTypeField.updateValueAndValidity();
+        }
+    }
+
+    async loadCatalogues() {
+        this.aerolinea_tipos = await this.catalogueService.findByType(CatalogueTypeEnum.aerolinea_tipos);
     }
 
     buildForm(): void {
         this.form = this.formBuilder.group({
-            aerolineType: [null, Validators.required],
+            airlineType: [null],
             localType: [null, Validators.required],
-            isEnrollment: [null, Validators.required],
-            code: [null, Validators.required],
-            issueAt: [null, Validators.required],
-            expirationAt: [null, Validators.required]
+            certifiedCode: [null, Validators.required],
+            certified: [false, Validators.required],
+            certifiedIssueAt: [null, Validators.required],
+            certifiedExpirationAt: [null, Validators.required]
         });
 
         this.watchFormChanges();
     }
 
     watchFormChanges() {
-        this.aerolineTypeField.valueChanges.subscribe((value: boolean) => {
-            if (value) {
-                this.localTypeField.setValidators([Validators.required]);
-            } else {
-                this.localTypeField.clearValidators();
-                this.localTypeField.setValue(false);
-            }
-            this.localTypeField.updateValueAndValidity();
-        });
-
-        this.localTypeField.valueChanges.subscribe((value: boolean) => {
-            if (value) {
-                this.isEnrollmentField.setValidators([Validators.required]);
-            } else {
-                this.isEnrollmentField.clearValidators();
-                this.isEnrollmentField.setValue(false);
-            }
-            this.isEnrollmentField.updateValueAndValidity();
-        });
-
         this.form.valueChanges.subscribe(() => {
             if (this.form.valid) {
                 this.dataOut.emit(this.form);
             }
+        });
+
+        this.airlineTypeField.valueChanges.subscribe((value: any) => {
+            if (value && this.subClassification === 'Aerolínea') {
+                this.localTypeField.setValidators([Validators.required]);
+            } else {
+                this.localTypeField.clearValidators();
+                this.localTypeField.setValue(null);
+            }
+            this.localTypeField.updateValueAndValidity();
         });
     }
 
@@ -96,6 +87,10 @@ export class AirComponent implements OnInit {
             errors.push('Debe seleccionar un Tipo de Local.');
         }
 
+        if (this.subClassification === 'Aerolínea' && this.airlineTypeField.invalid) {
+            errors.push('Debe seleccionar un Tipo de Aerolínea.');
+        }
+
         if (errors.length > 0) {
             this.form.markAllAsTouched();
         }
@@ -103,29 +98,29 @@ export class AirComponent implements OnInit {
         return errors;
     }
 
-    loadData() {}
-
-    get aerolineTypeField(): AbstractControl {
-        return this.form.controls['aerolineType'];
+    get airlineTypeField(): AbstractControl {
+        return this.form.controls['airlineType'];
     }
 
     get localTypeField(): AbstractControl {
         return this.form.controls['localType'];
     }
 
-    get isEnrollmentField(): AbstractControl {
-        return this.form.controls['isEnrollment'];
+    get certifiedCodeField(): AbstractControl {
+        return this.form.controls['certifiedCode'];
     }
 
-    get codeField(): AbstractControl {
-        return this.form.controls['code'];
+    get certifiedField(): AbstractControl {
+        return this.form.controls['certified'];
     }
 
-    get issueAtField(): AbstractControl {
-        return this.form.controls['issueAt'];
+    get certifiedIssueAtField(): AbstractControl {
+        return this.form.controls['certifiedIssueAt'];
     }
 
-    get expirationAtField(): AbstractControl {
-        return this.form.controls['expirationAt'];
+    get certifiedExpirationAtField(): AbstractControl {
+        return this.form.controls['certifiedExpirationAt'];
     }
+
+    protected readonly Validators = Validators;
 }
