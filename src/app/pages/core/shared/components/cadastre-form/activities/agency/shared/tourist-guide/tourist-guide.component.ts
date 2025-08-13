@@ -58,7 +58,7 @@ export class TouristGuideComponent implements OnInit {
             identification: [null, [Validators.required]],
             name: [null, [Validators.required]],
             isGuide: [false, [Validators.required]],
-            touristLicences: [[]]
+            touristLicenses: [[]]
         });
 
         this.form = this.formBuilder.group({
@@ -222,7 +222,7 @@ export class TouristGuideComponent implements OnInit {
     }
 
     get touristLicensesField(): FormArray {
-        return this.touristGuideForm.controls['touristLicences'] as FormArray;
+        return this.touristGuideForm.controls['touristLicenses'] as FormArray;
     }
 
     get hasTouristGuideField(): AbstractControl {

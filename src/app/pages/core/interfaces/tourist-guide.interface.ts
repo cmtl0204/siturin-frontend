@@ -2,6 +2,6 @@ export interface TouristGuideInterface {
     id?: string;
     identification?: string;
     name?: string;
-    touristLicences?: string;
+    touristLicenses?: string;
     isGuide?: boolean;
 }

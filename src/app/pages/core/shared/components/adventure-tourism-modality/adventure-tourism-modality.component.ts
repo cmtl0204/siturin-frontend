@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, effect, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Fluid } from 'primeng/fluid';
@@ -16,15 +16,16 @@ import { ListBasicComponent } from '@utils/components/list-basic/list-basic.comp
 import { DialogModule } from 'primeng/dialog';
 import { CatalogueInterface, ColInterface } from '@utils/interfaces';
 import { deleteButtonAction } from '@utils/components/button-action/consts';
-import { CustomMessageService } from '@utils/services';
+import { CoreSessionStorageService, CustomMessageService } from '@utils/services';
 import { CatalogueTypeEnum } from '@utils/enums';
 import { CatalogueService } from '@utils/services/catalogue.service';
 import { AdventureTourismModalityInterface } from '@modules/core/shared/interfaces';
+import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
 
 @Component({
     selector: 'app-adventure-tourism-modality',
     standalone: true,
-    imports: [ReactiveFormsModule, CommonModule, Fluid, LabelDirective, Select, ButtonModule, ToggleSwitch, TooltipModule, Message, ErrorMessageDirective, ToastModule, ConfirmDialogModule, ListBasicComponent, DialogModule],
+    imports: [ReactiveFormsModule, CommonModule, Fluid, LabelDirective, Select, ButtonModule, ToggleSwitch, TooltipModule, Message, ErrorMessageDirective, ToastModule, ConfirmDialogModule, ListBasicComponent, DialogModule, RegulationComponent],
     templateUrl: './adventure-tourism-modality.component.html',
     styleUrls: ['./adventure-tourism-modality.component.scss']
 })
@@ -38,6 +39,7 @@ export class AdventureTourismModalityComponent implements OnInit {
     private readonly confirmationService = inject(ConfirmationService);
     private readonly catalogueService = inject(CatalogueService);
     protected readonly customMessageService = inject(CustomMessageService);
+    protected readonly coreSessionStorageService = inject(CoreSessionStorageService);
 
     protected form!: FormGroup;
     protected modalityForm!: FormGroup;
@@ -53,6 +55,17 @@ export class AdventureTourismModalityComponent implements OnInit {
     protected landModalities: CatalogueInterface[] = [];
     protected airModalities: CatalogueInterface[] = [];
 
+    constructor() {
+        effect(async () => {
+            const processSignal = this.coreSessionStorageService.processSignal();
+
+            if (processSignal) {
+                if (processSignal.classification?.hasRegulation) this.modelId = processSignal.classification.id;
+                if (processSignal.category?.hasRegulation) this.modelId = processSignal.category.id;
+            }
+        });
+    }
+    
     async ngOnInit() {
         this.buildForm();
         this.buildColumns();
@@ -86,7 +99,8 @@ export class AdventureTourismModalityComponent implements OnInit {
 
         this.form = this.formBuilder.group({
             hasAdventureTourismModality: false,
-            adventureTourismModalities: []
+            adventureTourismModalities: [],
+            regulation: [null, Validators.required]
         });
 
         this.watchFormChanges();
@@ -214,6 +228,10 @@ export class AdventureTourismModalityComponent implements OnInit {
         this.modalityForm.reset();
     }
 
+    saveForm(childForm: FormGroup) {
+        this.regulationField.patchValue(childForm.value);
+    }
+
     // Getter Modality Form
     get classNameField(): AbstractControl {
         return this.modalityForm.get('className')!;
@@ -230,5 +248,9 @@ export class AdventureTourismModalityComponent implements OnInit {
 
     get adventureTourismModalitiesField(): AbstractControl {
         return this.form.controls['adventureTourismModalities'];
+    }
+
+    get regulationField(): AbstractControl {
+        return this.form.controls['regulation'];
     }
 }

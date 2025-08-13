@@ -195,8 +195,8 @@ export class TouristTransportCompanyComponent implements OnInit {
 
     async loadCatalogues() {
         this.types = await this.catalogueService.findByType(CatalogueTypeEnum.tourist_transport_companies_type);
-        console.log(this.types);
-        this.rucTypes = await this.catalogueService.findByType(CatalogueTypeEnum.adventure_tourism_modalities);
+
+        this.rucTypes = await this.catalogueService.findByType(CatalogueTypeEnum.ruc_types);
     }
 
     closeModal() {

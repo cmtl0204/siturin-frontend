@@ -12,7 +12,8 @@ import { Tag } from 'primeng/tag';
 import { PrimeIcons } from 'primeng/api';
 import { CatalogueActivitiesCodeEnum } from '@/utils/enums';
 import { CategoryConfigurationsHttpService } from '../../services/category-configurations.http.service';
-import { CategoryConfigurationInterface } from '../../interfaces/category-configuration.interface';
+import { CategoryConfigurationInterface } from '@/pages/core/shared/interfaces/category-configuration.interface';
+
 
 @Component({
     selector: 'app-regulation',
@@ -27,9 +28,10 @@ export class RegulationComponent {
     private readonly categoryConfigurationsHttpService = inject(CategoryConfigurationsHttpService);
 
     protected validationTypeEnum = ValidationTypeEnum;
-    public modelId = input.required<string | undefined>();
-    public isProtectedArea = input<boolean>(false);
-    public activityCode = input<string | undefined>(undefined);
+    modelId = input.required<string | undefined>();
+    isProtectedArea = input<boolean>(false);
+    isAdventureRequirement = input<boolean>(false);
+    activityCode = input<string | undefined>();
 
     protected form!: FormGroup;
     protected sections = signal<RegulationSectionInterface[]>([]);
@@ -39,9 +41,15 @@ export class RegulationComponent {
     private readonly loadRegulations = effect(() => {
         if (this.modelId()?.length === 0) return this.sections.set([]);
 
-        this.regulationHttpService.getRegulationsByModelId(this.modelId()!).subscribe((resp) => {
-            this.sections.set(resp);
-        });
+        if (this.isAdventureRequirement()) {
+            this.regulationHttpService.getRegulationsAdventureTourismModalityByModelId(this.modelId()!).subscribe((resp) => {
+                this.sections.set(resp);
+            });
+        } else {
+            this.regulationHttpService.getRegulationsByModelId(this.modelId()!).subscribe((resp) => {
+                this.sections.set(resp);
+            });
+        }
     });
 
     private readonly loadCategories = effect(() => {
@@ -51,7 +59,6 @@ export class RegulationComponent {
 
         return this.categoryConfigurationsHttpService.findByClassificationId(this.modelId()!).subscribe((resp) => {
             this.categoryConfigurations = resp;
-            if (this.categoryConfigurations.length === 0) this.setCategory('CATEGORÍA ÚNICA');
         });
     });
 
@@ -194,7 +201,7 @@ export class RegulationComponent {
 
         for (const categoryConfig of sortedCategories) {
             if (totalScore >= categoryConfig.min) {
-                selectedCategory = categoryConfig.category.name;
+                selectedCategory = categoryConfig;
             }
         }
 
@@ -205,9 +212,9 @@ export class RegulationComponent {
         }
     }
 
-    setCategory(category: string) {
+    setCategory(categoryConfiguration: CategoryConfigurationInterface) {
         this.categoryField.enable();
-        this.categoryField.setValue(category);
+        this.categoryField.setValue(categoryConfiguration.category);
     }
 
     get sectionsField(): FormArray {
