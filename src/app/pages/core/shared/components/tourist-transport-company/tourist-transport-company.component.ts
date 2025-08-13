@@ -38,7 +38,7 @@ export class TouristTransportCompanyComponent implements OnInit {
 
     protected readonly PrimeIcons = PrimeIcons;
     protected form!: FormGroup;
-    protected touristTransportCompanyForm!: FormGroup;
+    protected transportForm!: FormGroup;
     private readonly catalogueService = inject(CatalogueService);
 
     protected isVisibleModal = false;
@@ -55,7 +55,7 @@ export class TouristTransportCompanyComponent implements OnInit {
     }
 
     buildForm() {
-        this.touristTransportCompanyForm = this.formBuilder.group({
+        this.transportForm = this.formBuilder.group({
             id: [null],
             ruc: [null, Validators.required],
             legalName: [null, Validators.required],
@@ -201,27 +201,27 @@ export class TouristTransportCompanyComponent implements OnInit {
 
     closeModal() {
         this.isVisibleModal = false;
-        this.touristTransportCompanyForm.reset();
+        this.transportForm.reset();
     }
 
     get rucField(): AbstractControl {
-        return this.touristTransportCompanyForm.get('ruc')!;
+        return this.transportForm.get('ruc')!;
     }
 
     get ructypeField(): AbstractControl {
-        return this.touristTransportCompanyForm.get('rucType')!;
+        return this.transportForm.get('rucType')!;
     }
 
     get authorizationNumberField(): AbstractControl {
-        return this.touristTransportCompanyForm.get('authorizationNumber')!;
+        return this.transportForm.get('authorizationNumber')!;
     }
 
     get legalNameField(): AbstractControl {
-        return this.touristTransportCompanyForm.get('legalName')!;
+        return this.transportForm.get('legalName')!;
     }
 
     get typeField(): AbstractControl {
-        return this.touristTransportCompanyForm.get('type')!;
+        return this.transportForm.get('type')!;
     }
 
     get hasTouristTransportCompanyField(): AbstractControl {

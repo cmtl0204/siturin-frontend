@@ -73,7 +73,7 @@ export class TouristActivitiesComponent implements OnInit {
             foodDrink: [null],
             accommodation: [null],
             communityOperation: [null],
-            touristTransportCompany: [null]
+            transport: [null]
         });
 
         this.watchFormChanges();
@@ -105,7 +105,7 @@ export class TouristActivitiesComponent implements OnInit {
     }
 
     saveTouristTransportCompanyForm(values: any) {
-        this.touristTransportCompanyField.patchValue(values);
+        this.transportField.patchValue(values);
     }
 
     watchFormChanges(): void {
@@ -149,7 +149,7 @@ export class TouristActivitiesComponent implements OnInit {
                 this.foodDrinkField.reset();
             }
             if (!existTransport) {
-                this.touristTransportCompanyField.reset();
+                this.transportField.reset();
             }
         });
     }
@@ -208,8 +208,8 @@ export class TouristActivitiesComponent implements OnInit {
         return this.form.controls['communityOperation'];
     }
 
-    get touristTransportCompanyField() {
-        return this.form.controls['touristTransportCompany'];
+    get transportField() {
+        return this.form.controls['transport'];
     }
 
     get activitiesAvailable() {

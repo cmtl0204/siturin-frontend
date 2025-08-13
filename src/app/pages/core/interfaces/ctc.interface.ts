@@ -15,7 +15,7 @@ export interface CtcInterface {
   hasStatute: boolean;
   hasTechnicalReport: boolean;
   communityOperation: CommunityOperationInterface;
-  touristTransportCompany: TouristTransportCompanyInterface;
+  transport: TouristTransportCompanyInterface;
 }
 
 export interface AccommodationInterface {
@@ -33,11 +33,6 @@ export interface CommunityOperationInterface {
   hasGuide: boolean;
   touristGuides: TouristGuideInterface[];
 }
-
-// export interface TouristTransportCompanyInterface {
-//   hasTransports: boolean;
-//   transports: TransportInterface[];
-// }
 
 export interface TransportInterface {
   authorizationNumber: number;
