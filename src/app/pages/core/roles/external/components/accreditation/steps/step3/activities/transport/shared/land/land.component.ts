@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { LabelDirective } from '@utils/directives/label.directive';
 import { CatalogueInterface } from '@utils/interfaces';
@@ -9,11 +9,23 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
-import { Message } from 'primeng/message';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { VehicleTypeComponent } from '../type-vehicles/type-vehicles.component';
 
 @Component({
     selector: 'app-land',
-    imports: [ReactiveFormsModule, FluidModule, SelectModule, LabelDirective, ErrorMessageDirective, ToggleSwitchModule, InputTextModule, DatePickerModule, InputNumberModule, Message],
+    imports: [
+    ReactiveFormsModule,
+    FluidModule,
+    SelectModule,
+    LabelDirective,
+    ErrorMessageDirective,
+    ToggleSwitchModule,
+    InputTextModule,
+    DatePickerModule,
+    InputNumberModule,
+    VehicleTypeComponent
+],
     templateUrl: './land.component.html',
     styleUrl: './land.component.scss'
 })
@@ -32,6 +44,7 @@ export class LandComponent {
 
     ngOnInit(): void {
         this.buildForm();
+        this.watchFormChanges();
     }
 
     buildForm() {
@@ -42,36 +55,41 @@ export class LandComponent {
             certifiedIssueAt: [null, Validators.required],
             certifiedExpirationAt: [null, Validators.required]
         });
+    }
 
-        this.watchFormChanges();
-    }
     watchFormChanges() {
-        this.form.valueChanges.subscribe(() => {
-            if (this.form.valid) {
-                this.dataOut.emit(this.form);
-            }
-        });
-    }
+    this.localTypeField.valueChanges.subscribe((value: boolean) => {
+      if (value) {
+        this.certifiedField.setValidators([Validators.required]);
+      } else {
+        this.certifiedField.clearValidators();
+        this.certifiedField.setValue(false);
+      }
+      this.certifiedField.updateValueAndValidity();
+    });
+
+    this.certifiedField.valueChanges.subscribe((value: boolean) => {
+      if (value) {
+        this.certifiedCodeField.setValidators([Validators.required]);
+      } else {
+        this.certifiedCodeField.clearValidators();
+        this.certifiedCodeField.setValue(false);
+      }
+      this.certifiedCodeField.updateValueAndValidity();
+    });
+
+
+    this.form.valueChanges.subscribe(() => {
+      if (this.form.valid) {
+        this.dataOut.emit(this.form);
+      }
+    });
+  }
 
     getFormErrors(): string[] {
         const errors: string[] = [];
 
         if (this.localTypeField.invalid) {
-            errors.push('Debe seleccionar un Tipo de Local.');
-        }
-        if (this.certifiedField.invalid) {
-            errors.push('Debe seleccionar un Tipo de Local.');
-        }
-        if (this.certifiedCodeField.invalid) {
-            errors.push('Debe seleccionar un Tipo de Local.');
-        }
-        if (this.certifiedIssueAtField.invalid) {
-            errors.push('Debe seleccionar un Tipo de Local.');
-        }
-        if (this.certifiedExpirationAtField.invalid) {
-            errors.push('Debe seleccionar un Tipo de Local.');
-        }
-        if (this.certifiedCodeField.invalid) {
             errors.push('Debe seleccionar un Tipo de Local.');
         }
 

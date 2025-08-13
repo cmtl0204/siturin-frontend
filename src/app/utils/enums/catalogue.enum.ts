@@ -24,7 +24,10 @@ export enum CatalogueTypeEnum {
     activities_types_kitchens_continent = 'activities_types_kitchens_continent',
     activities_type_establishments = 'activities_type_establishments',
     activities_types_services_continent = 'activities_types_services_continent',
+    kitchen_types_continent = 'kitchen_types_continent',
     ruc_types = 'ruc_types',
+    process_food_drinks_establishment_type = 'process_food_drinks_establishment_type',
+    service_types_continent = 'service_types_continent',
 }
 
 export enum CatalogueStateEnum {

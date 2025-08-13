@@ -11,7 +11,7 @@ import { EstablishmentCapacityComponent } from '@modules/core/roles/external/com
 import { EstablishmentServicesComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-services/establishment-services.component';
 import { ClassificationInterface } from '@modules/core/shared/interfaces';
 import { KitchenComponent } from '../shared/kitchen/kitchen.component';
-import { CatalogueProcessFoodDrinksClassificationEnum, CoreEnum } from '@/utils/enums';
+import { CatalogueActivitiesCodeEnum, CatalogueProcessFoodDrinksClassificationEnum, CoreEnum } from '@/utils/enums';
 import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
 import { FoodDrinkHttpService } from '@/pages/core/roles/external/services';
 
@@ -48,6 +48,9 @@ export class RegistrationComponent {
     protected readonly coreSessionStorageService = inject(CoreSessionStorageService);
     protected readonly foodDrinkHttpService = inject(FoodDrinkHttpService);
 
+    protected activityCode = CatalogueActivitiesCodeEnum.food_drink_continent; // or food_drink_galapagos
+
+
     constructor() {
         this.mainForm = this.formBuilder.group({});
 
@@ -81,22 +84,41 @@ export class RegistrationComponent {
         });
     }
 
-    onSubmit() {
+    async onSubmit() {
         console.log(this.mainForm.value);
-        if (!this.checkFormErrors()) {
-            this.saveProcess();
+        if (this.checkFormErrors()) {
+            await this.saveProcess();
         }
     }
 
     async saveProcess() {    
 
         const sessionData = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
-        
-        console.log('mainForm.value', this.mainForm.value);
 
+        const kitchenData = this.mainForm.get('kitchenTypes')?.value;
+
+        const kitchenTypes = Array.isArray(kitchenData) 
+        ? kitchenData.map(item => ({
+            id: item.id,
+            code: item.code
+          }))
+        : [];
+        
+
+        const serviceData = this.mainForm.get('serviceTypes')?.value;
+        const serviceTypes = Array.isArray(serviceData) 
+        ? serviceData.map(item => ({
+            id: item.id,
+            code: item.code 
+          }))
+        : [];
+        console.log('mainForm.value', this.mainForm.value);
+          
         const payload = {
             ...this.mainForm.value,
-            ...sessionData
+            ...sessionData,
+            kitchenTypes,
+            serviceTypes
         };
         console.log(payload);
         this.foodDrinkHttpService.createRegistration(payload).subscribe({

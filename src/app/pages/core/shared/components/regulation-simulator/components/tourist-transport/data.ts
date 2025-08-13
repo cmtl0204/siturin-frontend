@@ -1,21 +1,21 @@
-import { CatalogueTouristTransportClassificationsCodeEnum, ContributorTypeEnum } from '../../enum';
+import { CatalogueTransportClassificationsCodeEnum, ContributorTypeEnum } from '../../enum';
 import { HeaderRegulation, Item } from '../../../../interfaces/item.interface';
 
 export const data: HeaderRegulation[] = [
     {
         definition:
             'Transporte Turístico Aéreo: Modalidad de transporte turístico, que consiste en la prestación del servicio de transporte aerocomercial con operación regular, para el desplazamiento de personas, que pueden ser o no turistas o excursionistas, dentro y fuera del país, en forma individual o en grupos homogéneos, en aeronaves motorizadas, debidamente certificadas por la autoridad aeronáutica competente. La operación de vuelos chárter deberá ser comercializada a través de una agencia de servicios turísticos.',
-        codeClassification: CatalogueTouristTransportClassificationsCodeEnum.air_transport
+        codeClassification: CatalogueTransportClassificationsCodeEnum.air_transport
     },
     {
         definition:
             'Transporte Turístico Marítimo, Fluvial y Lacustre :Modalidad de transporte turístico, que consiste en la prestación del servicio de transporte acuático con fines comerciales, para el desplazamiento de personas que tengan la condición de turistas o excursionistas en forma individual o en grupos homogéneos por mar, ríos o lagos en embarcaciones turísticas motorizadas acondicionadas para el efecto, debidamente autorizadas por la autoridad marítima y fluvial competente. Se excluye de esta clasificación a las motos acuáticas en cualquiera de sus tipos.',
-        codeClassification: CatalogueTouristTransportClassificationsCodeEnum.maritime_transport
+        codeClassification: CatalogueTransportClassificationsCodeEnum.maritime_transport
     },
     {
         definition:
             'Transporte Turístico Terrestre : Modalidad de transporte turístico, que consiste en la prestación del servicio de transporte terrestre con fines comerciales, para el desplazamiento de personas que tengan la condición de turistas o excursionistas en forma individual o en grupos homogéneos en vehículos terrestres motorizados debidamente habilitados por la autoridad competente en materia de tránsito.',
-        codeClassification: CatalogueTouristTransportClassificationsCodeEnum.land_transport
+        codeClassification: CatalogueTransportClassificationsCodeEnum.land_transport
     }
 ];
 export const items: Item[] = [

@@ -80,12 +80,11 @@ export enum CatalogueParkClassificationsCodeEnum {
   centers = 'centers'
 }
 
-export enum CatalogueTouristTransportClassificationsCodeEnum {
+export enum CatalogueTransportClassificationsCodeEnum {
   air_transport = 'air_transport',
   maritime_transport = 'maritime_transport',
   land_transport = 'land_transport'
 }
-
 
 export enum ContributorTypeEnum {
     natural_person = 'natural_person',

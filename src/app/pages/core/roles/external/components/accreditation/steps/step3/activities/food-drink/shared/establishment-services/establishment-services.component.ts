@@ -80,7 +80,7 @@ export class EstablishmentServicesComponent implements OnInit {
     }
 
     async loadCatalogues() {
-        this.serviceTypes = await this.catalogueService.findByType(CatalogueTypeEnum.activities_types_services_continent);
+        this.serviceTypes = await this.catalogueService.findByType(CatalogueTypeEnum.service_types_continent);
     }
 
     loadData() {}

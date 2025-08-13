@@ -81,7 +81,7 @@ export class EstablishmentCapacityComponent implements OnInit {
     }
 
     async loadCatalogues() {
-        this.typeEstablishments = await this.catalogueService.findByType(CatalogueTypeEnum.activities_type_establishments);
+        this.typeEstablishments = await this.catalogueService.findByType(CatalogueTypeEnum.process_food_drinks_establishment_type);
     }
 
     loadData() {}

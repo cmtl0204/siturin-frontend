@@ -56,8 +56,7 @@ export class FoodDrinkHttpService {
         );
     }
 
-    createRegistration(payload: FoodDrinkInterface) {        
-        // payload.processId = 'e30fba26-4b77-44f0-8c46-27e6d3f63b47';
+    createRegistration(payload: FoodDrinkInterface) {                
         const url = `${this._apiUrl}/registrations`;
         return this._httpClient.post<HttpResponseInterface>(url, payload).pipe(
             map((response) => {

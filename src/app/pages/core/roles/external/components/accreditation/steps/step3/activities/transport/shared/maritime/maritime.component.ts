@@ -1,240 +1,120 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Fluid } from 'primeng/fluid';
-import { ConfirmationService, MenuItem, PrimeIcons } from 'primeng/api';
-import { ToggleSwitch } from 'primeng/toggleswitch';
-import { Message } from 'primeng/message';
-import { CustomMessageService } from '@utils/services/custom-message.service';
-import { LabelDirective } from '@utils/directives/label.directive';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
-import { ColInterface } from '@utils/interfaces';
-import { TableModule } from 'primeng/table';
-import { Button } from 'primeng/button';
-import { deleteButtonAction } from '@utils/components/button-action/consts';
-import { Dialog } from 'primeng/dialog';
-import { InputText } from 'primeng/inputtext';
-import { ListBasicComponent } from '@utils/components/list-basic/list-basic.component';
-import { DatePicker } from 'primeng/datepicker';
+import { LabelDirective } from '@utils/directives/label.directive';
+import { CatalogueInterface } from '@utils/interfaces';
+import { DatePickerModule } from 'primeng/datepicker';
+import { FluidModule } from 'primeng/fluid';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { Message } from 'primeng/message';
 
 @Component({
     selector: 'app-maritime',
-    imports: [Fluid, ReactiveFormsModule, DatePicker, LabelDirective, Message, ErrorMessageDirective, ToggleSwitch, TableModule, Button, Dialog, InputText, ListBasicComponent],
+    imports: [ReactiveFormsModule, FluidModule, SelectModule, LabelDirective, ErrorMessageDirective, ToggleSwitchModule, InputTextModule, DatePickerModule, InputNumberModule, Message],
     templateUrl: './maritime.component.html',
-    styleUrls: ['./maritime.component.scss']
+    styleUrl: './maritime.component.scss'
 })
-export class MaritimeComponent implements OnInit {
-    @Input() data!: string | undefined;
+export class MaritimeComponent {
+    protected readonly formBuilder = inject(FormBuilder);
     @Output() dataOut = new EventEmitter<FormGroup>();
 
-    private readonly formBuilder = inject(FormBuilder);
-    protected readonly customMessageService = inject(CustomMessageService);
-    private confirmationService = inject(ConfirmationService);
-    protected readonly PrimeIcons = PrimeIcons;
-
     protected form!: FormGroup;
-    protected maritimeForm!: FormGroup;
-    protected buttonActions: MenuItem[] = [];
 
-    protected isVisibleModal = false;
+    protected localTypes: CatalogueInterface[] = [
+        { name: 'Islas de Centros Comerciales', code: 'islas' },
+        { name: 'Local Comercial', code: 'comercial' },
+        { name: 'Oficinas', code: 'oficinas' },
+        { name: 'Oficinas Compartidas', code: 'compartidas' }
+    ];
 
-    protected cols: ColInterface[] = [];
-    protected items: any[] = [];
-
-    constructor() {}
-
-    ngOnInit() {
+    ngOnInit(): void {
         this.buildForm();
-        this.buildColumns();
-        this.loadData();
-    }
-
-    loadData() {}
-
-    buildForm() {
-        this.maritimeForm = this.formBuilder.group({
-            id: [null],
-            totalUnits: [null, [Validators.required]],
-            totalSeats: [null, [Validators.required]],
-            certifiedCode: [null, [Validators.required]],
-            certifiedIssueAt: [null, [Validators.required]],
-            certifiedExpirationAt: [null, [Validators.required]]
-        });
-
-        this.form = this.formBuilder.group({
-            hasMaritimeTransport: false,
-            maritimeItems: []
-        });
-
         this.watchFormChanges();
     }
 
-    watchFormChanges() {
-        this.dataOut.emit(this.form);
-
-        this.hasMaritimeTransportField.valueChanges.subscribe((value) => {
-            this.maritimeItemsField.setValue(this.items);
-            this.dataOut.emit(this.form);
+    buildForm(): void {
+        this.form = this.formBuilder.group({
+            localType: [null, Validators.required],
+            certified: [null, Validators.required],
+            totalUnits: [null, Validators.required],
+            totalSeats: [null, Validators.required],
+            certifiedCode: [null, Validators.required],
+            certifiedIssueAt: [null, Validators.required],
+            certifiedExpirationAt: [null, Validators.required]
         });
     }
 
-    buildButtonActions(item: any) {
-        this.buttonActions = [
-            {
-                ...deleteButtonAction,
-                command: () => {
-                    if (item?.id) this.delete(item.id);
-                }
+    watchFormChanges() {
+        this.localTypeField.valueChanges.subscribe((value: boolean) => {
+            if (value) {
+                this.certifiedField.setValidators([Validators.required]);
+            } else {
+                this.certifiedField.clearValidators();
+                this.certifiedField.setValue(false);
             }
-        ];
-    }
+            this.certifiedField.updateValueAndValidity();
+        });
 
-    buildColumns() {
-        this.cols = [
-            { header: 'Número de unidades de transporte', field: 'totalUnits' },
-            { header: 'Total, número de puesto', field: 'totalSeats' },
-            { header: 'Número o Código de la Matrícula de Armador', field: 'certifiedCode' },
-            { header: 'Fecha de emisión de la Matrícula de Armador', field: 'certifiedIssueAt' },
-            { header: 'Fecha de Caducidad de la Matrícula de Armador', field: 'certifiedExpirationAt' }
-        ];
+        this.certifiedField.valueChanges.subscribe((value: boolean) => {
+            if (value) {
+                this.totalUnitsField.setValidators([Validators.required]);
+            } else {
+                this.totalUnitsField.clearValidators();
+                this.totalUnitsField.setValue(false);
+            }
+            this.totalUnitsField.updateValueAndValidity();
+        });
+
+        this.form.valueChanges.subscribe(() => {
+            if (this.form.valid) {
+                this.dataOut.emit(this.form);
+            }
+        });
     }
 
     getFormErrors(): string[] {
         const errors: string[] = [];
-        if (this.hasMaritimeTransportField.value && this.items.length === 0) errors.push('Transporte Marítimo');
+
+        if (this.localTypeField.invalid) {
+            errors.push('Debe seleccionar un Tipo de Local.');
+        }
 
         if (errors.length > 0) {
             this.form.markAllAsTouched();
-            return errors;
         }
 
-        return [];
+        return errors;
     }
 
-    validateForm() {
-        const errors: string[] = [];
-        if (this.totalUnitsField.invalid) errors.push('Número de unidades de transporte');
-        if (this.totalSeatsField.invalid) errors.push('Total, número de puesto');
-        if (this.certifiedCodeField.invalid) errors.push('Número o Código de la Matrícula de Armador');
-        if (this.certifiedIssueAtField.invalid) errors.push('Fecha de emisión de la Matrícula de Armador');
-        if (this.certifiedExpirationAtField.invalid) errors.push('Fecha de Caducidad de la Matrícula de Armador');
-
-        if (errors.length > 0) {
-            this.form.markAllAsTouched();
-            this.customMessageService.showFormErrors(errors);
-            return false;
-        }
-
-        return true;
+    get certifiedField(): AbstractControl {
+        return this.form.controls['certified'];
     }
 
-    create() {
-        this.idField.disable();
-        this.isVisibleModal = true;
-    }
-
-    edit(id: string) {
-        this.idField.enable();
-        this.findMaritimeItem(id);
-        this.isVisibleModal = true;
-    }
-
-    delete(id: string) {
-        this.isVisibleModal = false;
-
-        if (id) this.deleteMaritimeItem(id);
-    }
-
-    view() {
-        this.isVisibleModal = true;
-    }
-
-    closeModal() {
-        this.isVisibleModal = false;
-        this.idField.reset();
-        this.totalUnitsField.reset();
-        this.totalSeatsField.reset();
-        this.certifiedCodeField.reset();
-        this.certifiedIssueAtField.reset();
-        this.certifiedExpirationAtField.reset();
-    }
-
-    onSubmit() {
-        if (this.validateForm()) {
-            this.createMaritimeItem();
-        }
-    }
-
-    createMaritimeItem() {
-        this.items.push(this.maritimeForm.value);
-
-        this.closeModal();
-
-        this.maritimeItemsField.setValue(this.items);
-
-        this.dataOut.emit(this.form);
-    }
-
-    deleteMaritimeItem(id: string) {
-        this.confirmationService.confirm({
-            message: '¿Está seguro de eliminar?',
-            header: 'Eliminar',
-            icon: PrimeIcons.TRASH,
-            rejectButtonStyleClass: 'p-button-text',
-            rejectButtonProps: {
-                label: 'Cancelar',
-                severity: 'danger',
-                text: true
-            },
-            acceptButtonProps: {
-                label: 'Sí, Eliminar'
-            },
-            accept: () => {
-                this.items = this.items.filter((item) => item.id !== id);
-
-                this.maritimeItemsField.setValue(this.items);
-
-                this.dataOut.emit(this.form);
-            },
-            key: 'confirmdialog'
-        });
-    }
-
-    findMaritimeItem(id: string) {
-        const index = this.items.findIndex((item) => item.id === id);
-        if (index > -1) {
-            this.maritimeForm.patchValue(this.items[index]);
-        }
-    }
-
-    get idField(): AbstractControl {
-        return this.maritimeForm.controls['id'];
+    get localTypeField(): AbstractControl {
+        return this.form.controls['localType'];
     }
 
     get totalUnitsField(): AbstractControl {
-        return this.maritimeForm.controls['totalUnits'];
+        return this.form.controls['totalUnits'];
     }
 
     get totalSeatsField(): AbstractControl {
-        return this.maritimeForm.controls['totalSeats'];
+        return this.form.controls['totalSeats'];
     }
 
     get certifiedCodeField(): AbstractControl {
-        return this.maritimeForm.controls['certifiedCode'];
+        return this.form.controls['certifiedCode'];
     }
 
     get certifiedIssueAtField(): AbstractControl {
-        return this.maritimeForm.controls['certifiedIssueAt'];
+        return this.form.controls['certifiedIssueAt'];
     }
 
     get certifiedExpirationAtField(): AbstractControl {
-        return this.maritimeForm.controls['certifiedExpirationAt'];
-    }
-
-    get hasMaritimeTransportField(): AbstractControl {
-        return this.form.controls['hasMaritimeTransport'];
-    }
-
-    get maritimeItemsField(): AbstractControl {
-        return this.form.controls['maritimeItems'];
+        return this.form.controls['certifiedExpirationAt'];
     }
 }

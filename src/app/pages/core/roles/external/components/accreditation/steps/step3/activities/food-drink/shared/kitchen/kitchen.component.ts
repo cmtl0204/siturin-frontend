@@ -77,7 +77,7 @@ export class KitchenComponent implements OnInit {
     }
 
     async loadCatalogues() {
-        this.kitchenTypes = await this.catalogueService.findByType(CatalogueTypeEnum.activities_types_kitchens_continent);
+        this.kitchenTypes = await this.catalogueService.findByType(CatalogueTypeEnum.kitchen_types_continent);
     }
 
     loadData() {}
