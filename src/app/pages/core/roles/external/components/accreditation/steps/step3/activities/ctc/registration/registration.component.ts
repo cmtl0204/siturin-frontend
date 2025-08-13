@@ -12,7 +12,7 @@ import { TouristGuideComponent } from '@modules/core/shared/components/tourist-g
 import { CtcHttpService } from '@modules/core/roles/external/services/ctc-http.service';
 import { CoreEnum } from '@utils/enums';
 import { TouristTransportCompanyCtcComponent } from '../shared/touristTransportCompany/touristTransportCompany.component';
-import { RegulationComponent } from "@/pages/core/shared/components/regulation/regulation.component";
+import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
 
 @Component({
     selector: 'app-registration',
@@ -42,17 +42,17 @@ export class RegistrationComponent {
 
     constructor() {
         this.mainForm = this.formBuilder.group({
-            regulation:[null, Validators.required]
+            regulation: [null, Validators.required]
         });
 
         effect(async () => {
-                    const processSignal = this.coreSessionStorageService.processSignal();
-        
-                    if (processSignal) {
-                        if (processSignal.classification?.hasRegulation) this.modelId = processSignal.classification.id;
-                        if (processSignal.category?.hasRegulation) this.modelId = processSignal.category.id;
-                    }
-                });
+            const processSignal = this.coreSessionStorageService.processSignal();
+
+            if (processSignal) {
+                if (processSignal.classification?.hasRegulation) this.modelId = processSignal.classification.id;
+                if (processSignal.category?.hasRegulation) this.modelId = processSignal.category.id;
+            }
+        });
     }
 
     saveForm(childForm: FormGroup): void {
@@ -97,7 +97,7 @@ export class RegistrationComponent {
             ...this.accommodationComponent.toArray().flatMap((c) => c.getFormErrors()),
             ...this.communityOperationComponent.toArray().flatMap((c) => c.getFormErrors()),
             ...this.touristTransportCompanyCtcComponent.toArray().flatMap((c) => c.getFormErrors()),
-            ...this.regulationComponent.toArray().flatMap((c) => c.getFormErrors()),
+            ...this.regulationComponent.toArray().flatMap((c) => c.getFormErrors())
         ];
 
         if (errors.length > 0) {
