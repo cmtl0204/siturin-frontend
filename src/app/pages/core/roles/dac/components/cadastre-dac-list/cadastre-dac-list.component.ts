@@ -17,8 +17,7 @@ export class CadastreDacListComponent implements OnInit {
     private readonly coreService = inject(CoreService);
 
     items: any[] = [];
-    pagination: PaginationInterface = this.coreService.pagination;
-    currentPage: number = 1;
+    pagination!: PaginationInterface;
     currentSearch: string = '';
 
     cols: ColInterface[] = [
@@ -34,23 +33,22 @@ export class CadastreDacListComponent implements OnInit {
         this.loadCadastres();
     }
 
-    loadCadastres() {
-        this.cadastreDacHttpService.getCadastres(this.pagination.limit || 3, this.currentPage, this.currentSearch).subscribe({
+    loadCadastres(page = 1) {
+        this.cadastreDacHttpService.getCadastres(page, this.currentSearch).subscribe({
             next: (response: any) => {
                 this.items = response.data;
                 this.pagination = response.pagination;
+                this.pagination.totalItems = 12;
             }
         });
     }
 
     onSearch(searchTerm: string) {
         this.currentSearch = searchTerm || '';
-        this.currentPage = 1;
         this.loadCadastres();
     }
 
     onPagination(page: number) {
-        this.currentPage = page;
-        this.loadCadastres();
+        this.loadCadastres(page);
     }
 }

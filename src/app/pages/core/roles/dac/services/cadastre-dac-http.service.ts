@@ -14,11 +14,12 @@ export class CadastreDacHttpService {
     private readonly _apiUrl = `${environment.API_URL}/core/dac/cadastres`;
     private readonly _customMessageService = inject(CustomMessageService);
 
-    getCadastres(limit: number = 3, page: number = 1, search: string = ''): Observable<HttpResponseInterface> {
-        const params = new HttpParams()
-            .set('limit', limit.toString())
-            .set('page', page.toString())
-            .set('search', search);
+    getCadastres(page: number = 1, search: string = ''): Observable<HttpResponseInterface> {
+        let params = new HttpParams().set('page', page.toString());
+
+        if (search) {
+            params = params.append('search', search);
+        }
 
         return this._httpClient.get<HttpResponseInterface>(this._apiUrl, { params }).pipe(
             map((response) => {
@@ -26,5 +27,4 @@ export class CadastreDacHttpService {
             })
         );
     }
-
 }

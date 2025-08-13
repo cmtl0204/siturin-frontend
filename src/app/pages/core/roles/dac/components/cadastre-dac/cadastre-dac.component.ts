@@ -3,9 +3,9 @@ import { CadastreDacListComponent } from '@/pages/core/roles/dac/components/cada
 import { CadastreFormComponent } from '@/pages/core/shared/components/cadastre-form/cadastre-form.component';
 
 @Component({
-    selector: 'app-cadastre',
+    selector: 'app-cadastre-dac',
     imports: [CadastreDacListComponent, CadastreFormComponent],
-    templateUrl: './cadastre.component.html',
-    styleUrl: './cadastre.component.scss'
+    templateUrl: './cadastre-dac.component.html',
+    styleUrl: './cadastre-dac.component.scss'
 })
-export class CadastreComponent {}
+export class CadastreDacComponent {}

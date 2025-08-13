@@ -60,6 +60,10 @@ export const MY_ROUTES = {
                 base: 'dashboard',
                 absolute: '/main/core/specialist/dashboard'
             },
+            cadastre: {
+                base: 'cadastres',
+                absolute: '/main/core/specialist/cadastres'
+            },
             project: {
                 base: 'projects',
                 absolute: '/main/core/dac/projects',
@@ -99,6 +103,10 @@ export const MY_ROUTES = {
             dashboard: {
                 base: 'dashboard',
                 absolute: '/main/core/gad/dashboard'
+            },
+            cadastre: {
+                base: 'cadastres',
+                absolute: '/main/core/gad/cadastres'
             },
             project: {
                 base: 'projects',
@@ -159,6 +167,10 @@ export const MY_ROUTES = {
             process: {
                 base: 'processes',
                 absolute: '/main/core/technician/processes'
+            },
+            cadastre: {
+                base: 'cadastres',
+                absolute: '/main/core/technician/cadastres'
             },
             program: {
                 base: 'programs',

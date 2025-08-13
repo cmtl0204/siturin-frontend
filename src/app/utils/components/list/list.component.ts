@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { LabelButtonActionEnum } from '@utils/enums';
 import { MenuItem, PrimeIcons } from 'primeng/api';
 import { format } from 'date-fns';
@@ -25,7 +25,7 @@ import { debounceTime } from 'rxjs';
     imports: [Button, ButtonActionComponent, Fluid, IconField, InputIcon, ReactiveFormsModule, TableModule, Tooltip, InputText, Paginator, DatePipe],
     standalone: true
 })
-export class ListComponent {
+export class ListComponent implements OnInit {
     @Input() items: any[] = [];
     @Input() cols: ColInterface[] = [];
     @Input() buttonActions: MenuItem[] = [];
@@ -47,10 +47,15 @@ export class ListComponent {
 
     constructor() {
         this.pagination = this.coreService.pagination;
+        console.log('constructor', this.pagination);
 
         this.currentYear = format(new Date(), 'yyyy');
 
         this.checkValueChanges();
+    }
+
+    ngOnInit() {
+        console.log('ngOnInit', this.pagination);
     }
 
     checkValueChanges() {

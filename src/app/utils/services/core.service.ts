@@ -44,7 +44,7 @@ export class CoreService {
     }
 
     get pagination(): PaginationInterface {
-        return { page: 0, limit: 10, totalItems: 0, firstItem: 1, lastPage: 1, lastItem: 1 };
+        return { page: 1, limit: 10, totalItems: 0, firstItem: 1, lastPage: 1, lastItem: 1 };
     }
 
     get serviceUnavailable() {

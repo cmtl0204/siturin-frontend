@@ -103,7 +103,7 @@ export class AppMenu implements OnInit {
             {
                 label: 'Catastro Turístico (GAD)',
                 icon: PrimeIcons.LIST_CHECK,
-                routerLink: [MY_ROUTES.corePages.gad.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.gad.cadastre.absolute]
             },
             {
                 label: 'Bitácora',
@@ -158,7 +158,7 @@ export class AppMenu implements OnInit {
             {
                 label: 'Catastro Turístico',
                 icon: PrimeIcons.LIST_CHECK,
-                routerLink: [MY_ROUTES.corePages.gad.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.technician.cadastre.absolute]
             },
             {
                 label: 'Bitácora',
@@ -188,7 +188,7 @@ export class AppMenu implements OnInit {
             {
                 label: 'Catastro Turístico',
                 icon: PrimeIcons.LIST_CHECK,
-                routerLink: [MY_ROUTES.corePages.gad.project.list.absolute]
+                routerLink: [MY_ROUTES.corePages.specialist.cadastre.absolute]
             },
             {
                 label: 'Bitácora',
