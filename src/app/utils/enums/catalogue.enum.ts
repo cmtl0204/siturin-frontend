@@ -20,8 +20,10 @@ export enum CatalogueTypeEnum {
     complementary_services_model = 'complementary_services_model',
     rooms_room_type = 'rooms_room_type',
     breach_causes = 'breach_causes',
-complementary_services_entity = 'complementary_services_entity',
+    complementary_services_entity = 'complementary_services_entity',
     activities_types_kitchens_continent = 'activities_types_kitchens_continent',
+    activities_type_establishments = 'activities_type_establishments',
+    activities_types_services_continent = 'activities_types_services_continent',
 }
 
 export enum CatalogueStateEnum {
@@ -89,78 +91,12 @@ export enum CatalogueCadastresStateEnum {
     reclassified = 'reclassified'
 }
 
-export enum CatalogueSchoolPeriodStateEnum {
-    OPEN = 'open',
-    CLOSE = 'close'
-}
-
-export enum CatalogueSchoolPeriodTypeEnum {
-    ORDINARY = 'ordinary',
-    EXTRAORDINARY = 'extraordinary',
-    ESPECIAL = 'especial'
-}
-
-export enum CatalogueSubjectRequirementTypeEnum {
-    PREREQUISITE = 'prerequisite',
-    CO_REQUISITE = 'co_requisite'
-}
-
-export enum CatalogueCareersModalityEnum {
-    ON_SITE = 'on-site',
-    SEMI_ON_SITE = 'semi-on-site',
-    DISTANCE = 'distance',
-    DUAL = 'dual',
-    ONLINE = 'online',
-    HYBRID = 'hybrid'
-}
-
-export enum CatalogueYesNoEnum {
-    YES = '1',
-    NO = '2'
-}
-
-export enum UsersIdentificationTypeStateEnum {
-    IDENTIFICATION = '1',
-    PASSPORT = '2'
-}
-
-export enum CatalogueMaritalStatusEnum {
-    SINGLE = 'single',
-    MARRIED = 'married',
-    WIDOWER = 'widower',
-    DIVORCED = 'divorced',
-    FREE_UNION = 'free_union'
-}
-
-export enum CatalogueEthnicOriginEnum {
-    INDIGENOUS = 'indigenous',
-    AFRO_ECUADORIAN = 'afro_ecuadorian',
-    MONTUBIO = 'montubio',
-    HALF_BLOOD = 'half_blood',
-    WHITE = 'white'
-}
-
-export enum CatalogueTypeSchoolEnum {
-    FISCAL = 'fiscal',
-    FISCOMISIONAL = 'fiscomisional',
-    PARTICULAR = 'particular',
-    MUNICIPAL = 'municipal'
-}
-
-export enum CatalogueStudentLiveEnum {
-    ALONE = 'alone',
-    BOTH_PARENTS = 'both_parents',
-    MOTHER = 'mother',
-    FATHER = 'father',
-    SPOUSE = 'spouse',
-    GRANDPARENTS = 'grandparents',
-    OTHER = 'other'
-}
-
-export enum CatalogueEconomicContributionEnum {
-    PARENTS = 'parents',
-    GRAND_PARENTS = 'grand_parents',
-    FAMILY = 'family',
-    OWN_SALARY = 'own_salary',
-    OTHER = 'other'
+export enum CatalogueProcessFoodDrinksClassificationEnum {
+    cafeteria = 'cafeteria',
+    bar = 'bar',
+    restaurante = 'restaurante',
+    discoteca = 'discoteca',
+    plazas_comida = 'plazas_comida',
+    establecimiento_movil = 'establecimiento_movil',
+    servicio_catering = 'servicio_catering'
 }

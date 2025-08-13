@@ -11,6 +11,8 @@ import { LabelDirective } from '@utils/directives/label.directive';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { CatalogueInterface } from '@utils/interfaces';
 import { CommonModule } from '@angular/common';
+import { CatalogueActivitiesCodeEnum, CatalogueTypeEnum } from '@/utils/enums';
+import { CatalogueService } from '@/utils/services/catalogue.service';
 
 @Component({
     selector: 'app-physical-space',
@@ -28,26 +30,26 @@ export class PhysicalSpaceComponent implements OnInit {
     protected readonly PrimeIcons = PrimeIcons;
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
+    private readonly catalogueService = inject(CatalogueService);
+    
+    protected readonly CatalogueActivitiesCodeEnum = CatalogueActivitiesCodeEnum;
     protected form!: FormGroup;
 
-    protected localTypes: CatalogueInterface[] = [
-        { name: 'Arrendado', code: '1' },
-        { name: 'Cedido', code: '2' },
-        { name: 'Propio', code: '3' }
-    ];
+    protected localTypes: CatalogueInterface[] = [];
 
     constructor() {
         this.buildForm();
     }
 
-    ngOnInit() {
-        this.loadData();
+    async ngOnInit() {
+        await this.loadCatalogues();
+        await this.loadData();
     }
 
     buildForm() {
         this.form = this.formBuilder.group({
             localType: [null, [Validators.required]],
-            landUse: [false, [Validators.requiredTrue]]
+            hasLandUse: [false, [Validators.requiredTrue]]
         });
 
         this.watchFormChanges();
@@ -65,7 +67,7 @@ export class PhysicalSpaceComponent implements OnInit {
         const errors: string[] = [];
 
         if (this.localTypeField.invalid) errors.push('Su local es');
-        if (this.landUseField.invalid) errors.push('Al momento de la inspección se presentará el Certificado de Informe de compatibilidad de uso de suelo');
+        if (this.hasLandUseField.invalid) errors.push('Al momento de la inspección se presentará el Certificado de Informe de compatibilidad de uso de suelo');
 
         if (errors.length > 0) {
             this.form.markAllAsTouched();
@@ -75,13 +77,17 @@ export class PhysicalSpaceComponent implements OnInit {
         return [];
     }
 
-    loadData() {}
+    async loadData() {}
+
+    async loadCatalogues() {
+        this.localTypes = await this.catalogueService.findByType(CatalogueTypeEnum.processes_local_type);            
+    }
 
     get localTypeField(): AbstractControl {
         return this.form.controls['localType'];
     }
 
-    get landUseField(): AbstractControl {
-        return this.form.controls['landUse'];
+    get hasLandUseField(): AbstractControl {
+        return this.form.controls['hasLandUse'];
     }
 }

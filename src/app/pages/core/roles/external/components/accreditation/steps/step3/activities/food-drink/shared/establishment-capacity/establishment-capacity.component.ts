@@ -11,6 +11,8 @@ import { Divider } from 'primeng/divider';
 import { InputNumber } from 'primeng/inputnumber';
 import { CommonModule } from '@angular/common';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { CatalogueActivitiesCodeEnum, CatalogueTypeEnum } from '@/utils/enums';
+import { CatalogueService } from '@/utils/services/catalogue.service';
 
 @Component({
     selector: 'app-establishment-capacity',
@@ -28,14 +30,13 @@ export class EstablishmentCapacityComponent implements OnInit {
     protected readonly PrimeIcons = PrimeIcons;
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
+    private readonly catalogueService = inject(CatalogueService);
+        
+    protected readonly CatalogueActivitiesCodeEnum = CatalogueActivitiesCodeEnum;
 
     protected form!: FormGroup;
 
-    protected typeEstablishments: CatalogueInterface[] = [
-        { name: 'Cadena', id: '1' },
-        { name: 'Franquicia', id: '2' },
-        { name: 'Ninguno', id: '3' }
-    ];
+    protected typeEstablishments: CatalogueInterface[] = [];
 
     constructor() {
         this.buildForm();
@@ -51,10 +52,8 @@ export class EstablishmentCapacityComponent implements OnInit {
 
     buildForm() {
         this.form = this.formBuilder.group({
-            tables: [null, [Validators.required, Validators.min(1), Validators.max(100)]],
-            capacity: [null, [Validators.required, Validators.min(1), Validators.max(100)]],
-            serviceTypes: [[], [Validators.required]],
-            kitchenTypes: [[], [Validators.required]]
+            totalTables: [null, [Validators.required, Validators.min(1), Validators.max(100)]],
+            totalCapacities: [null, [Validators.required, Validators.min(1), Validators.max(100)]],
         });
 
         this.watchFormChanges();
@@ -73,8 +72,6 @@ export class EstablishmentCapacityComponent implements OnInit {
 
         if (this.tablesField.invalid) errors.push('Número de mesas');
         if (this.capacityField.invalid) errors.push('Capacidad en número de personas');
-        if (this.serviceTypesField.invalid) errors.push('Tipo de Servicio');
-        if (this.kitchenTypesField.invalid) errors.push('Tipo de Cocina');
         if (errors.length > 0) {
             this.form.markAllAsTouched();
             return errors;
@@ -83,21 +80,17 @@ export class EstablishmentCapacityComponent implements OnInit {
         return [];
     }
 
+    async loadCatalogues() {
+        this.typeEstablishments = await this.catalogueService.findByType(CatalogueTypeEnum.activities_type_establishments);
+    }
+
     loadData() {}
 
     get tablesField(): AbstractControl {
-        return this.form.controls['tables'];
+        return this.form.controls['totalTables'];
     }
 
     get capacityField(): AbstractControl {
-        return this.form.controls['capacity'];
-    }
-
-    get serviceTypesField(): AbstractControl {
-        return this.form.controls['serviceTypes'];
-    }
-
-    get kitchenTypesField(): AbstractControl {
-        return this.form.controls['kitchenTypes'];
+        return this.form.controls['totalCapacities'];
     }
 }

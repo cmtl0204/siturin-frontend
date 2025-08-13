@@ -1,25 +1,25 @@
 <p-fluid>
     <form [formGroup]="form" class="card flex flex-col gap-6 w-full">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-            <!-- typeEstablishment -->
+            <!-- establishmentType -->
             <div class="md:col-span-6 flex flex-col gap-2">
                 <label
-                    appLabel for="typeEstablishment"
+                    appLabel for="establishmentType"
                     label="Tipo de Establecimiento"
-                    [required]="typeEstablishmentField">
+                    [required]="establishmentTypeField">
                 </label>
 
                 <p-select
-                    [options]="typeEstablishments"
-                    formControlName="typeEstablishment"
+                    [options]="establishmentType"
+                    formControlName="establishmentType"
                     optionLabel="name"
                     [filter]="true" />
 
                 <p-message
                     appErrorMessage
-                    [errors]="typeEstablishmentField.errors"
-                    [touched]="typeEstablishmentField.touched"
-                    [dirty]="typeEstablishmentField.dirty" />
+                    [errors]="establishmentTypeField.errors"
+                    [touched]="establishmentTypeField.touched"
+                    [dirty]="establishmentTypeField.dirty" />
             </div>
 
             <!-- establishmentName -->
@@ -40,22 +40,22 @@
             }
 
             <!-- franchiseCertificate -->
-            @if (franchiseCertificateField.hasValidator(Validators.required)) {
+            @if (hasFranchiseGrantCertificateField.hasValidator(Validators.required)) {
                 <div class="md:col-span-12 flex flex-col gap-2">
-                    <label appLabel for="franchiseCertificate"
+                    <label appLabel for="hasFranchiseGrantCertificate"
                            label="Al momento de la inspección se presentará la certificación de concesión de la franquicia"
-                           [required]="franchiseCertificateField">
+                           [required]="hasFranchiseGrantCertificateField">
                     </label>
 
-                    <p-toggleswitch id="franchiseCertificate" formControlName="franchiseCertificate">
+                    <p-toggleswitch id="hasFranchiseGrantCertificate" formControlName="hasFranchiseGrantCertificate">
                         <ng-template #handle let-checked="checked">
                             <span class="!text-xs font-semibold">{{ checked ? 'Si' : 'No' }} </span>
                         </ng-template>
                     </p-toggleswitch>
 
-                    <p-message appErrorMessage [errors]="franchiseCertificateField.errors"
-                               [touched]="franchiseCertificateField.touched"
-                               [dirty]="franchiseCertificateField.dirty" />
+                    <p-message appErrorMessage [errors]="hasFranchiseGrantCertificateField.errors"
+                               [touched]="hasFranchiseGrantCertificateField.touched"
+                               [dirty]="hasFranchiseGrantCertificateField.dirty" />
                 </div>
             }
         </div>

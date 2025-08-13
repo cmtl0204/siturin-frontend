@@ -13,10 +13,15 @@
                 </div>
             </p-message>
             <div class="md:col-span-12 flex flex-col gap-2">
-                <label appLabel for="kitchenTypes" [required]="kitchenTypesField" label="Tipos de Cocina">
+                <label appLabel for="kitchenTypes" [required]="kitchenTypesField" label="Seleccione">
                 </label>
-                <p-multiselect [options]="kitchenTypes" formControlName="kitchenTypes" optionLabel="name" display="chip"
-                    placeholder="Seleccione una o varias" appendTo="body">
+                <p-multiselect 
+                [options]="kitchenTypes" 
+                formControlName="kitchenTypes" 
+                optionLabel="name" 
+                display="chip"
+                placeholder="Seleccione una o varias" 
+                appendTo="body">
                     <ng-template #selectedItem let-selectedItem>
                         @if (selectedItem) {
                         <div class="flex items-center gap-2">

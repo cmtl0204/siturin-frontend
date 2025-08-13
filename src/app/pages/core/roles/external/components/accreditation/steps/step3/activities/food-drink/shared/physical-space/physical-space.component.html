@@ -26,14 +26,14 @@
                 <div class="md:col-span-12 flex flex-col gap-2">
                     <label
                         appLabel
-                        for="landUse"
-                        [required]="landUseField"
+                        for="hasLandUse"
+                        [required]="hasLandUseField"
                         label="Al momento de la inspección se presentará el Certificado de Informe de compatibilidad de uso de suelo">
                     </label>
 
                     <p-toggleswitch
-                        id="landUse"
-                        formControlName="landUse"
+                        id="hasLandUse"
+                        formControlName="hasLandUse"
                     >
                         <ng-template #handle let-checked="checked">
                             <span class="!text-xs font-semibold">{{ checked ? 'Si' : 'No' }} </span>
@@ -42,9 +42,9 @@
 
                     <p-message
                         appErrorMessage
-                        [errors]="landUseField.errors"
-                        [touched]="landUseField.touched"
-                        [dirty]="landUseField.dirty" />
+                        [errors]="hasLandUseField.errors"
+                        [touched]="hasLandUseField.touched"
+                        [dirty]="hasLandUseField.dirty" />
                 </div>
             }
         </div>

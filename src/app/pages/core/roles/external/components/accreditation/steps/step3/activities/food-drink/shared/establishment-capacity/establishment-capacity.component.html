@@ -6,20 +6,20 @@
                 Capacidades del Establecimiento
             </div>
             <div class="md:col-span-6 flex flex-col gap-2">
-                <label appLabel for="tables" label="Mesas" [required]="tablesField">
+                <label appLabel for="totalTables" label="Mesas" [required]="tablesField">
                 </label>
 
-                <p-inputNumber id="tables" formControlName="tables" [showButtons]="true" inputId="minmax-buttons"
+                <p-inputNumber id="totalTables" formControlName="totalTables" [showButtons]="true" inputId="minmax-buttons"
                     [min]="0" [max]="100" />
 
                 <p-message appErrorMessage [errors]="tablesField.errors" [touched]="tablesField.touched"
                     [dirty]="tablesField.dirty" />
             </div>
             <div class="md:col-span-6 flex flex-col gap-2">
-                <label appLabel for="capacity" label="Capacidad en número de personas" [required]="capacityField">
+                <label appLabel for="totalCapacities" label="Capacidad en número de personas" [required]="capacityField">
                 </label>
 
-                <p-inputNumber id="capacity" formControlName="capacity" [showButtons]="true" inputId="minmax-buttons"
+                <p-inputNumber id="totalCapacities" formControlName="totalCapacities" [showButtons]="true" inputId="minmax-buttons"
                     [min]="0" [max]="100" />
 
                 <p-message appErrorMessage [errors]="capacityField.errors" [touched]="capacityField.touched"

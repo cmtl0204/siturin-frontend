@@ -10,6 +10,8 @@ import { CatalogueInterface } from '@utils/interfaces';
 import { MultiSelect } from 'primeng/multiselect';
 import { CommonModule } from '@angular/common';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { CatalogueService } from '@/utils/services/catalogue.service';
+import { CatalogueActivitiesCodeEnum, CatalogueTypeEnum } from '@/utils/enums';
 
 @Component({
     selector: 'app-establishment-services',
@@ -27,23 +29,20 @@ export class EstablishmentServicesComponent implements OnInit {
     protected readonly PrimeIcons = PrimeIcons;
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
+    private readonly catalogueService = inject(CatalogueService);
+    
+    protected readonly CatalogueActivitiesCodeEnum = CatalogueActivitiesCodeEnum;
 
     protected form!: FormGroup;
 
-    protected serviceTypes: CatalogueInterface[] = [
-        { name: 'Autoservicio', id: '1' },
-        { name: 'Bufet', id: '2' },
-        { name: 'Menú', id: '3' },
-        { name: 'Menú fijo', id: '4' },
-        { name: 'Servicio a Domicilio', id: '5' },
-        { name: 'Servicio al auto', id: '6' }
-    ];
+    protected serviceTypes: CatalogueInterface[] = [];
 
     constructor() {
         this.buildForm();
     }
 
     ngOnInit() {
+        this.loadCatalogues();
         this.loadData();
     }
 
@@ -78,6 +77,10 @@ export class EstablishmentServicesComponent implements OnInit {
         }
 
         return [];
+    }
+
+    async loadCatalogues() {
+        this.serviceTypes = await this.catalogueService.findByType(CatalogueTypeEnum.activities_types_services_continent);
     }
 
     loadData() {}

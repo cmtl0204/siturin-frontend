@@ -11,6 +11,8 @@ import { Divider } from 'primeng/divider';
 import { MultiSelect } from 'primeng/multiselect';
 import { CommonModule } from '@angular/common';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { CatalogueTypeEnum } from '@/utils/enums';
+import { CatalogueService } from '@/utils/services/catalogue.service';
 
 @Component({
     selector: 'app-kitchen',
@@ -28,36 +30,18 @@ export class KitchenComponent implements OnInit {
     protected readonly PrimeIcons = PrimeIcons;
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
+    private readonly catalogueService = inject(CatalogueService);
 
     protected form!: FormGroup;
 
-    protected kitchenTypes: CatalogueInterface[] = [
-        { name: 'Africana', id: '1' },
-        { name: 'Alemana', id: '2' },
-        { name: 'Americana', id: '3' },
-        { name: 'Argentina', id: '4' },
-        { name: 'Asiática', id: '5' },
-        { name: 'Australiana', id: '6' },
-        { name: 'Brasilera', id: '7' },
-        { name: 'Chilena', id: '8' },
-        { name: 'China', id: '9' },
-        { name: 'Cocina Andina', id: '10' },
-        { name: 'Cocina Patrimonial', id: '11' },
-        { name: 'Colombiana', id: '12' },
-        { name: 'Coreana', id: '13' },
-        { name: 'Costa Rica', id: '14' },
-        { name: 'Cubana', id: '15' },
-        { name: 'Dominicana', id: '16' },
-        { name: 'Ecuatoriana', id: '17' },
-        { name: 'Escandinava', id: '18' },
-        { name: 'Española', id: '19' }
-    ];
+    protected kitchenTypes: CatalogueInterface[] = [];
 
     constructor() {
         this.buildForm();
     }
 
     ngOnInit() {
+        this.loadCatalogues();
         this.loadData();
     }
 
@@ -73,7 +57,7 @@ export class KitchenComponent implements OnInit {
         this.watchFormChanges();
     }
 
-    watchFormChanges() {
+    watchFormChanges() {        
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
             if (this.form.valid) {
                 this.dataOut.emit(this.form);
@@ -82,8 +66,7 @@ export class KitchenComponent implements OnInit {
     }
 
     getFormErrors(): string[] {
-        const errors: string[] = [];
-
+        const errors: string[] = [];        
         if (this.kitchenTypesField.invalid) errors.push('Tipo de Cocina');
         if (errors.length > 0) {
             this.form.markAllAsTouched();
@@ -91,6 +74,10 @@ export class KitchenComponent implements OnInit {
         }
 
         return [];
+    }
+
+    async loadCatalogues() {
+        this.kitchenTypes = await this.catalogueService.findByType(CatalogueTypeEnum.activities_types_kitchens_continent);
     }
 
     loadData() {}

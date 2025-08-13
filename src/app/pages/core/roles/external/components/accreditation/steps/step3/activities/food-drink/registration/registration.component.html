@@ -1,13 +1,15 @@
 <app-physical-space (dataOut)="saveForm($event)"/>
 
-@if (shouldShowTypeEstablishment) {
-    <app-type-establishment (dataOut)="saveForm($event)"/>
-    <app-establishment-capacity (dataOut)="saveForm($event)"/>
-    <app-establishment-services (dataOut)="saveForm($event)"/>
-    <app-kitchen (dataOut)="saveForm($event)"/>
-    <app-regulation (dataOut)="saveForm($event)" [modelId]="modelId" />
+@if (showTypeEstablishment) {
+        <app-type-establishment (dataOut)="saveForm($event)"/>
+        <app-establishment-capacity (dataOut)="saveForm($event)"/>
+        @if (!hideFields) {
+            <app-establishment-services (dataOut)="saveForm($event)"/>
+            <app-kitchen (dataOut)="saveForm($event)"/>
+        }
+    
 }
-<!-- <app-adventure-modalities (dataOut)="saveForm($event)"/> -->
+<app-regulation (dataOut)="saveForm($event)" [modelId]="modelId" />
 
 <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
     <div class="md:col-start-4 md:col-span-6 flex flex-col gap-2">
