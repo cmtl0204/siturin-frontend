@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HeaderRegulation, Item } from '../../../../interfaces/item.interface';
-import { Panel } from 'primeng/panel';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { data, items } from './data';
 import { ClassificationInterface } from '@/pages/core/shared/interfaces';
@@ -11,7 +10,7 @@ import { LabelDirective } from '@utils/directives/label.directive';
 
 @Component({
     selector: 'app-food-drink-continent',
-    imports: [ReactiveFormsModule, Panel, ToggleSwitchModule, Message, LabelDirective],
+    imports: [ReactiveFormsModule, ToggleSwitchModule, Message, LabelDirective],
     templateUrl: './food-drink-continent.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

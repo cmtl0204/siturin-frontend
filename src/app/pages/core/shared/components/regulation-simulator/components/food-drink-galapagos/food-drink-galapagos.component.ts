@@ -1,18 +1,16 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HeaderRegulation, Item } from '../../../../interfaces/item.interface';
 import { data, items } from './data';
-import { Panel } from 'primeng/panel';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ClassificationInterface } from '@/pages/core/shared/interfaces';
 import { ContributorTypeEnum } from '../../enum';
 import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-switch.component';
-import { JsonPipe } from '@angular/common';
 import { Message } from 'primeng/message';
 
 @Component({
     selector: 'app-food-drink-galapagos',
-    imports: [ReactiveFormsModule, Panel, ToggleSwitchModule, ToggleSwitchComponent, JsonPipe, Message],
+    imports: [ReactiveFormsModule, ToggleSwitchModule, ToggleSwitchComponent, Message],
     templateUrl: './food-drink-galapagos.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

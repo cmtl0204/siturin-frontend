@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, signal } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HeaderRegulation, Item } from '../../../../interfaces/item.interface';
 import { ButtonModule } from 'primeng/button';
@@ -7,11 +7,10 @@ import { Panel } from 'primeng/panel';
 import { data, items } from './data';
 import { ClassificationInterface } from '@/pages/core/shared/interfaces';
 import { ContributorTypeEnum } from '../../enum';
-import { JsonPipe } from '@angular/common';
 
 @Component({
     selector: 'app-ctc',
-    imports: [ButtonModule, ReactiveFormsModule, ToggleSwitchModule, Panel, JsonPipe],
+    imports: [ButtonModule, ReactiveFormsModule, ToggleSwitchModule, Panel],
     templateUrl: './ctc.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
