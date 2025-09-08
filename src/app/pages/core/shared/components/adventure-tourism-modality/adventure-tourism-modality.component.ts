@@ -1,10 +1,9 @@
 import { Component, effect, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Fluid } from 'primeng/fluid';
 import { Select } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
-import { ToggleSwitch } from 'primeng/toggleswitch';
 import { TooltipModule } from 'primeng/tooltip';
 import { Message } from 'primeng/message';
 import { ConfirmationService, MenuItem, PrimeIcons } from 'primeng/api';
@@ -21,11 +20,28 @@ import { CatalogueTypeEnum } from '@utils/enums';
 import { CatalogueService } from '@utils/services/catalogue.service';
 import { AdventureTourismModalityInterface } from '@modules/core/shared/interfaces';
 import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
+import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-switch.component';
 
 @Component({
     selector: 'app-adventure-tourism-modality',
     standalone: true,
-    imports: [ReactiveFormsModule, CommonModule, Fluid, LabelDirective, Select, ButtonModule, ToggleSwitch, TooltipModule, Message, ErrorMessageDirective, ToastModule, ConfirmDialogModule, ListBasicComponent, DialogModule, RegulationComponent],
+    imports: [
+        ReactiveFormsModule,
+        CommonModule,
+        Fluid,
+        LabelDirective,
+        Select,
+        ButtonModule,
+        TooltipModule,
+        Message,
+        ErrorMessageDirective,
+        ToastModule,
+        ConfirmDialogModule,
+        ListBasicComponent,
+        DialogModule,
+        RegulationComponent,
+        ToggleSwitchComponent
+    ],
     templateUrl: './adventure-tourism-modality.component.html',
     styleUrls: ['./adventure-tourism-modality.component.scss']
 })
@@ -65,7 +81,7 @@ export class AdventureTourismModalityComponent implements OnInit {
             }
         });
     }
-    
+
     async ngOnInit() {
         this.buildForm();
         this.buildColumns();

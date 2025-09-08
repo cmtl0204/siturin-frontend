@@ -53,6 +53,7 @@ export const data: HeaderRegulation[] = [
         codeClassification: CatalogueAccommodationClassificationsCodeEnum.residential_properties
     }
 ];
+
 export const items: Item[] = [
     {
         label: 'Al momento de la inspección presentará el Registro Único de Contribuyentes (RUC) o número de Régimen Simplificado para Emprendedores y Negocios Populares (RIMPE), u otro que determine la Autoridad Tributaria.',
@@ -69,5 +70,5 @@ export const items: Item[] = [
     {
         label: 'Al momento de la inspección presentará el Nombramiento vigente del o los representantes legales, debidamente inscrito ante la autoridad correspondiente.',
         person: ContributorTypeEnum.juridical_person
-    },
+    }
 ];

@@ -11,32 +11,32 @@ export class CatalogueService {
     private readonly _customMessageService = inject(CustomMessageService);
     private readonly coreSessionStorageService = inject(CoreSessionStorageService);
 
-    async findByType(type: string): Promise<CatalogueInterface[]> {
-        let catalogues: CatalogueInterface[] = [];
-
-        if (sessionStorage.getItem(CoreEnum.catalogues)) {
-            catalogues = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.catalogues);
-            catalogues = Object.values(catalogues);
-            catalogues = catalogues.filter((catalogue) => {
-                return catalogue.type === type;
-            });
+    private async getCatalogues(): Promise<CatalogueInterface[]> {
+        if (!sessionStorage.getItem(CoreEnum.catalogues)) {
+            return [];
         }
 
-        return catalogues;
+        const raw = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.catalogues);
+
+        return Object.values(raw) as CatalogueInterface[];
+    }
+
+    async findByType(type: string): Promise<CatalogueInterface[]> {
+        const catalogues = await this.getCatalogues();
+
+        return catalogues
+            .filter(c => c.type === type)
+            .map(c => ({
+                id: c.id,
+                code: c.code,
+                name: c.name,
+                enabled: c.enabled,
+            }));
     }
 
     async findByCode(code: string, type: string): Promise<CatalogueInterface | undefined> {
-        let catalogues: CatalogueInterface[] = [];
-        let catalogue!: CatalogueInterface | undefined;
+        const catalogues = await this.getCatalogues();
 
-        if (sessionStorage.getItem(CoreEnum.catalogues)) {
-            catalogues = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.catalogues);
-            catalogues = Object.values(catalogues);
-            catalogue = catalogues.find((catalogue) => {
-                return catalogue.code === code && catalogue.type === type;
-            });
-        }
-
-        return catalogue;
+        return catalogues.find(c => c.code === code && c.type === type);
     }
 }

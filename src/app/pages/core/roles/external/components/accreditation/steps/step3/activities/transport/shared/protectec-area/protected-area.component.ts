@@ -1,24 +1,24 @@
-import { Component, OnInit, Output, EventEmitter, inject } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ToggleSwitch } from 'primeng/toggleswitch';
 import { Message } from 'primeng/message';
 import { Fluid } from 'primeng/fluid';
 import { LabelDirective } from '@utils/directives/label.directive';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { CommonModule } from '@angular/common';
+import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-switch.component';
 
 @Component({
-    selector: 'app-aprotectec',
+    selector: 'app-protected-area',
     standalone: true,
-    imports: [Fluid, ReactiveFormsModule, ToggleSwitch, Message, LabelDirective, ErrorMessageDirective, CommonModule],
-    templateUrl: './aprotectec.component.html',
-    styleUrl: './aprotectec.component.scss'
+    imports: [Fluid, ReactiveFormsModule, Message, LabelDirective, ErrorMessageDirective, CommonModule, ToggleSwitchComponent],
+    templateUrl: './protected-area.component.html',
+    styleUrl: './protected-area.component.scss'
 })
-export class AprotectecComponent implements OnInit {
+export class ProtectedAreaComponent implements OnInit {
     protected readonly formBuilder = inject(FormBuilder);
     protected form!: FormGroup;
 
-    @Output() dataOut = new EventEmitter<FormGroup>(); // emisor para el padre
+    @Output() dataOut = new EventEmitter<FormGroup>();
 
     constructor() {
         this.buildForm();
@@ -44,6 +44,12 @@ export class AprotectecComponent implements OnInit {
     }
 
     watchFormChanges(): void {
+        this.form.valueChanges.subscribe(() => {
+            if (this.form.valid) {
+                this.dataOut.emit(this.form);
+            }
+        });
+
         this.isProtectedAreaField.valueChanges.subscribe((value: boolean) => {
             if (value) {
                 this.hasProtectedAreaContractField.setValidators([Validators.required]);
@@ -51,13 +57,8 @@ export class AprotectecComponent implements OnInit {
                 this.hasProtectedAreaContractField.clearValidators();
                 this.hasProtectedAreaContractField.setValue(false);
             }
-            this.hasProtectedAreaContractField.updateValueAndValidity();
-        });
 
-        this.form.valueChanges.subscribe(() => {
-            if (this.form.valid) {
-                this.dataOut.emit(this.form);
-            }
+            this.hasProtectedAreaContractField.updateValueAndValidity();
         });
     }
 
@@ -74,9 +75,8 @@ export class AprotectecComponent implements OnInit {
 
         if (errors.length > 0) {
             this.form.markAllAsTouched();
-            return errors;
         }
 
-        return [];
+        return errors;
     }
 }

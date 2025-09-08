@@ -1,107 +1,98 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
+import { Component, EventEmitter, inject, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Fluid } from 'primeng/fluid';
 import { PrimeIcons } from 'primeng/api';
 import { MessageModule } from 'primeng/message';
 import { CustomMessageService } from '@utils/services/custom-message.service';
-import { Panel } from 'primeng/panel';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { LabelDirective } from '@utils/directives/label.directive';
+import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-switch.component';
+import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 
 @Component({
-  selector: 'app-requirements',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    Fluid,
-    MessageModule,
-    Panel,
-    ToggleSwitchModule
-  ],
-  templateUrl: './requirements.component.html',
-  styleUrl: './requirements.component.scss'
+    selector: 'app-requirements',
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule, Fluid, MessageModule, ToggleSwitchModule, LabelDirective, ToggleSwitchComponent, ErrorMessageDirective],
+    templateUrl: './requirements.component.html',
+    styleUrl: './requirements.component.scss'
 })
 export class RequirementsComponent implements OnInit {
-  @Input() data!: string | undefined;
-  @Output() dataOut = new EventEmitter<FormGroup>();
-  @Output() fieldErrorsOut = new EventEmitter<string[]>();
+    @Input() data!: string | undefined;
+    @Output() dataOut = new EventEmitter<FormGroup>();
+    @Output() fieldErrorsOut = new EventEmitter<string[]>();
 
-  protected readonly PrimeIcons = PrimeIcons;
-  private readonly formBuilder = inject(FormBuilder);
-  protected readonly customMessageService = inject(CustomMessageService);
+    protected readonly PrimeIcons = PrimeIcons;
+    private readonly formBuilder = inject(FormBuilder);
+    protected readonly customMessageService = inject(CustomMessageService);
 
-  protected requirementsForm!: FormGroup;
+    protected requirementsForm!: FormGroup;
 
-  constructor() {
-    this.buildForm();
-  }
+    constructor() {
+        this.buildForm();
+    }
 
-  ngOnInit(): void {
-    this.loadData();
-  }
+    ngOnInit(): void {
+        this.loadData();
+    }
 
-  buildForm(): void {
-    this.requirementsForm = this.formBuilder.group({
-      hasPropertyRegistrationCertificate: [false, Validators.requiredTrue],
-      hasTechnicalReport: [false, Validators.requiredTrue],
-      hasStatute: [false, Validators.requiredTrue]
-    });
+    buildForm(): void {
+        this.requirementsForm = this.formBuilder.group({
+            hasPropertyRegistrationCertificate: [false, Validators.requiredTrue],
+            hasTechnicalReport: [false, Validators.requiredTrue],
+            hasStatute: [false, Validators.requiredTrue]
+        });
 
-    this.watchFormChanges();
-  }
+        this.watchFormChanges();
+    }
 
+    watchFormChanges(): void {
+        this.requirementsForm.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(() => {
+            if (this.requirementsForm.valid) {
+                this.dataOut.emit(this.requirementsForm);
+            }
+        });
+    }
 
-  watchFormChanges(): void {
-    this.requirementsForm.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe(() => {
-        if (this.requirementsForm.valid) {
-          this.dataOut.emit(this.requirementsForm);
+    getFormErrors(): string[] {
+        const errors: string[] = [];
+
+        if (!this.requirementsForm.get('hasPropertyRegistrationCertificate')?.value) {
+            errors.push('Debe marcar como disponible el documento: "Certificado de propiedad"');
         }
-      });
-  }
+        if (!this.requirementsForm.get('hasTechnicalReport')?.value) {
+            errors.push('Debe marcar como disponible el documento: "Informe técnico"');
+        }
+        if (!this.requirementsForm.get('hasStatute')?.value) {
+            errors.push('Debe marcar como disponible el documento: "Estatuto"');
+        }
 
-  getFormErrors(): string[] {
-    const errors: string[] = [];
+        if (errors.length > 0) {
+            this.requirementsForm.markAllAsTouched();
+        }
 
-    if (!this.requirementsForm.get('hasPropertyRegistrationCertificate')?.value) {
-      errors.push('Debe marcar como disponible el documento: "Certificado de propiedad"');
-    }
-    if (!this.requirementsForm.get('hasTechnicalReport')?.value) {
-      errors.push('Debe marcar como disponible el documento: "Informe técnico"');
-    }
-    if (!this.requirementsForm.get('hasStatute')?.value) {
-      errors.push('Debe marcar como disponible el documento: "Estatuto"');
+        return errors;
     }
 
-    if (errors.length > 0) {
-      this.requirementsForm.markAllAsTouched();
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['data'] && changes['data'].currentValue) {
+            this.loadData();
+        }
     }
 
-    return errors;
-  }
+    loadData(): void {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['data'] && changes['data'].currentValue) {
-      this.loadData();
+    // (Opcional) Getters por campo
+    get hasPropertyRegistrationCertificateField(): AbstractControl {
+        return this.requirementsForm.get('hasPropertyRegistrationCertificate')!;
     }
-  }
 
-  loadData(): void{
-  }
+    get hasTechnicalReportField(): AbstractControl {
+        return this.requirementsForm.get('hasTechnicalReport')!;
+    }
 
-  // (Opcional) Getters por campo
-  get hasPropertyRegistrationCertificateField(): AbstractControl {
-    return this.requirementsForm.get('hasPropertyRegistrationCertificate')!;
-  }
-
-  get hasTechnicalReportField(): AbstractControl {
-    return this.requirementsForm.get('hasTechnicalReport')!;
-  }
-
-  get hasStatuteField(): AbstractControl {
-    return this.requirementsForm.get('hasStatute')!;
-  }
+    get hasStatuteField(): AbstractControl {
+        return this.requirementsForm.get('hasStatute')!;
+    }
 }

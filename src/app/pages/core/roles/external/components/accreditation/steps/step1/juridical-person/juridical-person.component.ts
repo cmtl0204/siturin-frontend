@@ -3,17 +3,17 @@ import { Fluid } from 'primeng/fluid';
 import { LabelDirective } from '@utils/directives/label.directive';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Select } from 'primeng/select';
-import { ToggleSwitch } from 'primeng/toggleswitch';
 import { CustomMessageService } from '@utils/services';
 import { CatalogueInterface } from '@utils/interfaces';
 import { Message } from 'primeng/message';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { CatalogueService } from '@utils/services/catalogue.service';
 import { CatalogueTypeEnum } from '@utils/enums';
+import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-switch.component';
 
 @Component({
     selector: 'app-juridical-person',
-    imports: [Fluid, LabelDirective, ReactiveFormsModule, Select, ToggleSwitch, Message, ErrorMessageDirective],
+    imports: [Fluid, LabelDirective, ReactiveFormsModule, Select, Message, ErrorMessageDirective, ToggleSwitchComponent],
     templateUrl: './juridical-person.component.html',
     styleUrl: './juridical-person.component.scss'
 })

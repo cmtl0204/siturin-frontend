@@ -1,66 +1,68 @@
 <p-fluid>
-  <form [formGroup]="requirementsForm" class="card flex flex-col gap-6 w-full">
-    <p-panel header="Requisitos documentales requeridos al momento de la inspección">
-      <p-message severity="info">
-        <div>
-          <h2 class="m-0 text-lg font-semibold text-blue-800">Importante:</h2>
-          <p class="m-0 text-base text-blue-700">
-            Declaro la disponibilidad física de los documentos que validan el cumplimiento de los siguientes requisitos.
-          </p>
+    <form [formGroup]="requirementsForm" class="card flex flex-col">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <h2>Requisitos documentales requeridos al momento de la inspección</h2>
+
+                <p-message severity="info">
+                    <h2 class="m-0 text-lg font-semibold">Importante:</h2>
+                    <p class="m-0 text-base text-blue-700">
+                        Declaro la disponibilidad física de los documentos que validan el cumplimiento de los siguientes
+                        requisitos.
+                    </p>
+                </p-message>
+            </div>
         </div>
-      </p-message>
 
-      <div class="flex flex-col gap-4 pt-4">
-        <div class="flex flex-col gap-1" [formGroup]="requirementsForm">
-          <!-- Certificado de propiedad -->
-          <div class="flex items-center gap-3">
-            <p-toggleswitch formControlName="hasPropertyRegistrationCertificate">
-              <ng-template #handle let-checked="checked">
-                <span class="text-xs font-semibold">{{ checked ? 'SÍ' : 'NO' }}</span>
-              </ng-template>
-            </p-toggleswitch>
-            <label class="text-sm font-medium">
-              Certificado actualizado del registro de la propiedad en el que se determina la titularidad del predio a favor de la comunidad u organización comunitaria.
-              <span class="text-red-500">*</span>
-            </label>
-          </div><br>
-          @if (hasPropertyRegistrationCertificateField.invalid && hasPropertyRegistrationCertificateField.touched) {
-            <p-message severity="error" text="Campo obligatorio." />
-          }
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
 
-          <!-- Informe técnico -->
-          <div class="flex items-center gap-3">
-            <p-toggleswitch formControlName="hasTechnicalReport">
-              <ng-template #handle let-checked="checked">
-                <span class="text-xs font-semibold">{{ checked ? 'SÍ' : 'NO' }}</span>
-              </ng-template>
-            </p-toggleswitch>
-            <label class="text-sm font-medium">
-              Informe técnico que justifique la calidad comunitaria de la organización que solicita el registro, expedido por la Secretaría de Gestión y Desarrollo de Pueblos y Nacionalidades, o la entidad que ejerza dichas atribuciones.
-              <span class="text-red-500">*</span>
-            </label>
-          </div><br>
-          @if (hasTechnicalReportField.invalid && hasTechnicalReportField.touched) {
-            <p-message severity="error" text="Campo obligatorio." />
-          }
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <label
+                    appLabel
+                    [required]="hasPropertyRegistrationCertificateField"
+                    label="Certificado actualizado del registro de la propiedad en el que se determina la titularidad del predio a favor de la comunidad u organización comunitaria">
+                </label>
 
-          <!-- Estatuto -->
-           <div>
-              <p-toggleswitch id="estatuto" formControlName="hasStatute">
-                <ng-template #handle let-checked="checked">
-                  <span class="text-xs font-semibold">{{ checked ? 'SÍ' : 'NO' }}</span>
-                </ng-template>
-              </p-toggleswitch>
-              <label class="text-sm font-medium">
-                Copia certificada del Estatuto de la comunidad, en la que debe indicar que sí podrán realizar la actividad de turismo comunitario.
-                <span class="text-red-500">*</span>
-              </label>
-          </div>
-          @if (hasStatuteField.invalid && hasStatuteField.touched) {
-            <p-message severity="error" text="Campo obligatorio." />
-          }
+                <app-toggle-switch id="hasPropertyRegistrationCertificate" formControlName="hasPropertyRegistrationCertificate"/>
+
+                <p-message
+                appErrorMessage
+                [errors]="hasPropertyRegistrationCertificateField.errors"
+                [touched]="hasPropertyRegistrationCertificateField.touched"
+                [dirty]="hasPropertyRegistrationCertificateField.dirty"/>
+            </div>
+
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <label
+                    appLabel
+                    [required]="hasTechnicalReportField"
+                    label="Informe técnico que justifique la calidad comunitaria de la organización que solicita el
+                    registro, expedido por la Secretaría de Gestión y Desarrollo de Pueblos y Nacionalidades, o
+                    la entidad que ejerza dichas atribuciones">
+                </label>
+
+                <app-toggle-switch id="hasTechnicalReport" formControlName="hasTechnicalReport"/>
+
+                <p-message
+                    appErrorMessage
+                    [errors]="hasTechnicalReportField.errors"
+                    [touched]="hasTechnicalReportField.touched"
+                    [dirty]="hasTechnicalReportField.dirty"/>
+            </div>
+
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <label appLabel [required]="hasStatuteField" label="Copia certificada del Estatuto de la comunidad, en la que debe indicar que sí podrán
+                    realizar la actividad de turismo comunitario">
+                </label>
+
+                <app-toggle-switch id="hasStatute" formControlName="hasStatute"/>
+
+                <p-message
+                    appErrorMessage
+                    [errors]="hasStatuteField.errors"
+                    [touched]="hasStatuteField.touched"
+                    [dirty]="hasStatuteField.dirty"/>
+            </div>
         </div>
-      </div>
-    </p-panel>
-  </form>
+    </form>
 </p-fluid>

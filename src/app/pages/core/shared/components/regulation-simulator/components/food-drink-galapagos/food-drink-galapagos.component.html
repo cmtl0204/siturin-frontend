@@ -1,9 +1,7 @@
 @if (this.classification()) {
-    <div class="flex flex-col gap-4">
-        <p-panel>
-            <p class="text-md mb-2">{{ classification()?.definition }}</p>
-        </p-panel>
-    </div>
+    <p-message severity="info">
+        {{ classification()?.definition }}
+    </p-message>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <hr />
         <div formArrayName="items">
@@ -14,13 +12,8 @@
                         <span class="text-red-500 ml-1">*</span>
                     </label>
 
-                    <p-toggleswitch formControlName="isCompliant">
-                        <ng-template #handle let-checked="checked">
-                            <span class="!text-xs font-bold">{{ checked ? 'SI' : 'NO' }}</span>
-                        </ng-template>
-                    </p-toggleswitch>
+                    <app-toggle-switch id="isCompliant" formControlName="isCompliant" />
                 </div>
-                <hr />
             }
         </div>
     </form>

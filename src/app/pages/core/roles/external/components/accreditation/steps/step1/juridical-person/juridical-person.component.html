@@ -34,11 +34,7 @@
                     [required]="hasPersonDesignationField">
                 </label>
 
-                <p-toggleswitch id="hasPersonDesignation" formControlName="hasPersonDesignation">
-                    <ng-template #handle let-checked="checked">
-                        <span class="!text-xs font-semibold">{{ checked ? 'SÍ' : 'NO' }}</span>
-                    </ng-template>
-                </p-toggleswitch>
+                <app-toggle-switch id="hasPersonDesignation" formControlName="hasPersonDesignation"/>
 
                 <p-message
                     appErrorMessage
@@ -56,11 +52,7 @@
                     [required]="hasTouristActivityDocumentField">
                 </label>
 
-                <p-toggleswitch id="hasTouristActivityDocument" formControlName="hasTouristActivityDocument">
-                    <ng-template #handle let-checked="checked">
-                        <span class="!text-xs font-semibold">{{ checked ? 'SÍ' : 'NO' }}</span>
-                    </ng-template>
-                </p-toggleswitch>
+                <app-toggle-switch id="hasTouristActivityDocument" formControlName="hasTouristActivityDocument"/>
 
                 <p-message
                     appErrorMessage

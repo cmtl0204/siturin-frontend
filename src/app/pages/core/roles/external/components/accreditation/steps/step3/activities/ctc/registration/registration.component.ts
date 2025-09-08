@@ -81,6 +81,7 @@ export class RegistrationComponent {
             ...this.mainForm.value,
             ...sessionData
         };
+
         console.log(payload);
         this.ctcHttpService.createRegistration(payload).subscribe({
             next: () => {

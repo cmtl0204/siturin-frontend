@@ -6,26 +6,31 @@ import { Panel } from 'primeng/panel';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ClassificationInterface } from '@/pages/core/shared/interfaces';
 import { ContributorTypeEnum } from '../../enum';
+import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-switch.component';
+import { JsonPipe } from '@angular/common';
+import { Message } from 'primeng/message';
 
 @Component({
     selector: 'app-food-drink-galapagos',
-    imports: [ReactiveFormsModule, Panel, ToggleSwitchModule],
+    imports: [ReactiveFormsModule, Panel, ToggleSwitchModule, ToggleSwitchComponent, JsonPipe, Message],
     templateUrl: './food-drink-galapagos.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FoodDrinkGalapagosComponent {
     private readonly fb = inject(FormBuilder);
     public contributorType = input.required<ContributorTypeEnum>();
-    public classificationInput = input<ClassificationInterface|null>();
+    public classificationInput = input<ClassificationInterface | null>();
     protected classification = signal<HeaderRegulation | null>(null);
     form!: FormGroup;
 
     buildForm = effect(() => {
+        console.log(this.classification());
         if (!this.classificationInput()) return;
 
         this.classification.set(data.find((item) => item.codeClassification === this.classificationInput()?.code) ?? null);
 
         const validatedItems = items.filter((item) => item.person === this.contributorType() || item.person === ContributorTypeEnum.both);
+
         this.form = this.fb.group({
             items: this.fb.array(validatedItems.map((item) => this.createItemGroup(item)))
         });
@@ -37,6 +42,7 @@ export class FoodDrinkGalapagosComponent {
             isCompliant: [false]
         });
     }
+
     onSubmit() {}
 
     get itemsField(): FormArray {

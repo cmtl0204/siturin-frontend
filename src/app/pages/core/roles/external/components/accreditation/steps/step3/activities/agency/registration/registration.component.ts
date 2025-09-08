@@ -11,7 +11,6 @@ import { Fluid } from 'primeng/fluid';
 import { SalesRepresentativeComponent } from '@/pages/core/shared/components/sales-representative/sales-representative.component';
 import { TouristTransportCompanyComponent } from '@/pages/core/shared/components/tourist-transport-company/tourist-transport-company.component';
 import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
-import { ClassificationInterface } from '@/pages/core/shared/interfaces';
 
 @Component({
     selector: 'app-registration',

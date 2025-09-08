@@ -4,6 +4,7 @@ import { AppLayoutMain } from '@layout/component/app.layout-main';
 import { AppLayoutBlank } from '@layout/component/app.layout-blank';
 import { AppLayoutAuth } from '@layout/component/app.layout-auth';
 import { tokenGuard } from '@/guards/token.guard';
+import { RegulationSimulatorComponent } from '@/pages/core/shared/components/regulation-simulator/regulation-simulator.component';
 
 export const appRoutes: Routes = [
     {
@@ -12,7 +13,7 @@ export const appRoutes: Routes = [
         canActivate: [tokenGuard],
         children: [
             { path: MY_ROUTES.dashboards.base, loadChildren: () => import('./app/pages/dashboards/dashboard.routes') },
-            { path: MY_ROUTES.corePages.base, loadChildren: () => import('./app/pages/core/core.routes') },
+            { path: MY_ROUTES.corePages.base, loadChildren: () => import('./app/pages/core/core.routes') }
         ]
     },
 
@@ -26,6 +27,12 @@ export const appRoutes: Routes = [
         path: MY_ROUTES.authPages.base,
         component: AppLayoutAuth,
         children: [{ path: '', loadChildren: () => import('./app/pages/auth/auth.routes') }]
+    },
+
+    {
+        path: MY_ROUTES.guessPages.base,
+        component: AppLayoutBlank,
+        children: [{ path: MY_ROUTES.guessPages.simulator.base, component: RegulationSimulatorComponent }]
     },
 
     { path: '', redirectTo: '/main/dashboards', pathMatch: 'full' },

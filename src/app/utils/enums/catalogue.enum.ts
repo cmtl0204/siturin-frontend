@@ -29,7 +29,7 @@ export enum CatalogueTypeEnum {
     process_food_drinks_establishment_type = 'process_food_drinks_establishment_type',
     service_types_continent = 'service_types_continent',
     transporte_tipo_vehiculos = 'transporte_tipo_vehiculos',
-    aerolinea_tipos = 'aerolinea_tipos',
+    process_transport_airline_type = 'process_transport_airline_type',
 }
 
 export enum CatalogueStateEnum {

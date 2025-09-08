@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, effect, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { DividerModule } from 'primeng/divider';
 import { RegulationSimulatorFormComponent } from './components/regulation-simulator-form/regulation-simulator-form.component';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { FormGroup, FormsModule } from '@angular/forms';
-import { FormSubmission } from '../../interfaces/regulations.model';
 import { CtcComponent } from './components/ctc/ctc.component';
 import { Message } from 'primeng/message';
 import { AccommodationContinentComponent } from './components/accommodation-continent/accommodation.component';
@@ -17,6 +16,7 @@ import { EventComponent } from './components/event/event.component';
 import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
 import { CatalogueInterface } from '@/utils/interfaces';
 import { ActivityInterface, CategoryInterface, ClassificationInterface } from '../../interfaces';
+import { Fluid } from 'primeng/fluid';
 
 @Component({
     selector: 'app-regulation-simulator',
@@ -34,36 +34,46 @@ import { ActivityInterface, CategoryInterface, ClassificationInterface } from '.
         ParkComponent,
         AccommodationContinentComponent,
         EventComponent,
-        RegulationComponent
+        RegulationComponent,
+        Fluid
     ],
     templateUrl: './regulation-simulator.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegulationSimulatorComponent {
+    protected geographicArea = signal<CatalogueInterface | null>(null);
     protected activity = signal<ActivityInterface | null>(null);
     protected classification = signal<ClassificationInterface | null>(null);
-    protected geographicZone = signal<CatalogueInterface | null>(null);
-    protected contributorType = signal<ContributorTypeEnum>(ContributorTypeEnum.natural_person);
     protected category = signal<CategoryInterface | null>(null);
-    protected catalogueActivitiesCodeEnum = CatalogueActivitiesCodeEnum;
+    protected contributorType = signal<ContributorTypeEnum>(ContributorTypeEnum.natural_person);
     protected modelId = signal<string | undefined>('');
+    protected catalogueActivitiesCodeEnum = CatalogueActivitiesCodeEnum;
 
-    isProtectedArea = false;
+    protected isProtectedArea = false;
+
     onRegulationSubmitted(event: FormGroup) {
         console.log(event);
     }
 
-    onFormValueChanges(event: any) {
+    watchFormChanges(event: any) {
         this.activity.set(event.activity);
+
         this.classification.set(event.classification);
-        if (this.classification() && this.classification()?.hasRegulation) {
-            this.modelId.set(this.classification()?.id);
-        }
-        this.geographicZone.set(event.geographicZone);
+
+        this.geographicArea.set(event.geographicZone);
+
         this.contributorType.set(event.contributorType);
+
         this.category.set(event.category);
-        if (this.category() && this.category()?.hasRegulation) {
+
+        if (this.classification()?.hasRegulation) {
+            this.modelId.set(this.classification()?.id);
+            return;
+        }
+
+        if (this.category()?.hasRegulation) {
             this.modelId.set(this.category()?.id);
+            return;
         }
     }
 }

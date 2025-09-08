@@ -15,13 +15,13 @@ import { CatalogueTypeEnum } from '@/utils/enums';
 import { CatalogueService } from '@/utils/services/catalogue.service';
 
 @Component({
-    selector: 'app-kitchen',
+    selector: 'app-establishment-kitchen',
     standalone: true,
     imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, Divider, MultiSelect, CommonModule],
-    templateUrl: './kitchen.component.html',
-    styleUrl: './kitchen.component.scss'
+    templateUrl: './establishment-kitchen.component.html',
+    styleUrl: './establishment-kitchen.component.scss'
 })
-export class KitchenComponent implements OnInit {
+export class EstablishmentKitchenComponent implements OnInit {
     @Input() data!: string | undefined;
     @Output() dataOut = new EventEmitter<FormGroup>();
     @Output() fieldErrorsOut = new EventEmitter<string[]>();
@@ -40,8 +40,8 @@ export class KitchenComponent implements OnInit {
         this.buildForm();
     }
 
-    ngOnInit() {
-        this.loadCatalogues();
+    async ngOnInit() {
+        await this.loadCatalogues();
         this.loadData();
     }
 
@@ -57,7 +57,7 @@ export class KitchenComponent implements OnInit {
         this.watchFormChanges();
     }
 
-    watchFormChanges() {        
+    watchFormChanges() {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
             if (this.form.valid) {
                 this.dataOut.emit(this.form);
@@ -66,14 +66,16 @@ export class KitchenComponent implements OnInit {
     }
 
     getFormErrors(): string[] {
-        const errors: string[] = [];        
+        const errors: string[] = [];
+
         if (this.kitchenTypesField.invalid) errors.push('Tipo de Cocina');
+
         if (errors.length > 0) {
             this.form.markAllAsTouched();
             return errors;
         }
 
-        return [];
+        return errors;
     }
 
     async loadCatalogues() {

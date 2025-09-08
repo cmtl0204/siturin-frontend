@@ -3,3 +3,7 @@
 @use './layout/layout.scss';
 @use 'primeicons/primeicons.css';
 @use './demo/demo.scss';
+.p-inputtext {
+    background-color: #f0f8ff; /* azul claro */
+    color: #000;              /* texto negro */
+}

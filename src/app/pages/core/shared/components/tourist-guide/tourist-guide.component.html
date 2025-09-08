@@ -24,11 +24,7 @@
                     label="Declaro que el establecimiento, al momento del envío de la solicitud, ha contratado Guías de Turismo">
                 </label>
 
-                <p-toggleswitch id="hasTouristGuide" formControlName="hasTouristGuide" >
-                    <ng-template #handle let-checked="checked">
-                        <span class="!text-xs font-semibold">{{ checked ? 'SÍ' : 'NO' }}</span>
-                    </ng-template>
-                </p-toggleswitch>
+                <app-toggle-switch id="hasTouristGuide" formControlName="hasTouristGuide"/>
 
                 <p-message
                     appErrorMessage

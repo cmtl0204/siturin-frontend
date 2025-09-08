@@ -6,10 +6,12 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { data, items } from './data';
 import { ClassificationInterface } from '@/pages/core/shared/interfaces';
 import { ContributorTypeEnum } from '../../enum';
+import { Message } from 'primeng/message';
+import { LabelDirective } from '@utils/directives/label.directive';
 
 @Component({
     selector: 'app-food-drink-continent',
-    imports: [ReactiveFormsModule, Panel, ToggleSwitchModule],
+    imports: [ReactiveFormsModule, Panel, ToggleSwitchModule, Message, LabelDirective],
     templateUrl: './food-drink-continent.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -26,6 +28,7 @@ export class FoodDrinkContinentComponent {
         this.classification.set(data.find((item) => item.codeClassification === this.classificationInput()?.code) ?? null);
 
         const validatedItems = items.filter((item) => item.person === this.contributorType() || item.person === ContributorTypeEnum.both);
+
         this.form = this.fb.group({
             items: this.fb.array(validatedItems.map((item) => this.createItemGroup(item)))
         });
@@ -37,6 +40,7 @@ export class FoodDrinkContinentComponent {
             isCompliant: [false]
         });
     }
+
     onSubmit() {}
 
     get itemsField(): FormArray {

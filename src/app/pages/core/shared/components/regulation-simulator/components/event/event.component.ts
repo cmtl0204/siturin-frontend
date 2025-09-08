@@ -15,20 +15,18 @@ import { ContributorTypeEnum } from '../../enum';
 })
 export class EventComponent {
     private readonly fb = inject(FormBuilder);
-    public classificationInput = input<ClassificationInterface|null>();
+    public classificationInput = input<ClassificationInterface | null>();
     public contributorType = input.required<ContributorTypeEnum>();
     protected classification = signal<HeaderRegulation | null>(null);
     form!: FormGroup;
 
     buildForm = effect(() => {
-        console.log('event component');
-
         if (!this.classificationInput()) return;
 
         this.classification.set(data.find((item) => item.codeClassification === this.classificationInput()?.code) ?? null);
-        console.log(this.contributorType());
 
         const validatedItems = items.filter((item) => item.person === this.contributorType() || item.person === ContributorTypeEnum.both);
+
         this.form = this.fb.group({
             items: this.fb.array(validatedItems.map((item) => this.createItemGroup(item)))
         });
@@ -40,6 +38,7 @@ export class EventComponent {
             isCompliant: [false]
         });
     }
+
     onSubmit() {}
 
     get itemsField(): FormArray {

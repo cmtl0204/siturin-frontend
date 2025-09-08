@@ -14,13 +14,13 @@ import { CatalogueService } from '@/utils/services/catalogue.service';
 import { CatalogueActivitiesCodeEnum, CatalogueTypeEnum } from '@/utils/enums';
 
 @Component({
-    selector: 'app-establishment-services',
+    selector: 'app-establishment-service',
     standalone: true,
     imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, MultiSelect, CommonModule],
-    templateUrl: './establishment-services.component.html',
-    styleUrl: './establishment-services.component.scss'
+    templateUrl: './establishment-service.component.html',
+    styleUrl: './establishment-service.component.scss'
 })
-export class EstablishmentServicesComponent implements OnInit {
+export class EstablishmentServiceComponent implements OnInit {
     @Input() data!: string | undefined;
     @Output() dataOut = new EventEmitter<FormGroup>();
     @Output() fieldErrorsOut = new EventEmitter<string[]>();
@@ -30,7 +30,7 @@ export class EstablishmentServicesComponent implements OnInit {
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
     private readonly catalogueService = inject(CatalogueService);
-    
+
     protected readonly CatalogueActivitiesCodeEnum = CatalogueActivitiesCodeEnum;
 
     protected form!: FormGroup;

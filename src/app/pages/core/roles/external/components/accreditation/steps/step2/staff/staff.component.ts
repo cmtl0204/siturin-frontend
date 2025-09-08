@@ -98,15 +98,15 @@ export class StaffComponent implements OnInit {
         if (errors.length > 0) {
             this.form.markAllAsTouched();
             this.totalStaffControl.markAsTouched();
-            return errors;
         }
 
-        return [];
+        return errors;
     }
 
     loadData() {
         if (this.dataIn()) {
             this.form.patchValue(this.dataIn());
+            this.totalStaffControl.patchValue(this.totalMenField.value + this.totalWomenField.value);
         }
     }
 

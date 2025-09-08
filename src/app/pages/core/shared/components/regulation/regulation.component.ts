@@ -13,11 +13,12 @@ import { PrimeIcons } from 'primeng/api';
 import { CatalogueActivitiesCodeEnum } from '@/utils/enums';
 import { CategoryConfigurationsHttpService } from '../../services/category-configurations.http.service';
 import { CategoryConfigurationInterface } from '@/pages/core/shared/interfaces/category-configuration.interface';
+import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-switch.component';
 
 
 @Component({
     selector: 'app-regulation',
-    imports: [ReactiveFormsModule, ToggleSwitchModule, ButtonModule, Divider, Fluid, Message, Tag],
+    imports: [ReactiveFormsModule, ToggleSwitchModule, ButtonModule, Divider, Fluid, Message, Tag, ToggleSwitchComponent],
     templateUrl: './regulation.component.html'
 })
 export class RegulationComponent {

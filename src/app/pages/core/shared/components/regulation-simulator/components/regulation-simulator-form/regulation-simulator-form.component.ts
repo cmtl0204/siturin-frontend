@@ -1,16 +1,16 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, output } from '@angular/core';
 import { FluidModule } from 'primeng/fluid';
-import { CatalogueActivitiesCodeEnum, CatalogueCtcClassificationsCodeEnum, CatalogueFoodDrinkClassificationsCodeEnum, ContributorTypeEnum, RegulationSimulatorFormEnum } from '../../enum';
+import { ContributorTypeEnum, RegulationSimulatorFormEnum } from '../../enum';
 import { SelectModule } from 'primeng/select';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LabelDirective } from '@utils/directives/label.directive';
-import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
-import { ActivityInterface, ClassificationInterface, CategoryInterface } from '@/pages/core/shared/interfaces';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { ActivityInterface, CategoryInterface, ClassificationInterface } from '@/pages/core/shared/interfaces';
 import { CatalogueInterface } from '@/utils/interfaces';
 import { ActivityService } from '@/pages/core/shared/services';
 import { CoreSessionStorageService } from '@/utils/services';
 import { CatalogueService } from '@/utils/services/catalogue.service';
-import { CatalogueProcessesTypeEnum, CatalogueTypeEnum, CoreEnum } from '@/utils/enums';
+import { CatalogueTypeEnum } from '@/utils/enums';
 
 @Component({
     selector: 'app-regulation-simulator-form',
@@ -21,7 +21,6 @@ import { CatalogueProcessesTypeEnum, CatalogueTypeEnum, CoreEnum } from '@/utils
 export class RegulationSimulatorFormComponent implements OnInit {
     private readonly fb = inject(FormBuilder);
     private readonly activityService = inject(ActivityService);
-    private readonly coreSessionStorageService = inject(CoreSessionStorageService);
     private readonly catalogueService = inject(CatalogueService);
     protected regulationSimulatorFormEnum = RegulationSimulatorFormEnum;
 
@@ -44,11 +43,11 @@ export class RegulationSimulatorFormComponent implements OnInit {
 
     buildForm() {
         this.form = this.fb.group({
-            contributorType: [null],
-            geographicArea: [null],
-            activity: [null],
-            classification: [null],
-            category: [null]
+            geographicArea: [null, Validators.required],
+            contributorType: [null, Validators.required],
+            activity: [null, Validators.required],
+            classification: [null, Validators.required],
+            category: [null, Validators.required]
         });
     }
 
@@ -58,12 +57,18 @@ export class RegulationSimulatorFormComponent implements OnInit {
         });
 
         this.geographicAreaField.valueChanges.subscribe(async (geographicArea) => {
+            this.activities = [];
+            this.classifications = [];
+            this.categories = [];
+
             if (geographicArea) {
                 this.activities = await this.activityService.findActivitiesByZone(geographicArea.id);
             }
         });
 
         this.activityField.valueChanges.subscribe(async (activity) => {
+            this.categories = [];
+
             if (activity) {
                 this.classifications = await this.activityService.findClassificationsByActivity(activity.id);
             }
@@ -74,24 +79,10 @@ export class RegulationSimulatorFormComponent implements OnInit {
                 this.categories = await this.activityService.findCategoriesByClassification(classification.id);
             }
         });
-
-        // this.categoryField.valueChanges.subscribe(async (category) => {
-        //     if (category) {
-        //         // TODO
-        //     }
-        // });
     }
 
     async loadCatalogues() {
         this.geographicAreas = await this.catalogueService.findByType(CatalogueTypeEnum.activities_geographic_area);
-    }
-
-    async loadActivities() {
-        if (this.geographicAreaField.value === 'continent') {
-            this.activities = await this.activityService.findActivitiesByZone(this.geographicAreaField.getRawValue().id);
-        } else if (this.geographicAreaField.value === 'galapagos') {
-            this.activities = await this.activityService.findActivitiesByZone(this.geographicAreaField.getRawValue().id);
-        }
     }
 
     get contributorTypeField(): AbstractControl {

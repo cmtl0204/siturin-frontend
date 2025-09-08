@@ -1,5 +1,5 @@
-import { Component, OnInit, inject, Output, EventEmitter, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ReactiveFormsModule } from '@angular/forms';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Fluid } from 'primeng/fluid';
 import { SelectModule } from 'primeng/select';
 import { Message } from 'primeng/message';
@@ -11,12 +11,12 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { CatalogueTypeEnum } from '@/utils/enums';
 import { CatalogueService } from '@/utils/services/catalogue.service';
 import { CatalogueInterface } from '@/utils/interfaces';
-import { NgIf } from '@angular/common';
+import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-switch.component';
 
 @Component({
     selector: 'app-air',
     standalone: true,
-    imports: [Fluid, ReactiveFormsModule, SelectModule, Message, LabelDirective, ErrorMessageDirective, ToggleSwitchModule, InputTextModule, DatePickerModule, NgIf],
+    imports: [Fluid, ReactiveFormsModule, SelectModule, Message, LabelDirective, ErrorMessageDirective, ToggleSwitchModule, InputTextModule, DatePickerModule, ToggleSwitchComponent],
     templateUrl: './air.component.html',
     styleUrl: './air.component.scss'
 })
@@ -26,32 +26,29 @@ export class AirComponent implements OnInit {
 
     @Input() isAirTransport = false;
     @Input() subClassification: string | undefined;
-
     @Output() dataOut = new EventEmitter<FormGroup>();
 
+    protected readonly Validators = Validators;
     protected form!: FormGroup;
-    protected aerolinea_tipos: CatalogueInterface[] = [];
+    protected airlineTypes: CatalogueInterface[] = [];
+    protected localTypes: CatalogueInterface[] = [];
 
     constructor() {
         this.buildForm();
     }
 
-    ngOnInit() {
-        this.loadCatalogues();
-
-        if (this.subClassification === 'Aerolínea') {
-            this.airlineTypeField.setValidators([Validators.required]);
-            this.airlineTypeField.updateValueAndValidity();
-        }
+    async ngOnInit() {
+        await this.loadCatalogues();
     }
 
     async loadCatalogues() {
-        this.aerolinea_tipos = await this.catalogueService.findByType(CatalogueTypeEnum.aerolinea_tipos);
+        this.airlineTypes = await this.catalogueService.findByType(CatalogueTypeEnum.process_transport_airline_type);
+        this.localTypes = await this.catalogueService.findByType(CatalogueTypeEnum.processes_local_type);
     }
 
     buildForm(): void {
         this.form = this.formBuilder.group({
-            airlineType: [null],
+            airlineType: [null,Validators.required],
             localType: [null, Validators.required],
             certifiedCode: [null, Validators.required],
             certified: [false, Validators.required],
@@ -87,8 +84,16 @@ export class AirComponent implements OnInit {
             errors.push('Debe seleccionar un Tipo de Local.');
         }
 
-        if (this.subClassification === 'Aerolínea' && this.airlineTypeField.invalid) {
+        if (this.airlineTypeField.invalid) {
             errors.push('Debe seleccionar un Tipo de Aerolínea.');
+        }
+
+        if (this.certifiedField.invalid) {
+            errors.push('Certificado de operador de Área (AOCR) emitido por la Dirección General de Aviación');
+        }
+
+        if (this.certifiedCodeField.invalid) {
+            errors.push('Número o Código del Certificado de Operador Aéreo (AOC) o AOCR');
         }
 
         if (errors.length > 0) {
@@ -121,6 +126,4 @@ export class AirComponent implements OnInit {
     get certifiedExpirationAtField(): AbstractControl {
         return this.form.controls['certifiedExpirationAt'];
     }
-
-    protected readonly Validators = Validators;
 }

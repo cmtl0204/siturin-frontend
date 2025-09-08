@@ -1,4 +1,4 @@
-import { Component, effect, inject, QueryList, ViewChildren } from '@angular/core';
+import { Component, effect, EventEmitter, inject, Output, QueryList, ViewChildren } from '@angular/core';
 import { Button } from 'primeng/button';
 import { PrimeIcons } from 'primeng/api';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -9,21 +9,23 @@ import { ClassificationInterface } from '@modules/core/shared/interfaces';
 import { AirComponent } from '../shared/air/air.component';
 import { LandComponent } from '../shared/land/land.component';
 import { MaritimeComponent } from '../shared/maritime/maritime.component';
-import { AprotectecComponent } from '../shared/aprotectec/aprotectec.component';
+import { ProtectedAreaComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/transport/shared/protectec-area/protected-area.component';
 import { CatalogueTransportClassificationsCodeEnum } from '@/pages/core/shared/components/regulation-simulator/enum';
+import { Fluid } from 'primeng/fluid';
 
 @Component({
     selector: 'app-registration',
     standalone: true,
-    imports: [CommonModule, Button, AirComponent, LandComponent, MaritimeComponent, AprotectecComponent],
+    imports: [CommonModule, Button, AirComponent, LandComponent, MaritimeComponent, ProtectedAreaComponent, Fluid],
     templateUrl: './registration.component.html',
     styleUrl: './registration.component.scss'
 })
 export class RegistrationComponent {
     protected readonly PrimeIcons = PrimeIcons;
+    @Output() step: EventEmitter<number> = new EventEmitter<number>();
 
     // Referencias a componentes hijos para validaciones
-    @ViewChildren(AprotectecComponent) private aprotectecComponent!: QueryList<AprotectecComponent>;
+    @ViewChildren(ProtectedAreaComponent) private aprotectecComponent!: QueryList<ProtectedAreaComponent>;
     @ViewChildren(AirComponent) private airComponent!: QueryList<AirComponent>;
     @ViewChildren(LandComponent) private landComponent!: QueryList<LandComponent>;
     @ViewChildren(MaritimeComponent) private maritimeComponent!: QueryList<MaritimeComponent>;
@@ -32,7 +34,7 @@ export class RegistrationComponent {
 
     protected mainForm!: FormGroup;
     protected currentClassification!: ClassificationInterface | undefined;
-
+    protected readonly CatalogueTransportClassificationsCodeEnum = CatalogueTransportClassificationsCodeEnum;
     protected readonly customMessageService = inject(CustomMessageService);
     protected readonly coreSessionStorageService = inject(CoreSessionStorageService);
 
@@ -94,5 +96,7 @@ export class RegistrationComponent {
         return false; // Sin errores
     }
 
-    protected readonly CatalogueTransportClassificationsCodeEnum = CatalogueTransportClassificationsCodeEnum;
+    back() {
+        this.step.emit(1);
+    }
 }

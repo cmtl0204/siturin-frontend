@@ -3,7 +3,6 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validator
 import { CommonModule } from '@angular/common';
 import { Fluid } from 'primeng/fluid';
 import { ButtonModule } from 'primeng/button';
-import { ToggleSwitch } from 'primeng/toggleswitch';
 import { TooltipModule } from 'primeng/tooltip';
 import { Message } from 'primeng/message';
 import { ConfirmationService, MenuItem, PrimeIcons } from 'primeng/api';
@@ -21,11 +20,12 @@ import { TouristTransportCompanyInterface } from '../../interfaces/tourist-trans
 import { SelectModule } from 'primeng/select';
 import { CatalogueTypeEnum } from '@/utils/enums';
 import { CatalogueService } from '@/utils/services/catalogue.service';
+import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-switch.component';
 
 @Component({
     selector: 'app-tourist-transport-company',
     standalone: true,
-    imports: [ReactiveFormsModule, CommonModule, Fluid, LabelDirective, ButtonModule, ToggleSwitch, TooltipModule, Message, ErrorMessageDirective, ToastModule, ConfirmDialogModule, ListBasicComponent, DialogModule, InputText, SelectModule],
+    imports: [ReactiveFormsModule, CommonModule, Fluid, LabelDirective, ButtonModule, TooltipModule, Message, ErrorMessageDirective, ToastModule, ConfirmDialogModule, ListBasicComponent, DialogModule, InputText, SelectModule, ToggleSwitchComponent],
     templateUrl: './tourist-transport-company.component.html',
     styleUrls: ['./tourist-transport-company.component.scss']
 })

@@ -1,195 +1,192 @@
 <p-fluid>
-  <form [formGroup]="form" class="card flex flex-col gap-6 w-full">
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-      
-      <!-- Título e información -->
-      <div class="md:col-span-12 flex flex-col gap-2">
-        <h2>Compañías de Transporte Turístico</h2>
+    <form [formGroup]="form" class="card flex flex-col gap-6 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
 
-        <p-message severity="info">
-          <div>
-                <p class="font-bold text-2xl">Importante:</p>
+            <!-- Título e información -->
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <h2>Compañías de Transporte Turístico</h2>
 
-                <p class="mt-4">
-                Registrar Compañía de Transporte Turístico contratado por el establecimiento
-                </p>
-          </div>
-        </p-message>
-      </div>
+                <p-message severity="info">
+                    <div>
+                        <p class="font-bold text-2xl">Importante:</p>
 
-      <!-- hasTouristTransportCompany -->
-      <div class="md:col-span-12 flex flex-col gap-2">
-        <label
-          appLabel
-          for="hasTouristTransportCompany"
-          label="Declaro que el establecimiento, al momento del envío del trámite, ha firmado un contrato con una Compañía de Transporte Turístico."
-          [required]="hasTouristTransportCompanyField"
-        ></label>
+                        <p class="mt-4">
+                            Registrar Compañía de Transporte Turístico contratado por el establecimiento
+                        </p>
+                    </div>
+                </p-message>
+            </div>
 
-        <p-toggleswitch id="hasTouristTransportCompany" formControlName="hasTouristTransportCompany">
-          <ng-template #handle let-checked="checked">
-            <span class="!text-xs font-semibold">{{ checked ? 'SÍ' : 'NO' }}</span>
-          </ng-template>
-        </p-toggleswitch>
+            <!-- hasTouristTransportCompany -->
+            <div class="md:col-span-12 flex flex-col gap-2">
+                <label
+                    appLabel
+                    for="hasTouristTransportCompany"
+                    label="Declaro que el establecimiento, al momento del envío del trámite, ha firmado un contrato con una Compañía de Transporte Turístico."
+                    [required]="hasTouristTransportCompanyField"
+                ></label>
 
-        <p-message
-          appErrorMessage
-          [errors]="hasTouristTransportCompanyField.errors"
-          [touched]="hasTouristTransportCompanyField.touched"
-          [dirty]="hasTouristTransportCompanyField.dirty"
-        />
-      </div>
-    </div>
-  </form>
+                <app-toggle-switch id="hasTouristTransportCompany" formControlName="hasTouristTransportCompany" />
+
+
+                <p-message
+                    appErrorMessage
+                    [errors]="hasTouristTransportCompanyField.errors"
+                    [touched]="hasTouristTransportCompanyField.touched"
+                    [dirty]="hasTouristTransportCompanyField.dirty"
+                />
+            </div>
+        </div>
+    </form>
 </p-fluid>
 
 <p-fluid>
-  @if (hasTouristTransportCompanyField.value) {
-    <div class="md:col-span-12">
-      <app-list-basic
-        title="Listado de Compañías de Transporte Turístico"
-        [items]="items"
-        [cols]="cols"
-        [buttonActions]="buttonActions"
-        (onCreate)="isVisibleModal = true"
-        (onSelect)="buildButtonActions($event)"
-      />
-    </div>
-  }
+    @if (hasTouristTransportCompanyField.value) {
+        <div class="md:col-span-12">
+            <app-list-basic
+                title="Listado de Compañías de Transporte Turístico"
+                [items]="items"
+                [cols]="cols"
+                [buttonActions]="buttonActions"
+                (onCreate)="isVisibleModal = true"
+                (onSelect)="buildButtonActions($event)"
+            />
+        </div>
+    }
 </p-fluid>
 
 <p-dialog
-  [(visible)]="isVisibleModal"
-  [modal]="true"
-  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-  [style]="{ width: '25vw' }"
-  [draggable]="false"
-  (onHide)="closeModal()"
-  [resizable]="false">
+    [(visible)]="isVisibleModal"
+    [modal]="true"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [style]="{ width: '25vw' }"
+    [draggable]="false"
+    (onHide)="closeModal()"
+    [resizable]="false">
 
-  <ng-template #header>
-    <div class="inline-flex items-center justify-center gap-2">
-      <span class="font-bold whitespace-nowrap">Agregar Compañía</span>
-    </div>
-  </ng-template>
-
-  <p-fluid>
-    <form [formGroup]="transportForm" class="card flex flex-col gap-2 w-full" (ngSubmit)="onSubmit()">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-        
-        <!-- RUC -->
-        <div class="md:col-span-12 flex flex-col gap-2">
-          <label 
-          appLabel 
-          for="ruc" 
-          label="RUC" 
-          [required]="rucField"></label>
-
-          <input pInputText id="ruc" formControlName="ruc">
-
-          <p-message
-            appErrorMessage
-            [errors]="rucField.errors"
-            [touched]="rucField.touched"
-            [dirty]="rucField.dirty"
-          />
+    <ng-template #header>
+        <div class="inline-flex items-center justify-center gap-2">
+            <span class="font-bold whitespace-nowrap">Agregar Compañía</span>
         </div>
+    </ng-template>
 
-        <!-- Razón Social -->
-        <div class="md:col-span-12 flex flex-col gap-2">
-          <label 
-          appLabel 
-          for="legalName" 
-          label="Razón Social" 
-          [required]="legalNameField"></label>
+    <p-fluid>
+        <form [formGroup]="transportForm" class="card flex flex-col gap-2 w-full" (ngSubmit)="onSubmit()">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
 
-          <input pInputText id="legalName" formControlName="legalName">
+                <!-- RUC -->
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <label
+                        appLabel
+                        for="ruc"
+                        label="RUC"
+                        [required]="rucField"></label>
 
-          <p-message
-            appErrorMessage
-            [errors]="legalNameField.errors"
-            [touched]="legalNameField.touched"
-            [dirty]="legalNameField.dirty"
-          />
-        </div>
+                    <input pInputText id="ruc" formControlName="ruc">
 
-        <!-- Número de Autorización -->
-        <div class="md:col-span-12 flex flex-col gap-2">
-          <label 
-            appLabel 
-            for="authorizationNumber" 
-            label="Número de Autorización" 
-            [required]="authorizationNumberField"
-          ></label>
+                    <p-message
+                        appErrorMessage
+                        [errors]="rucField.errors"
+                        [touched]="rucField.touched"
+                        [dirty]="rucField.dirty"
+                    />
+                </div>
 
-          <input pInputText id="authorizationNumber" formControlName="authorizationNumber">
+                <!-- Razón Social -->
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <label
+                        appLabel
+                        for="legalName"
+                        label="Razón Social"
+                        [required]="legalNameField"></label>
 
-          <p-message
-            appErrorMessage
-            [errors]="authorizationNumberField.errors"
-            [touched]="authorizationNumberField.touched"
-            [dirty]="authorizationNumberField.dirty"
-          />
-        </div>
+                    <input pInputText id="legalName" formControlName="legalName">
 
-        <!-- Tipo Contribuyente -->
-      <div class="md:col-span-12 flex flex-col gap-2">
-        <label 
-          appLabel 
-          for="rucType"
-          label="Tipo Contribuyente" 
-          [required]="ructypeField">
-        </label>
+                    <p-message
+                        appErrorMessage
+                        [errors]="legalNameField.errors"
+                        [touched]="legalNameField.touched"
+                        [dirty]="legalNameField.dirty"
+                    />
+                </div>
 
-        <p-select 
-          id="rucType" 
-          [options]="rucTypes" 
-          optionLabel="name"
-          formControlName="rucType"
-          placeholder="Seleccione tipo de contribuyente">
-        </p-select>
+                <!-- Número de Autorización -->
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <label
+                        appLabel
+                        for="authorizationNumber"
+                        label="Número de Autorización"
+                        [required]="authorizationNumberField"
+                    ></label>
 
-        <p-message
-          appErrorMessage
-          [errors]="ructypeField.errors"
-          [touched]="ructypeField.touched"
-          [dirty]="ructypeField.dirty"
-        />
-      </div>
+                    <input pInputText id="authorizationNumber" formControlName="authorizationNumber">
 
-      <!-- Tipo de Transporte -->
-        <div class="md:col-span-12 flex flex-col gap-2">
-          <label 
-            appLabel 
-            for="type"
-            label="Tipo de Transporte" 
-            [required]="typeField">
-          </label>
+                    <p-message
+                        appErrorMessage
+                        [errors]="authorizationNumberField.errors"
+                        [touched]="authorizationNumberField.touched"
+                        [dirty]="authorizationNumberField.dirty"
+                    />
+                </div>
 
-          <p-select 
-            id="type" 
-            [options]="types" 
-            optionLabel="name"
-            formControlName="type"
-            placeholder="Seleccione tipo de transporte">
-          </p-select>
+                <!-- Tipo Contribuyente -->
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <label
+                        appLabel
+                        for="rucType"
+                        label="Tipo Contribuyente"
+                        [required]="ructypeField">
+                    </label>
 
-          <p-message
-            appErrorMessage
-            [errors]="typeField.errors"
-            [touched]="typeField.touched"
-            [dirty]="typeField.dirty"
-          />
-        </div>
+                    <p-select
+                        id="rucType"
+                        [options]="rucTypes"
+                        optionLabel="name"
+                        formControlName="rucType"
+                        placeholder="Seleccione tipo de contribuyente">
+                    </p-select>
 
-        <!-- Action Button -->
-        <div class="md:col-span-12 flex flex-col gap-2">
-          <p-button 
-                type="submit" 
-                label="Agregar" 
-                [icon]="PrimeIcons.PLUS" />
-        </div>
-      </div>
-    </form>
-  </p-fluid>
+                    <p-message
+                        appErrorMessage
+                        [errors]="ructypeField.errors"
+                        [touched]="ructypeField.touched"
+                        [dirty]="ructypeField.dirty"
+                    />
+                </div>
+
+                <!-- Tipo de Transporte -->
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <label
+                        appLabel
+                        for="type"
+                        label="Tipo de Transporte"
+                        [required]="typeField">
+                    </label>
+
+                    <p-select
+                        id="type"
+                        [options]="types"
+                        optionLabel="name"
+                        formControlName="type"
+                        placeholder="Seleccione tipo de transporte">
+                    </p-select>
+
+                    <p-message
+                        appErrorMessage
+                        [errors]="typeField.errors"
+                        [touched]="typeField.touched"
+                        [dirty]="typeField.dirty"
+                    />
+                </div>
+
+                <!-- Action Button -->
+                <div class="md:col-span-12 flex flex-col gap-2">
+                    <p-button
+                        type="submit"
+                        label="Agregar"
+                        [icon]="PrimeIcons.PLUS" />
+                </div>
+            </div>
+        </form>
+    </p-fluid>
 </p-dialog>

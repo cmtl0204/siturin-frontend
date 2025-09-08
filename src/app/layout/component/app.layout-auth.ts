@@ -4,13 +4,14 @@ import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { AppTopbar } from './app.topbar';
 import { AppSidebar } from './app.sidebar';
-import { LayoutService } from '../service/layout.service';
+import { LayoutService } from '@layout/service';
 import { Divider } from 'primeng/divider';
 import { Fluid } from 'primeng/fluid';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Message } from 'primeng/message';
 import { environment } from '@env/environment';
 import { PrimeIcons } from 'primeng/api';
+import { MY_ROUTES } from '@routes';
 
 @Component({
     selector: 'app-layout',
@@ -18,10 +19,10 @@ import { PrimeIcons } from 'primeng/api';
     imports: [CommonModule, RouterModule, Divider, Fluid, FormsModule, Message, ReactiveFormsModule],
     template: `
         <p-fluid>
-            <div class="flex flex-col md:flex-row gap-8 mt-6">
+            <div class="card flex flex-col md:flex-row gap-8">
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
-                    <div class="card h-full flex flex-col lg:col-start-2 lg:col-span-4 md:col-start-1 md:col-span-6 gap-4">
-                        <img [src]="environment.PATH_ASSETS + '/images/auth/logo.png'" alt="" class="mx-auto" />
+                    <div class="card h-full flex flex-col lg:col-start-2 lg:col-span-4 md:col-start-1 md:col-span-6">
+                        <img [src]="environment.PATH_ASSETS + '/auth/images/logo.png'" alt="" class="mx-auto" />
 
                         <p-message>
                             <ng-template #icon>
@@ -29,14 +30,12 @@ import { PrimeIcons } from 'primeng/api';
                             </ng-template>
                         </p-message>
 
-                        <p-divider />
-
                         <router-outlet />
 
-                        <img [src]="environment.PATH_ASSETS + '/images/auth/footer.png'" alt="" class="mx-auto" />
+                        <img [src]="environment.PATH_ASSETS + '/auth/images/footer.png'" alt="" class="mx-auto" />
                     </div>
 
-                    <div class="card h-full flex flex-col lg:col-start-6 lg:col-span-6 md:col-start-7 md:col-span-6 gap-4">
+                    <div class="card h-full flex flex-col lg:col-start-6 lg:col-span-6 md:col-start-7 md:col-span-6 gap-6">
                         <div class="font-semibold text-xl text-center">SISTEMA DE TURISMO INTELIGENTE</div>
 
                         <p-message>
@@ -54,8 +53,6 @@ import { PrimeIcons } from 'primeng/api';
                             </div>
                         </p-message>
 
-                        <p-divider />
-
                         <div class="flex flex-col gap-2">
                             <a target="_blank" [href]="environment.PATH_ASSETS + '/files/auth/steps.pdf'">
                                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -71,9 +68,9 @@ import { PrimeIcons } from 'primeng/api';
                                     </div>
                                 </div>
                             </a>
-                            <br />
+                            <p-divider/>
 
-                            <a target="_blank" [routerLink]="['/simulador-externo']">
+                            <a target="_blank" [routerLink]="[MY_ROUTES.guessPages.simulator.absolute]">
                                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
                                     <div class="md:col-span-2 flex flex-col gap-2">
                                         <!--                                    <img [src]="environment.PATH_ASSETS+'/images/auth/simulador_normativa.svg'"-->
@@ -86,7 +83,7 @@ import { PrimeIcons } from 'primeng/api';
                                     </div>
                                 </div>
                             </a>
-                            <br />
+                            <p-divider/>
 
                             <a target="_blank" [href]="environment.PATH_ASSETS + '/files/auth/external_manual.pdf'">
                                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -102,7 +99,7 @@ import { PrimeIcons } from 'primeng/api';
                                     </div>
                                 </div>
                             </a>
-                            <br />
+                            <p-divider/>
 
                             <a target="_blank" [href]="environment.PATH_ASSETS + '/files/auth/terms_conditions.pdf'">
                                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -213,4 +210,6 @@ export class AppLayoutAuth {
             this.menuOutsideClickListener();
         }
     }
+
+    protected readonly MY_ROUTES = MY_ROUTES;
 }

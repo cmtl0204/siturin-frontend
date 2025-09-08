@@ -4,7 +4,6 @@ import { LabelDirective } from '@utils/directives/label.directive';
 import { Fluid } from 'primeng/fluid';
 import { PrimeIcons } from 'primeng/api';
 import { Select } from 'primeng/select';
-import { ToggleSwitch } from 'primeng/toggleswitch';
 import { Message } from 'primeng/message';
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
@@ -13,16 +12,21 @@ import { InputText } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { CatalogueService } from '@/utils/services/catalogue.service';
-import { CatalogueActivitiesCodeEnum, CatalogueProcessFoodDrinksEstablishmentTypeEnum, CatalogueTypeEnum } from '@/utils/enums';
+import {
+    CatalogueActivitiesCodeEnum,
+    CatalogueProcessFoodDrinksEstablishmentTypeEnum,
+    CatalogueTypeEnum
+} from '@/utils/enums';
+import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-switch.component';
 
 @Component({
-    selector: 'app-type-establishment',
+    selector: 'app-establishment-type',
     standalone: true,
-    imports: [Fluid, ReactiveFormsModule, LabelDirective, Select, Message, ErrorMessageDirective, ToggleSwitch, InputText, CommonModule],
-    templateUrl: './type-establishment.component.html',
-    styleUrl: './type-establishment.component.scss'
+    imports: [Fluid, ReactiveFormsModule, LabelDirective, Select, Message, ErrorMessageDirective, InputText, CommonModule, ToggleSwitchComponent],
+    templateUrl: './establishment-type.component.html',
+    styleUrl: './establishment-type.component.scss'
 })
-export class TypeEstablishmentComponent implements OnInit {
+export class EstablishmentTypeComponent implements OnInit {
     @Input() data!: string | undefined;
     @Output() dataOut = new EventEmitter<FormGroup>();
     @Output() fieldErrorsOut = new EventEmitter<string[]>();
@@ -37,7 +41,7 @@ export class TypeEstablishmentComponent implements OnInit {
 
     protected form!: FormGroup;
 
-    protected establishmentType: CatalogueInterface[] = [];
+    protected establishmentTypes: CatalogueInterface[] = [];
 
     constructor() {
         this.buildForm();
@@ -49,21 +53,17 @@ export class TypeEstablishmentComponent implements OnInit {
         await this.loadData();
     }
 
-    onSubmit() {
-        console.log(this.form.value);
-    }
-
     buildForm() {
         this.form = this.formBuilder.group({
             establishmentType: [null, [Validators.required]],
-            establishmentName: [null,],
-            hasFranchiseGrantCertificate: [false, [Validators.requiredTrue]]
+            establishmentName: [null],
+            hasFranchiseGrantCertificate: [null, [Validators.requiredTrue]]
         });
 
         this.watchFormChanges();
     }
 
-    async watchFormChanges() {
+    watchFormChanges() {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
             if (this.form.valid) {
                 this.dataOut.emit(this.form);
@@ -71,20 +71,17 @@ export class TypeEstablishmentComponent implements OnInit {
         });
 
         this.establishmentTypeField.valueChanges.subscribe((value) => {
-            
-            
             if (value.code === CatalogueProcessFoodDrinksEstablishmentTypeEnum.cadena) {
-                this.hasFranchiseGrantCertificateField.clearValidators();
                 this.establishmentNameField.setValidators([Validators.required]);
+                this.hasFranchiseGrantCertificateField.clearValidators();
             }
 
-            if (value.code === CatalogueProcessFoodDrinksEstablishmentTypeEnum.franquicia) {            
+            if (value.code === CatalogueProcessFoodDrinksEstablishmentTypeEnum.franquicia) {
                 this.hasFranchiseGrantCertificateField.setValidators([Validators.required]);
                 this.establishmentNameField.setValidators([Validators.required]);
             }
 
             if (value.code === CatalogueProcessFoodDrinksEstablishmentTypeEnum.ninguno) {
-                this.hasFranchiseGrantCertificateField.setValidators([Validators.required]);
                 this.hasFranchiseGrantCertificateField.clearValidators();
                 this.establishmentNameField.clearValidators();
             }
@@ -110,7 +107,7 @@ export class TypeEstablishmentComponent implements OnInit {
     }
 
     async loadCatalogues() {
-        this.establishmentType = await this.catalogueService.findByType(CatalogueTypeEnum.process_food_drinks_establishment_type);
+        this.establishmentTypes = await this.catalogueService.findByType(CatalogueTypeEnum.process_food_drinks_establishment_type);
     }
 
     loadData() {}

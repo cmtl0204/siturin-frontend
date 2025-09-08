@@ -36,8 +36,8 @@ export class Step2Component implements OnInit {
     constructor() {
         this.mainForm = this.formBuilder.group({});
     }
-    ngOnInit() {
-        this.loadData();
+    async ngOnInit() {
+        await this.loadData();
     }
 
     async loadData() {

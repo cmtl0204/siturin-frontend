@@ -21,11 +21,7 @@
                        label="¿Su Establecimiento oferta alguna modalidad de turismo de aventura?"
                        [required]="hasAdventureTourismModalityField"></label>
 
-                <p-toggleswitch id="hasAdventureTourismModality" formControlName="hasAdventureTourismModality">
-                    <ng-template #handle let-checked="checked">
-                        <span class="!text-xs font-semibold">{{ checked ? 'SÍ' : 'NO' }}</span>
-                    </ng-template>
-                </p-toggleswitch>
+                <app-toggle-switch id="hasAdventureTourismModality" formControlName="hasAdventureTourismModality"/>
 
                 <p-message
                     appErrorMessage

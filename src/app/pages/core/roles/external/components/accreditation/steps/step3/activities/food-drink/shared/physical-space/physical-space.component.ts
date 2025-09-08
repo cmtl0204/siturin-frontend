@@ -4,7 +4,6 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Fluid } from 'primeng/fluid';
 import { PrimeIcons } from 'primeng/api';
 import { Select } from 'primeng/select';
-import { ToggleSwitch } from 'primeng/toggleswitch';
 import { Message } from 'primeng/message';
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { LabelDirective } from '@utils/directives/label.directive';
@@ -13,11 +12,12 @@ import { CatalogueInterface } from '@utils/interfaces';
 import { CommonModule } from '@angular/common';
 import { CatalogueActivitiesCodeEnum, CatalogueTypeEnum } from '@/utils/enums';
 import { CatalogueService } from '@/utils/services/catalogue.service';
+import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-switch.component';
 
 @Component({
     selector: 'app-physical-space',
     standalone: true,
-    imports: [Fluid, CommonModule, ReactiveFormsModule, LabelDirective, Select, Message, ErrorMessageDirective, ToggleSwitch],
+    imports: [Fluid, CommonModule, ReactiveFormsModule, LabelDirective, Select, Message, ErrorMessageDirective, ToggleSwitchComponent],
     templateUrl: './physical-space.component.html',
     styleUrl: './physical-space.component.scss'
 })
@@ -31,7 +31,7 @@ export class PhysicalSpaceComponent implements OnInit {
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
     private readonly catalogueService = inject(CatalogueService);
-    
+
     protected readonly CatalogueActivitiesCodeEnum = CatalogueActivitiesCodeEnum;
     protected form!: FormGroup;
 
@@ -49,7 +49,7 @@ export class PhysicalSpaceComponent implements OnInit {
     buildForm() {
         this.form = this.formBuilder.group({
             localType: [null, [Validators.required]],
-            hasLandUse: [false, [Validators.requiredTrue]]
+            hasLandUse: [null, [Validators.requiredTrue]]
         });
 
         this.watchFormChanges();
@@ -80,7 +80,7 @@ export class PhysicalSpaceComponent implements OnInit {
     async loadData() {}
 
     async loadCatalogues() {
-        this.localTypes = await this.catalogueService.findByType(CatalogueTypeEnum.processes_local_type);            
+        this.localTypes = await this.catalogueService.findByType(CatalogueTypeEnum.processes_local_type);
     }
 
     get localTypeField(): AbstractControl {

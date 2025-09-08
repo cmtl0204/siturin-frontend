@@ -213,6 +213,13 @@ export const MY_ROUTES = {
             absolute: '/auth/password-reset'
         }
     },
+    guessPages: {
+        base: 'guess',
+        simulator: {
+            base: 'simulators',
+            absolute: '/guess/simulators'
+        }
+    },
     signIn: '/auth/sign-in',
     dashboards: {
         base: 'dashboards',

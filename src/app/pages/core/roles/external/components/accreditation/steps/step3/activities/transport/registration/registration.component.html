@@ -1,7 +1,5 @@
-<!-- Componente base -->
-<app-aprotectec (dataOut)="saveForm($event)" />
+<app-protected-area (dataOut)="saveForm($event)" />
 
-<!-- Render condicional agrupado -->
 @switch (currentClassification?.code) {
     @case (CatalogueTransportClassificationsCodeEnum.air_transport) {
         <app-air (dataOut)="saveForm($event)" />
@@ -14,13 +12,24 @@
     }
 }
 
-<!-- Botón de guardar -->
-<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-    <div class="md:col-start-4 md:col-span-6 flex flex-col gap-2">
-        <p-button
-            label="Guardar"
-            [icon]="PrimeIcons.SAVE"
-            (onClick)="onSubmit()" />
-    </div>
-</div>
+<p-fluid>
+    <div class="card flex flex-col gap-6 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <div class="md:col-span-3 flex flex-col gap-2">
+                <p-button
+                    label="Atrás"
+                    severity="warn"
+                    [icon]="PrimeIcons.ARROW_LEFT"
+                    (onClick)="back()" />
+            </div>
 
+            <div class="md:col-start-10 md:col-span-3 flex flex-col gap-2">
+                <p-button
+                    class="w-full"
+                    label="Guardar"
+                    [icon]="PrimeIcons.SAVE"
+                    (onClick)="onSubmit()" />
+            </div>
+        </div>
+    </div>
+</p-fluid>

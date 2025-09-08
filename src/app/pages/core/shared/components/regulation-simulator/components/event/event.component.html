@@ -5,7 +5,7 @@
         </p-panel>
     </div>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <hr />
+
         <div formArrayName="items">
             @for (item of itemsField.controls; track $index; let i = $index) {
                 <div [formGroupName]="i" class="flex items-center justify-between gap-2">
@@ -20,7 +20,6 @@
                         </ng-template>
                     </p-toggleswitch>
                 </div>
-                <hr />
             }
         </div>
     </form>

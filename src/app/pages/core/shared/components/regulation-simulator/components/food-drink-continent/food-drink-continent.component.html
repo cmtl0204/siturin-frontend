@@ -1,17 +1,13 @@
 @if (this.classification()) {
-    <div class="flex flex-col gap-4">
-        <p-panel>
-            <p class="text-md mb-2">{{ classification()?.definition }}</p>
-        </p-panel>
-    </div>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <hr />
+    <p-message severity="info">
+        <p class="text-md mb-2">{{ classification()?.definition }}</p>
+    </p-message>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="card flex flex-col gap-6">
         <div formArrayName="items">
             @for (item of itemsField.controls; track $index; let i = $index) {
                 <div [formGroupName]="i" class="flex items-center justify-between gap-2">
-                    <label>
-                        {{ item.value.name }}
-                        <span class="text-red-500 ml-1">*</span>
+                    <label appLabel [required]="item" [label]="item.value.name">
                     </label>
 
                     <p-toggleswitch formControlName="isCompliant">
@@ -20,7 +16,6 @@
                         </ng-template>
                     </p-toggleswitch>
                 </div>
-                <hr />
             }
         </div>
     </form>

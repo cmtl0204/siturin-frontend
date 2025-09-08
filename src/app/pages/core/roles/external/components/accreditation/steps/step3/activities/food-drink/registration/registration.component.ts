@@ -1,6 +1,6 @@
-import { Component, effect, inject, QueryList, ViewChildren } from '@angular/core';
+import { Component, effect, EventEmitter, inject, Output, QueryList, ViewChildren } from '@angular/core';
 import { PhysicalSpaceComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/physical-space/physical-space.component';
-import { TypeEstablishmentComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment/type-establishment.component';
+import { EstablishmentTypeComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-type/establishment-type.component';
 import { Button } from 'primeng/button';
 import { PrimeIcons } from 'primeng/api';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -8,28 +8,30 @@ import { CoreSessionStorageService, CustomMessageService } from '@utils/services
 import { CommonModule } from '@angular/common';
 import { AdventureModalitiesComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/adventure-modalities/adventure-modalities.component';
 import { EstablishmentCapacityComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-capacity/establishment-capacity.component';
-import { EstablishmentServicesComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-services/establishment-services.component';
+import { EstablishmentServiceComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-service/establishment-service.component';
 import { ClassificationInterface } from '@modules/core/shared/interfaces';
-import { KitchenComponent } from '../shared/kitchen/kitchen.component';
+import { EstablishmentKitchenComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-kitchen/establishment-kitchen.component';
 import { CatalogueActivitiesCodeEnum, CatalogueProcessFoodDrinksClassificationEnum, CoreEnum } from '@/utils/enums';
 import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
 import { FoodDrinkHttpService } from '@/pages/core/roles/external/services';
+import { Fluid } from 'primeng/fluid';
 
 @Component({
     selector: 'app-registration',
     standalone: true,
-    imports: [CommonModule, Button, TypeEstablishmentComponent, PhysicalSpaceComponent, EstablishmentCapacityComponent, EstablishmentServicesComponent, KitchenComponent, RegulationComponent],
+    imports: [CommonModule, Button, EstablishmentTypeComponent, PhysicalSpaceComponent, EstablishmentCapacityComponent, EstablishmentServiceComponent, EstablishmentKitchenComponent, RegulationComponent, Fluid],
     templateUrl: './registration.component.html',
     styleUrl: './registration.component.scss'
 })
 export class RegistrationComponent {
     protected readonly PrimeIcons = PrimeIcons;
+    @Output() step: EventEmitter<number> = new EventEmitter<number>();
 
     @ViewChildren(PhysicalSpaceComponent) private physicalSpaceComponent!: QueryList<PhysicalSpaceComponent>;
-    @ViewChildren(TypeEstablishmentComponent) private typeEstablishmentComponent!: QueryList<TypeEstablishmentComponent>;
+    @ViewChildren(EstablishmentTypeComponent) private typeEstablishmentComponent!: QueryList<EstablishmentTypeComponent>;
     @ViewChildren(EstablishmentCapacityComponent) private establishmentCapacityComponent!: QueryList<EstablishmentCapacityComponent>;
-    @ViewChildren(EstablishmentServicesComponent) private establishmentServicesComponent!: QueryList<EstablishmentServicesComponent>;
-    @ViewChildren(KitchenComponent) private kitchenComponent!: QueryList<KitchenComponent>;
+    @ViewChildren(EstablishmentServiceComponent) private establishmentServicesComponent!: QueryList<EstablishmentServiceComponent>;
+    @ViewChildren(EstablishmentKitchenComponent) private kitchenComponent!: QueryList<EstablishmentKitchenComponent>;
     @ViewChildren(RegulationComponent) private regulationComponent!: QueryList<RegulationComponent>;
 
     private formBuilder = inject(FormBuilder);
@@ -50,7 +52,6 @@ export class RegistrationComponent {
 
     protected activityCode = CatalogueActivitiesCodeEnum.food_drink_continent; // or food_drink_galapagos
 
-
     constructor() {
         this.mainForm = this.formBuilder.group({});
 
@@ -58,7 +59,11 @@ export class RegistrationComponent {
             const processSignal = this.coreSessionStorageService.processSignal();
             if (processSignal) {
                 this.currentClassification = processSignal.classification;
-                if (this.currentClassification?.code === CatalogueProcessFoodDrinksClassificationEnum.plazas_comida || this.currentClassification?.code === CatalogueProcessFoodDrinksClassificationEnum.establecimiento_movil || this.currentClassification?.code === CatalogueProcessFoodDrinksClassificationEnum.discoteca) {
+                if (
+                    this.currentClassification?.code === CatalogueProcessFoodDrinksClassificationEnum.plazas_comida ||
+                    this.currentClassification?.code === CatalogueProcessFoodDrinksClassificationEnum.establecimiento_movil ||
+                    this.currentClassification?.code === CatalogueProcessFoodDrinksClassificationEnum.discoteca
+                ) {
                     this.hideFields = true;
                 }
                 if (processSignal.classification?.hasRegulation) this.modelId = processSignal.classification.id;
@@ -91,29 +96,27 @@ export class RegistrationComponent {
         }
     }
 
-    async saveProcess() {    
-
+    async saveProcess() {
         const sessionData = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
 
         const kitchenData = this.mainForm.get('kitchenTypes')?.value;
 
-        const kitchenTypes = Array.isArray(kitchenData) 
-        ? kitchenData.map(item => ({
-            id: item.id,
-            code: item.code
-          }))
-        : [];
-        
+        const kitchenTypes = Array.isArray(kitchenData)
+            ? kitchenData.map((item) => ({
+                  id: item.id,
+                  code: item.code
+              }))
+            : [];
 
         const serviceData = this.mainForm.get('serviceTypes')?.value;
-        const serviceTypes = Array.isArray(serviceData) 
-        ? serviceData.map(item => ({
-            id: item.id,
-            code: item.code 
-          }))
-        : [];
+        const serviceTypes = Array.isArray(serviceData)
+            ? serviceData.map((item) => ({
+                  id: item.id,
+                  code: item.code
+              }))
+            : [];
         console.log('mainForm.value', this.mainForm.value);
-          
+
         const payload = {
             ...this.mainForm.value,
             ...sessionData,
@@ -126,8 +129,6 @@ export class RegistrationComponent {
                 console.log('Creado');
             }
         });
-
-
     }
 
     checkFormErrors() {
@@ -145,5 +146,9 @@ export class RegistrationComponent {
         }
 
         return true;
+    }
+
+    back() {
+        this.step.emit(1);
     }
 }

@@ -7,32 +7,35 @@ import { Panel } from 'primeng/panel';
 import { data, items } from './data';
 import { ClassificationInterface } from '@/pages/core/shared/interfaces';
 import { ContributorTypeEnum } from '../../enum';
+import { JsonPipe } from '@angular/common';
 
 @Component({
     selector: 'app-ctc',
-    imports: [ButtonModule, ReactiveFormsModule, ToggleSwitchModule, Panel],
+    imports: [ButtonModule, ReactiveFormsModule, ToggleSwitchModule, Panel, JsonPipe],
     templateUrl: './ctc.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CtcComponent {
     public contributorType = input.required<ContributorTypeEnum>();
-    private readonly fb = inject(FormBuilder);
+    private readonly formBuilder = inject(FormBuilder);
     public classificationInput = input<ClassificationInterface | null>();
     protected classification = signal<HeaderRegulation | null>(null);
-    form!: FormGroup;
+    protected form!: FormGroup;
 
     buildForm = effect(() => {
         if (!this.classificationInput()) return;
 
         this.classification.set(data.find((item) => item.codeClassification === this.classificationInput()?.code) ?? null);
+
         const validatedItems = items.filter((item) => item.person === this.contributorType());
-        this.form = this.fb.group({
-            items: this.fb.array(validatedItems.map((item) => this.createItemGroup(item)))
+
+        this.form = this.formBuilder.group({
+            items: this.formBuilder.array(validatedItems.map((item) => this.createItemGroup(item)))
         });
     });
 
     createItemGroup(item: Item): FormGroup {
-        return this.fb.group({
+        return this.formBuilder.group({
             name: [item.label],
             isCompliant: [false]
         });
