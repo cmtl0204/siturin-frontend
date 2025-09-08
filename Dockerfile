@@ -3,6 +3,7 @@ FROM node:20.19.0-bullseye-slim AS build
 WORKDIR /app
 ENV CI=true npm_config_fund=false npm_config_audit=false
 COPY package*.json ./
+RUN npm install --package-lock-only
 RUN npm ci
 COPY . .
 RUN npm run build:prod
