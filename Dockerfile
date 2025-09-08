@@ -11,6 +11,6 @@ RUN npm run build:prod
 FROM nginx:stable-alpine
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 # ⚠️ Cambia la ruta si tu outputPath es otro
-COPY --from=build /app/dist/siturin-frontend/browser /usr/share/nginx/html
+COPY --from=build /dist/siturin-frontend/browser /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx","-g","daemon off;"]
