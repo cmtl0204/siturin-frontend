@@ -21,7 +21,7 @@ import { CatalogueService } from '@utils/services/catalogue.service';
 })
 export class PhysicalSpaceComponent implements OnInit {
     @Input() data!: string | undefined;
-    @Output() dataOut = new EventEmitter<FormGroup>();
+    @Output() dataOut = new EventEmitter<Record<string, any>>();
 
     protected readonly Validators = Validators;
     protected readonly PrimeIcons = PrimeIcons;
@@ -37,9 +37,9 @@ export class PhysicalSpaceComponent implements OnInit {
 
     constructor() {}
 
-    ngOnInit() {
+    async ngOnInit() {
         this.buildForm();
-        this.loadCatalogues();
+        await this.loadCatalogues();
         this.loadData();
     }
 
@@ -55,11 +55,11 @@ export class PhysicalSpaceComponent implements OnInit {
     }
 
     watchFormChanges() {
-        this.dataOut.emit(this.form);
+        this.dataOut.emit(this.form.value);
 
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
             if (this.form.valid) {
-                this.dataOut.emit(this.form);
+                this.dataOut.emit(this.form.value);
             }
         });
 

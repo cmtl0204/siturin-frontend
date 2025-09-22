@@ -30,7 +30,7 @@ import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-sw
     styleUrls: ['./tourist-transport-company.component.scss']
 })
 export class TouristTransportCompanyComponent implements OnInit {
-    @Output() dataOut = new EventEmitter<FormGroup>();
+    @Output() dataOut = new EventEmitter<Record<string, any>>();
 
     private readonly formBuilder = inject(FormBuilder);
     private readonly confirmationService = inject(ConfirmationService);
@@ -65,7 +65,7 @@ export class TouristTransportCompanyComponent implements OnInit {
         });
 
         this.form = this.formBuilder.group({
-            hasTouristTransportCompanies: false,
+            hasTouristTransportCompany: false,
             touristTransportCompanies: []
         });
 
@@ -73,12 +73,12 @@ export class TouristTransportCompanyComponent implements OnInit {
     }
 
     watchFormChanges() {
-        this.dataOut.emit(this.form);
+        this.dataOut.emit(this.form.value);
 
         this.hasTouristTransportCompanyField.valueChanges.subscribe((value) => {
             this.touristTransportCompaniesField.setValue(this.items);
 
-            this.dataOut.emit(this.form);
+            this.dataOut.emit(this.form.value);
         });
     }
 
@@ -121,7 +121,7 @@ export class TouristTransportCompanyComponent implements OnInit {
 
         if (this.rucField.invalid) errors.push('RUC');
         if (this.legalNameField.invalid) errors.push('Razón Social');
-        if (this.ructypeField.invalid) errors.push('Tipo Contribuyente');
+        if (this.rucTypeField.invalid) errors.push('Tipo Contribuyente');
         if (this.authorizationNumberField.invalid) errors.push('Autorizacion');
         if (this.typeField.invalid) errors.push('Tipo');
 
@@ -153,7 +153,7 @@ export class TouristTransportCompanyComponent implements OnInit {
 
         this.items.push({
             ruc: this.rucField.value,
-            rucType: this.ructypeField.value,
+            rucType: this.rucTypeField.value,
             legalName: this.legalNameField.value,
             authorizationNumber: this.authorizationNumberField.value,
             type: this.typeField.value
@@ -161,7 +161,7 @@ export class TouristTransportCompanyComponent implements OnInit {
 
         this.touristTransportCompaniesField.setValue(this.items);
 
-        this.dataOut.emit(this.form);
+        this.dataOut.emit(this.form.value);
 
         this.closeModal();
     }
@@ -187,7 +187,7 @@ export class TouristTransportCompanyComponent implements OnInit {
 
                 this.touristTransportCompaniesField.setValue(this.items);
 
-                this.dataOut.emit(this.form);
+                this.dataOut.emit(this.form.value);
             },
             key: 'confirmdialog'
         });
@@ -208,7 +208,7 @@ export class TouristTransportCompanyComponent implements OnInit {
         return this.transportForm.get('ruc')!;
     }
 
-    get ructypeField(): AbstractControl {
+    get rucTypeField(): AbstractControl {
         return this.transportForm.get('rucType')!;
     }
 

@@ -24,8 +24,7 @@ export class RegistrationComponent implements OnInit {
     @ViewChildren(PhysicalSpaceComponent) private physicalSpaceComponent!: QueryList<PhysicalSpaceComponent>;
     @ViewChildren(PeopleCapacityComponent) private peopleCapacityComponent!: QueryList<PeopleCapacityComponent>;
 
-    private formBuilder = inject(FormBuilder);
-    protected mainForm!: FormGroup;
+    private mainData: Record<string, any> = {};
     protected modelId: string | undefined = undefined;
 
 
@@ -40,23 +39,21 @@ export class RegistrationComponent implements OnInit {
                 if (processSignal.category?.hasRegulation) this.modelId = processSignal.category.id;
             }
         });
-
-        this.mainForm = this.formBuilder.group({});
     }
 
     ngOnInit(): void {
     }
 
-    saveForm(childForm: FormGroup) {
-        Object.keys(childForm.controls).forEach((controlName) => {
-            const control = childForm.get(controlName);
-
-            if (control && !this.mainForm.contains(controlName)) {
-                this.mainForm.addControl(controlName, control);
-            } else {
-                this.mainForm.get(controlName)?.patchValue(control?.value);
+    saveForm(data: any, objectName?: string) {
+        if (objectName) {
+            if (!this.mainData[objectName]) {
+                this.mainData[objectName] = {};
             }
-        });
+
+            this.mainData[objectName] = { ...this.mainData[objectName], ...data };
+        } else {
+            this.mainData = { ...this.mainData, ...data };
+        }
     }
 
     async onSubmit() {
@@ -70,7 +67,7 @@ export class RegistrationComponent implements OnInit {
 
         console.log('sessionData', sessionData);
 
-        const payload = { ...this.mainForm.value, ...sessionData };
+        const payload = { ...this.mainData, ...sessionData };
 
         this.eventHttpService.createRegistration(payload).subscribe({
             next: () => {}

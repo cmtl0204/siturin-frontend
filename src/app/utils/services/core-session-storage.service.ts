@@ -14,6 +14,13 @@ export interface ProcessI {
     type?: CatalogueInterface;
 }
 
+export interface ProcessStep2I {
+    totalMen?: number;
+    totalMenDisability?: number;
+    totalWomen?: number;
+    totalWomenDisability?: number;
+}
+
 @Injectable({
     providedIn: 'root'
 })

@@ -51,7 +51,7 @@ export class RegulationSimulatorComponent {
 
     protected isProtectedArea = false;
 
-    onRegulationSubmitted(event: FormGroup) {
+    onRegulationSubmitted(event: Record<string, any>) {
         console.log(event);
     }
 

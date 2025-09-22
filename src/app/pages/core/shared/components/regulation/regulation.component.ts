@@ -15,14 +15,13 @@ import { CategoryConfigurationsHttpService } from '../../services/category-confi
 import { CategoryConfigurationInterface } from '@/pages/core/shared/interfaces/category-configuration.interface';
 import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-switch.component';
 
-
 @Component({
     selector: 'app-regulation',
     imports: [ReactiveFormsModule, ToggleSwitchModule, ButtonModule, Divider, Fluid, Message, Tag, ToggleSwitchComponent],
     templateUrl: './regulation.component.html'
 })
 export class RegulationComponent {
-    dataOut = output<FormGroup>();
+    dataOut = output<Record<string, any>>();
 
     private readonly regulationHttpService = inject(RegulationHttpService);
     private readonly formBuilder = inject(FormBuilder);
@@ -74,11 +73,7 @@ export class RegulationComponent {
 
         this.form.valueChanges.subscribe((_) => {
             if (this.errorMessages.length === 0) {
-                this.dataOut.emit(
-                    this.formBuilder.group({
-                        regulation: this.formattedResult
-                    })
-                );
+                this.dataOut.emit({ regulation: this.formattedResult });
             }
         });
     });

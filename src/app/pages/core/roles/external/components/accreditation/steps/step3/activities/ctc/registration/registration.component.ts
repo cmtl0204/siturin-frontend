@@ -1,14 +1,13 @@
 import { Component, effect, inject, Input, QueryList, ViewChildren } from '@angular/core';
 import { Button } from 'primeng/button';
 import { PrimeIcons } from 'primeng/api';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoreSessionStorageService, CustomMessageService } from '@utils/services';
 import { TouristActivitiesComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/ctc/shared/tourist-activities/tourist-activities.component';
 import { FoodDrinkComponent } from '../shared/food-drink/food-drink.component';
 import { RequirementsComponent } from '../shared/requirements/requirements.component';
 import { AccommodationComponent } from '../shared/accommodation/accommodation.component';
 import { CommunityOperationComponent } from '../shared/community-operation/community-operation.component';
-import { TouristGuideComponent } from '@modules/core/shared/components/tourist-guide/tourist-guide.component';
 import { CtcHttpService } from '@modules/core/roles/external/services/ctc-http.service';
 import { CoreEnum } from '@utils/enums';
 import { TouristTransportCompanyCtcComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/ctc/shared/transport/transport.component';
@@ -31,20 +30,15 @@ export class RegistrationComponent {
     @ViewChildren(TouristTransportCompanyCtcComponent) private touristTransportCompanyCtcComponent!: QueryList<TouristTransportCompanyCtcComponent>;
     @ViewChildren(RegulationComponent) private regulationComponent!: QueryList<RegulationComponent>;
 
-    private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
     protected activities: any[] = [];
     protected readonly ctcHttpService = inject(CtcHttpService);
     private readonly coreSessionStorageService = inject(CoreSessionStorageService);
     @Input() modelId!: string | undefined;
 
-    protected mainForm!: FormGroup;
+    private mainData: Record<string, any> = {};
 
     constructor() {
-        this.mainForm = this.formBuilder.group({
-            regulation: [null, Validators.required]
-        });
-
         effect(async () => {
             const processSignal = this.coreSessionStorageService.processSignal();
 
@@ -55,14 +49,16 @@ export class RegistrationComponent {
         });
     }
 
-    saveForm(childForm: FormGroup): void {
-        Object.keys(childForm.controls).forEach((controlName) => {
-            if (!this.mainForm.contains(controlName)) {
-                this.mainForm.addControl(controlName, this.formBuilder.control(childForm.get(controlName)?.value));
-            } else {
-                this.mainForm.get(controlName)?.patchValue(childForm.get(controlName)?.value);
+    saveForm(data: any, objectName?: string) {
+        if (objectName) {
+            if (!this.mainData[objectName]) {
+                this.mainData[objectName] = {};
             }
-        });
+
+            this.mainData[objectName] = { ...this.mainData[objectName], ...data };
+        } else {
+            this.mainData = { ...this.mainData, ...data };
+        }
     }
 
     async onSubmit() {
@@ -74,11 +70,8 @@ export class RegistrationComponent {
     async saveProcess() {
         const sessionData = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
 
-        console.log('sessionData', sessionData);
-        console.log('mainForm.value', this.mainForm.value);
-
         const payload = {
-            ...this.mainForm.value,
+            ...this.mainData,
             ...sessionData
         };
 

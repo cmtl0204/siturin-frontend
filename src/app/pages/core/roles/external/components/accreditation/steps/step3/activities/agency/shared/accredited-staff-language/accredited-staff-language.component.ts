@@ -9,48 +9,86 @@ import { Message } from 'primeng/message';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { InputNumber } from 'primeng/inputnumber';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { CoreEnum } from '@utils/enums';
+import { CoreSessionStorageService } from '@utils/services';
+import { ProcessI, ProcessStep2I } from '@utils/services/core-session-storage.service';
+import { InputGroup } from 'primeng/inputgroup';
+import { InputGroupAddon } from 'primeng/inputgroupaddon';
 
 @Component({
     selector: 'app-accredited-staff-language',
-    imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, InputNumber],
+    imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, InputNumber, InputGroup, InputGroupAddon],
     templateUrl: './accredited-staff-language.component.html',
     styleUrl: './accredited-staff-language.component.scss'
 })
 export class AccreditedStaffLanguageComponent implements OnInit {
     @Input() data!: string | undefined;
-    @Output() dataOut = new EventEmitter<FormGroup>();
+    @Output() dataOut = new EventEmitter<Record<string, any>>();
     @Output() fieldErrorsOut = new EventEmitter<string[]>();
 
-    private readonly _formBuilder = inject(FormBuilder);
-    protected readonly _customMessageService = inject(CustomMessageService);
+    private readonly formBuilder = inject(FormBuilder);
+    protected readonly coreSessionStorageService = inject(CoreSessionStorageService);
+    protected readonly customMessageService = inject(CustomMessageService);
     protected readonly PrimeIcons = PrimeIcons;
 
     protected form!: FormGroup;
+    protected sessionDataProcessStep2!: ProcessStep2I;
+    protected totalStaff = 0;
 
-    constructor() {
+    constructor() {}
 
-    }
-
-    ngOnInit() {
+    async ngOnInit() {
         this.buildForm();
         this.loadData();
+        this.sessionDataProcessStep2 = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.step2);
+        this.totalStaff = this.getTotalStaff();
+        this.totalAccreditedStaffLanguageField.setValidators([Validators.required, Validators.min(1), Validators.max(this.totalStaff)]);
+    }
+
+    getTotalStaff(): number {
+        if (this.sessionDataProcessStep2) {
+            if (this.sessionDataProcessStep2.totalMen && this.sessionDataProcessStep2.totalWomen) {
+                return this.sessionDataProcessStep2.totalMen + this.sessionDataProcessStep2.totalWomen;
+            }
+
+            if (this.sessionDataProcessStep2.totalMen) {
+                return this.sessionDataProcessStep2.totalMen;
+            }
+
+            if (this.sessionDataProcessStep2.totalWomen) {
+                return this.sessionDataProcessStep2.totalWomen;
+            }
+        }
+        return 0;
     }
 
     buildForm() {
-        this.form = this._formBuilder.group({
-            totalAccreditedStaffLanguage: [null, [Validators.required]],
-            percentageAccreditedStaffLanguage: [null, [Validators.required]]
+        this.form = this.formBuilder.group({
+            totalAccreditedStaffLanguage: [null, [Validators.required, Validators.min(1)]],
+            percentageAccreditedStaffLanguage: [null, [Validators.required, Validators.min(1)]]
         });
+
+        this.percentageAccreditedStaffLanguageField.disable();
 
         this.watchFormChanges();
     }
 
     watchFormChanges() {
-        this.dataOut.emit(this.form);
+        this.dataOut.emit(this.form.value);
 
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
             if (this.form.valid) {
-                this.dataOut.emit(this.form);
+                this.dataOut.emit(this.form.value);
+            }
+        });
+
+        this.totalAccreditedStaffLanguageField.valueChanges.subscribe((value) => {
+            if (this.totalAccreditedStaffLanguageField.valid) {
+                const percentage = Math.round((value / this.totalStaff) * 100);
+
+                this.percentageAccreditedStaffLanguageField.patchValue(percentage);
+            } else {
+                this.percentageAccreditedStaffLanguageField.patchValue(0);
             }
         });
     }

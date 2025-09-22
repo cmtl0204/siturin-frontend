@@ -24,7 +24,7 @@ import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-sw
 })
 export class TouristGuideComponent implements OnInit {
     @Input() data!: string | undefined;
-    @Output() dataOut = new EventEmitter<FormGroup>();
+    @Output() dataOut = new EventEmitter<Record<string, any>>();
 
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
@@ -68,12 +68,12 @@ export class TouristGuideComponent implements OnInit {
     }
 
     watchFormChanges() {
-        this.dataOut.emit(this.form);
+        this.dataOut.emit(this.form.value);
 
-        this.hasTouristGuideField.valueChanges.subscribe((value) => {
+        this.hasTouristGuideField.valueChanges.subscribe((_) => {
             this.touristGuidesField.setValue(this.items);
 
-            this.dataOut.emit(this.form);
+            this.dataOut.emit(this.form.value);
         });
     }
 
@@ -168,7 +168,7 @@ export class TouristGuideComponent implements OnInit {
 
         this.touristGuidesField.setValue(this.items);
 
-        this.dataOut.emit(this.form);
+        this.dataOut.emit(this.form.value);
     }
 
     deleteTouristGuide(identification: string) {
@@ -192,7 +192,7 @@ export class TouristGuideComponent implements OnInit {
 
                 this.touristGuidesField.setValue(this.items);
 
-                this.dataOut.emit(this.form);
+                this.dataOut.emit(this.form.value);
             },
             key: 'confirmdialog'
         });

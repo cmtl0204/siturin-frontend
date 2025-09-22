@@ -80,6 +80,7 @@ export class RegistrationComponent {
                 this.showTypeEstablishment = hasLandUseControl.value === true;
             }
         }
+
         Object.keys(childForm.controls).forEach((controlName) => {
             if (!this.mainForm.contains(controlName)) {
                 this.mainForm.addControl(controlName, this.formBuilder.control(childForm.get(controlName)?.value));

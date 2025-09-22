@@ -7,14 +7,18 @@
                 <label
                     appLabel
                     for="totalAccreditedStaffLanguage"
-                    [required]="totalAccreditedStaffLanguageField"
-                    [label]="'De <b>1</b> empleados declarados en la sección de Personal del establecimiento ¿Cuántas personas están acreditadas como mínimo el nivel B1 de conocimiento de al menos un idioma extranjero de acuerdo al Marco Común Europeo para las Lenguas?'">
+                    [required]="totalAccreditedStaffLanguageField">
+                    De <b>{{ totalStaff }}</b> empleados declarados en la sección de Personal del establecimiento
+                    ¿Cuántas personas están acreditadas como mínimo el nivel B1 de conocimiento de al menos un idioma
+                    extranjero de acuerdo al Marco Común Europeo para las Lenguas?
                 </label>
 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-                    <div class="md:col-span-2 flex flex-col gap-2">
+                    <div class="md:col-span-3 flex flex-col gap-2">
                         <p-inputNumber id="totalAccreditedStaffLanguage"
                                        formControlName="totalAccreditedStaffLanguage"
+                                       [max]="totalStaff"
+                                       [min]="0"
                                        [showButtons]="true" buttonLayout="horizontal">
                         </p-inputNumber>
 
@@ -24,27 +28,21 @@
                             [touched]="totalAccreditedStaffLanguageField.touched"
                             [dirty]="totalAccreditedStaffLanguageField.dirty" />
                     </div>
+
+                    <div class="md:col-span-2 flex flex-col gap-2">
+                        <p-inputgroup>
+                            <p-inputnumber id="percentageAccreditedStaffLanguage"
+                                           formControlName="percentageAccreditedStaffLanguage" />
+                            <p-inputgroup-addon>%</p-inputgroup-addon>
+                        </p-inputgroup>
+
+                        <p-message
+                            appErrorMessage
+                            [errors]="percentageAccreditedStaffLanguageField.errors"
+                            [touched]="percentageAccreditedStaffLanguageField.touched"
+                            [dirty]="percentageAccreditedStaffLanguageField.dirty" />
+                    </div>
                 </div>
-            </div>
-
-            <!-- percentageAccreditedStaffLanguage -->
-            <div class="md:col-span-12 flex flex-col gap-2">
-                <label
-                    appLabel
-                    for="percentageAccreditedStaffLanguage"
-                    label="Porcentaje de personal acreditado"
-                    [required]="percentageAccreditedStaffLanguageField">
-                </label>
-
-                <p-inputNumber
-                    id="percentageAccreditedStaffLanguage"
-                    formControlName="percentageAccreditedStaffLanguage" />
-
-                <p-message
-                    appErrorMessage
-                    [errors]="percentageAccreditedStaffLanguageField.errors"
-                    [touched]="percentageAccreditedStaffLanguageField.touched"
-                    [dirty]="percentageAccreditedStaffLanguageField.dirty" />
             </div>
         </div>
     </form>

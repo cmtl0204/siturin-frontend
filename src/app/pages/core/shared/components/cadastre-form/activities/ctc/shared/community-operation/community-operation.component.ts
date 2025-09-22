@@ -14,9 +14,7 @@ import { PanelModule } from 'primeng/panel';
 import { PrimeIcons } from 'primeng/api';
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { TouristGuideComponent } from '@modules/core/shared';
-import {
-    AdventureTourismModalityComponent
-} from '@modules/core/shared/components/adventure-tourism-modality/adventure-tourism-modality.component';
+import { AdventureTourismModalityComponent } from '@modules/core/shared/components/adventure-tourism-modality/adventure-tourism-modality.component';
 
 @Component({
     selector: 'app-community-operation',
@@ -61,14 +59,14 @@ export class CommunityOperationComponent implements OnInit {
         });
     }
 
-    saveForm(childForm: FormGroup): void {
-        Object.keys(childForm.controls).forEach((controlName) => {
-            if (!this.mainForm.contains(controlName)) {
-                this.mainForm.addControl(controlName, this.formBuilder.control(childForm.get(controlName)?.value));
+    saveForm(data: Record<string, any>, objectName?: string): void {
+        if (objectName) {
+            if (!this.mainForm.contains(objectName)) {
+                this.mainForm.addControl(objectName, this.formBuilder.control(data));
             } else {
-                this.mainForm.get(controlName)?.patchValue(childForm.get(controlName)?.value);
+                this.mainForm.get(objectName)?.patchValue(data);
             }
-        });
+        }
     }
 
     getFormErrors(): string[] {

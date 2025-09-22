@@ -135,7 +135,7 @@
                         appLabel
                         for="rucType"
                         label="Tipo Contribuyente"
-                        [required]="ructypeField">
+                        [required]="rucTypeField">
                     </label>
 
                     <p-select
@@ -143,14 +143,15 @@
                         [options]="rucTypes"
                         optionLabel="name"
                         formControlName="rucType"
+                        appendTo="body"
                         placeholder="Seleccione tipo de contribuyente">
                     </p-select>
 
                     <p-message
                         appErrorMessage
-                        [errors]="ructypeField.errors"
-                        [touched]="ructypeField.touched"
-                        [dirty]="ructypeField.dirty"
+                        [errors]="rucTypeField.errors"
+                        [touched]="rucTypeField.touched"
+                        [dirty]="rucTypeField.dirty"
                     />
                 </div>
 
@@ -168,6 +169,7 @@
                         [options]="types"
                         optionLabel="name"
                         formControlName="type"
+                        appendTo="body"
                         placeholder="Seleccione tipo de transporte">
                     </p-select>
 

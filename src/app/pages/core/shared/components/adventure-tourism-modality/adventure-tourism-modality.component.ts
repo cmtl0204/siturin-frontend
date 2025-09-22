@@ -46,7 +46,7 @@ import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-sw
     styleUrls: ['./adventure-tourism-modality.component.scss']
 })
 export class AdventureTourismModalityComponent implements OnInit {
-    @Output() dataOut = new EventEmitter<FormGroup>();
+    @Output() dataOut = new EventEmitter<Record<string, any>>();
     @Input() modelId!: string | undefined;
 
     protected readonly PrimeIcons = PrimeIcons;
@@ -123,12 +123,12 @@ export class AdventureTourismModalityComponent implements OnInit {
     }
 
     watchFormChanges() {
-        this.dataOut.emit(this.form);
+        this.dataOut.emit(this.form.value);
 
         this.hasAdventureTourismModalityField.valueChanges.subscribe((value) => {
             this.adventureTourismModalitiesField.setValue(this.items);
 
-            this.dataOut.emit(this.form);
+            this.dataOut.emit(this.form.value);
         });
 
         this.classNameField.valueChanges.subscribe((value) => {
@@ -207,7 +207,7 @@ export class AdventureTourismModalityComponent implements OnInit {
 
         this.adventureTourismModalitiesField.setValue(this.items);
 
-        this.dataOut.emit(this.form);
+        this.dataOut.emit(this.form.value);
 
         this.closeModal();
     }
@@ -244,8 +244,8 @@ export class AdventureTourismModalityComponent implements OnInit {
         this.modalityForm.reset();
     }
 
-    saveForm(childForm: FormGroup) {
-        this.regulationField.patchValue(childForm.value);
+    saveForm(data: Record<string, any>) {
+        this.regulationField.patchValue(data);
     }
 
     // Getter Modality Form

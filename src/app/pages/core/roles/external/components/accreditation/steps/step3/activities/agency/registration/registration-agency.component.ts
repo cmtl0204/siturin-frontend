@@ -11,14 +11,16 @@ import { Fluid } from 'primeng/fluid';
 import { SalesRepresentativeComponent } from '@/pages/core/shared/components/sales-representative/sales-representative.component';
 import { TouristTransportCompanyComponent } from '@/pages/core/shared/components/tourist-transport-company/tourist-transport-company.component';
 import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
+import { CoreEnum } from '@utils/enums';
+import { AgencyHttpService } from '@/pages/core/roles/external/services';
 
 @Component({
     selector: 'app-registration',
     imports: [PhysicalSpaceComponent, AccreditedStaffLanguageComponent, Button, TouristGuideComponent, AdventureTourismModalityComponent, Fluid, SalesRepresentativeComponent, TouristTransportCompanyComponent, RegulationComponent],
-    templateUrl: './registration.component.html',
-    styleUrl: './registration.component.scss'
+    templateUrl: './registration-agency.component.html',
+    styleUrl: './registration-agency.component.scss'
 })
-export class RegistrationComponent {
+export class RegistrationAgencyComponent {
     protected readonly PrimeIcons = PrimeIcons;
     @Output() step: EventEmitter<number> = new EventEmitter<number>();
 
@@ -28,13 +30,12 @@ export class RegistrationComponent {
     @ViewChildren(TouristGuideComponent) private touristGuideComponent!: QueryList<TouristGuideComponent>;
     @ViewChildren(RegulationComponent) private regulationComponent!: QueryList<RegulationComponent>;
 
-    private formBuilder = inject(FormBuilder);
-    protected mainForm!: FormGroup;
-    protected formInitialized = false;
+    private mainData: Record<string, any> = {};
     protected modelId!: string | undefined;
 
     protected readonly customMessageService = inject(CustomMessageService);
     protected readonly coreSessionStorageService = inject(CoreSessionStorageService);
+    protected readonly agencyHttpService = inject(AgencyHttpService);
 
     constructor() {
         effect(async () => {
@@ -45,29 +46,34 @@ export class RegistrationComponent {
                 if (processSignal.category?.hasRegulation) this.modelId = processSignal.category.id;
             }
         });
-
-        this.mainForm = this.formBuilder.group({});
     }
 
-    saveForm(childForm: FormGroup) {
-        Object.keys(childForm.controls).forEach((controlName) => {
-            if (!this.mainForm.contains(controlName)) {
-                this.mainForm.addControl(controlName, this.formBuilder.control(childForm.get(controlName)?.value));
-            } else {
-                this.mainForm.get(controlName)?.patchValue(childForm.get(controlName)?.value);
+    saveForm(data: any, objectName?: string) {
+        if (objectName) {
+            if (!this.mainData[objectName]) {
+                this.mainData[objectName] = {};
             }
-        });
-    }
 
-    onSubmit() {
-        console.log(this.mainForm.value);
-        if (this.checkFormErrors()) {
-            this.saveProcess();
+            this.mainData[objectName] = { ...this.mainData[objectName], ...data };
+        } else {
+            this.mainData = { ...this.mainData, ...data };
         }
     }
 
-    saveProcess() {
-        console.log(this.mainForm.value);
+    async onSubmit() {
+        if (this.checkFormErrors()) {
+            await this.saveProcess();
+        }
+    }
+
+    async saveProcess() {
+        const sessionData = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
+
+        const payload = { ...this.mainData, ...sessionData };
+
+        this.agencyHttpService.createRegistration(payload).subscribe({
+            next: () => {}
+        });
     }
 
     checkFormErrors() {

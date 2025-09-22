@@ -27,7 +27,7 @@ import { SalesRepresentativeInterface } from '../../interfaces/sales-representat
     styleUrls: ['./sales-representative.component.scss']
 })
 export class SalesRepresentativeComponent implements OnInit {
-    @Output() dataOut = new EventEmitter<FormGroup>();
+    @Output() dataOut = new EventEmitter<Record<string, any>>();
 
     private readonly formBuilder = inject(FormBuilder);
     private readonly confirmationService = inject(ConfirmationService);
@@ -66,12 +66,12 @@ export class SalesRepresentativeComponent implements OnInit {
     }
 
     watchFormChanges() {
-        this.dataOut.emit(this.form);
+        this.dataOut.emit(this.form.value);
 
         this.hasSalesRepresentativeField.valueChanges.subscribe((value) => {
             this.salesRepresentativesField.setValue(this.items);
 
-            this.dataOut.emit(this.form);
+            this.dataOut.emit(this.form.value);
         });
     }
 
@@ -151,7 +151,7 @@ export class SalesRepresentativeComponent implements OnInit {
 
         this.salesRepresentativesField.setValue(this.items);
 
-        this.dataOut.emit(this.form);
+        this.dataOut.emit(this.form.value);
 
         this.closeModal();
     }
@@ -177,7 +177,7 @@ export class SalesRepresentativeComponent implements OnInit {
 
                 this.salesRepresentativesField.setValue(this.items);
 
-                this.dataOut.emit(this.form);
+                this.dataOut.emit(this.form.value);
             },
             key: 'confirmdialog'
         });
