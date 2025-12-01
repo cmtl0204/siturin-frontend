@@ -7,11 +7,12 @@ import { LayoutService } from '@layout/service';
 import { environment } from '@env/environment';
 import { AuthService } from '@modules/auth/auth.service';
 import { Button } from 'primeng/button';
+import { Tooltip } from 'primeng/tooltip';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [RouterModule, CommonModule, StyleClassModule, Button],
+    imports: [RouterModule, CommonModule, StyleClassModule, Button, Tooltip],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
             <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">
@@ -47,11 +48,11 @@ import { Button } from 'primeng/button';
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
                     @if (authService.auth && authService.role) {
-                        <p-button type="button" [text]="true" [raised]="true" [rounded]="true" [label]="authService.auth.username" [icon]="PrimeIcons.USER" />
+                        <p-button type="button" [text]="true" [raised]="true" [rounded]="true" [label]="authService.auth.username" pTooltip="Mi Perfil" [icon]="PrimeIcons.USER" />
 
-                        <p-button type="button" [text]="true" [raised]="true" [rounded]="true" severity="warn" [label]="authService.role.name" />
+                        <p-button type="button" [text]="true" [raised]="true" [rounded]="true" severity="warn" [label]="authService.role.name" pTooltip="Mi Rol" />
                     }
-                    <p-button (onClick)="signOut()" type="button" [text]="true" [raised]="true" [rounded]="true" severity="danger" label="Cerrar Sesión" [icon]="PrimeIcons.POWER_OFF" />
+                    <p-button (onClick)="signOut()" type="button" [raised]="true" [rounded]="true" severity="danger" pTooltip="Cerrar Sesión" [icon]="PrimeIcons.POWER_OFF" />
                 </div>
             </div>
         </div>
