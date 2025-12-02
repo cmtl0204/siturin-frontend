@@ -1,13 +1,12 @@
-import { Component, effect, EventEmitter, inject, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { Component, effect, inject, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Button } from 'primeng/button';
 import { PrimeIcons } from 'primeng/api';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { CoreEnum } from '@utils/enums';
 import { CoreSessionStorageService, CustomMessageService } from '@utils/services';
 import { PeopleCapacityComponent } from '../shared/people-capacity/people-capacity.component';
 import { PhysicalSpaceComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/park/shared/physical-space/physical-space.component';
-import { CoreEnum } from '@utils/enums';
-import { ParkHttpService } from '@modules/core/roles/external/services/park-http.service';
 import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
+import { ParkHttpService } from '@modules/core/roles/external/services/park-http.service';
 
 @Component({
     selector: 'app-registration',
@@ -17,50 +16,49 @@ import { RegulationComponent } from '@/pages/core/shared/components/regulation/r
     styleUrl: './registration.component.scss'
 })
 export class RegistrationComponent implements OnInit {
-    protected readonly PrimeIcons = PrimeIcons;
-    private readonly coreSessionStorageService = inject(CoreSessionStorageService);
-    private readonly parksHttpService = inject(ParkHttpService);
-
     @ViewChildren(PhysicalSpaceComponent) private physicalSpaceComponent!: QueryList<PhysicalSpaceComponent>;
     @ViewChildren(PeopleCapacityComponent) private peopleCapacityComponent!: QueryList<PeopleCapacityComponent>;
 
-    private mainData: Record<string, any> = {};
-    protected modelId: string | undefined = undefined;
+    protected readonly PrimeIcons = PrimeIcons;
+    private readonly coreSessionStorageService = inject(CoreSessionStorageService);
+    private readonly parksHttpService = inject(ParkHttpService);
+    private readonly customMessageService = inject(CustomMessageService);
 
-    protected readonly customMessageService = inject(CustomMessageService);
+    private mainData: Record<string, any> = {};
+    protected modelId?: string;
 
     constructor() {
         effect(async () => {
-            const processSignal = this.coreSessionStorageService.processSignal();
+            const process = this.coreSessionStorageService.processSignal();
 
-            if (processSignal) {
-                if (processSignal.classification?.hasRegulation) this.modelId = processSignal.classification.id;
-                if (processSignal.category?.hasRegulation) this.modelId = processSignal.category.id;
+            if (!process) return;
+
+            const candidates = [process.classification, process.category];
+            const regulated = candidates.find(c => c?.hasRegulation);
+
+            if (regulated) {
+                this.modelId = regulated.id;
             }
         });
     }
 
     ngOnInit(): void {}
 
-    saveForm(data: any, objectName?: string) {
-        if (objectName) {
-            if (!this.mainData[objectName]) {
-                this.mainData[objectName] = {};
-            }
+    protected saveForm(data: any, objectName?: string) {
+        const target = objectName ? (this.mainData[objectName] ?? {}) : this.mainData;
 
-            this.mainData[objectName] = { ...this.mainData[objectName], ...data };
-        } else {
-            this.mainData = { ...this.mainData, ...data };
-        }
+        const merged = { ...target, ...data };
+
+        objectName ? (this.mainData[objectName] = merged) : (this.mainData = merged);
     }
 
-    async onSubmit() {
+    protected async onSubmit() {
         if (this.checkFormErrors()) {
             await this.saveProcess();
         }
     }
 
-    async saveProcess() {
+    private async saveProcess() {
         const sessionData = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
 
         const payload = { ...this.mainData, ...sessionData };
@@ -70,10 +68,12 @@ export class RegistrationComponent implements OnInit {
         });
     }
 
-    checkFormErrors() {
-        const errors: string[] = [...this.physicalSpaceComponent.toArray().flatMap((c) => c.getFormErrors()), ...this.peopleCapacityComponent.toArray().flatMap((c) => c.getFormErrors())];
+    private checkFormErrors() {
+        const components = [...this.physicalSpaceComponent.toArray(), ...this.peopleCapacityComponent.toArray()];
 
-        if (errors.length > 0) {
+        const errors = components.flatMap((c) => c.getFormErrors());
+
+        if (errors.length) {
             this.customMessageService.showFormErrors(errors);
             return false;
         }

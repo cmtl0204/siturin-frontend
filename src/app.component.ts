@@ -32,7 +32,9 @@ import { ActivityHttpService } from '@modules/core/shared/services';
 
         <app-configurator />
 
-        <router-outlet />
+        @if (loading) {
+            <router-outlet />
+        }
     `
 })
 export class AppComponent implements OnInit {
@@ -42,6 +44,7 @@ export class AppComponent implements OnInit {
     protected readonly catalogueHttpService = inject(CatalogueHttpService);
     protected readonly customMessageService = inject(CustomMessageService);
     private readonly coreSessionStorageService = inject(CoreSessionStorageService);
+    protected loading: boolean = false;
 
     constructor() {}
 
@@ -61,6 +64,8 @@ export class AppComponent implements OnInit {
                     await this.coreSessionStorageService.setEncryptedValue(CoreEnum.activities, response.data.activities);
                     await this.coreSessionStorageService.setEncryptedValue(CoreEnum.classifications, response.data.classifications);
                     await this.coreSessionStorageService.setEncryptedValue(CoreEnum.categories, response.data.categories);
+
+                    this.loading = true;
                 })
             )
             .subscribe();

@@ -9,14 +9,17 @@ import { Router } from '@angular/router';
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { CoreService } from '@utils/services/core.service';
 import { MY_ROUTES } from '@routes';
+import { CatalogueHttpService, CoreSessionStorageService, DpaHttpService } from '@utils/services';
+import { ActivityHttpService } from '@/pages/core/shared/services';
+import { switchMap, tap } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
-    private readonly _coreService = inject(CoreService);
-    private readonly _router = inject(Router);
-    private readonly _customMessageService = inject(CustomMessageService);
+    private readonly coreService = inject(CoreService);
+    private readonly router = inject(Router);
+    private readonly customMessageService = inject(CustomMessageService);
 
     get accessToken(): string | null {
         let accessToken = sessionStorage.getItem('accessToken');
@@ -81,22 +84,18 @@ export class AuthService {
     }
 
     removeLogin() {
-        this._coreService.showProcessing();
+        this.coreService.showProcessing();
 
         setTimeout(() => {
-            this._coreService.hideProcessing();
+            this.coreService.hideProcessing();
 
             if (this.accessToken) {
-                this._customMessageService.showInfo({ summary: 'Se cerró la sesión correctamente', detail: '' });
+                this.customMessageService.showInfo({ summary: 'Se cerró la sesión correctamente', detail: '' });
             }
 
-            this._router.navigateByUrl(MY_ROUTES.signIn);
             localStorage.clear();
-
-            for (let i = 0; i < sessionStorage.length; i++) {
-                sessionStorage.removeItem(sessionStorage.key(i)!);
-            }
-
+            sessionStorage.clear();
+            this.router.navigateByUrl(MY_ROUTES.signIn);
         }, 500);
     }
 }

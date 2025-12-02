@@ -28,7 +28,7 @@ export enum CatalogueTypeEnum {
     ruc_types = 'ruc_types',
     process_food_drinks_establishment_type = 'process_food_drinks_establishment_type',
     service_types_continent = 'service_types_continent',
-    transporte_tipo_vehiculos = 'transporte_tipo_vehiculos',
+    transport_vehicle_types = 'transporte_tipo_vehiculos',
     process_transport_airline_type = 'process_transport_airline_type',
 }
 

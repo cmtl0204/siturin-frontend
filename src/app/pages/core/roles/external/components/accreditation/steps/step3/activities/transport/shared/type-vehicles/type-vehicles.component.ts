@@ -189,7 +189,7 @@ export class TypeVehiclesComponent implements OnInit {
     }
 
     async loadCatalogues() {
-        this.types = await this.catalogueService.findByType(CatalogueTypeEnum.transporte_tipo_vehiculos);
+        this.types = await this.catalogueService.findByType(CatalogueTypeEnum.transport_vehicle_types);
     }
 
     get hasLandTransportsField(): AbstractControl {
