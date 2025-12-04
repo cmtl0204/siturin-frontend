@@ -8,7 +8,7 @@ import { RegulationSimulatorComponent } from '@/pages/core/shared/components/reg
 
 export const appRoutes: Routes = [
     {
-        path: 'main',
+        path: MY_ROUTES.main,
         component: AppLayoutMain,
         canActivate: [tokenGuard],
         children: [

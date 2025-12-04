@@ -11,12 +11,10 @@ import { HttpInterceptorProviders } from '@/interceptors';
 export const appConfig: ApplicationConfig = {
     providers: [
         provideRouter(appRoutes, withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }), withEnabledBlockingInitialNavigation()),
-        provideHttpClient(withFetch()),
+        provideHttpClient(withFetch(),withInterceptors(HttpInterceptorProviders)),
         provideAnimationsAsync(),
+
         providePrimeNG({ theme: { preset: Theme, options: { darkModeSelector: '.app-dark' } } }),
-        provideHttpClient(withFetch()),
-        provideHttpClient(withInterceptors(HttpInterceptorProviders)),
-        provideAnimationsAsync(),
 
         MessageService,
         ConfirmationService

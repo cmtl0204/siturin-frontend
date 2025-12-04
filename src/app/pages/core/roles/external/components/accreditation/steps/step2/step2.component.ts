@@ -17,18 +17,18 @@ import { CoreEnum } from '@utils/enums';
     styleUrl: './step2.component.scss'
 })
 export class Step2Component implements OnInit {
-    protected readonly PrimeIcons = PrimeIcons;
-
-    @Output() step: EventEmitter<number> = new EventEmitter<number>();
     @ViewChildren(BusinessInfoComponent) private businessInfoComponent!: QueryList<BusinessInfoComponent>;
     @ViewChildren(ContactPersonComponent) private contactPersonComponent!: QueryList<ContactPersonComponent>;
     @ViewChildren(StaffComponent) private staffComponent!: QueryList<StaffComponent>;
     @ViewChildren(AddressComponent) private addressComponent!: QueryList<AddressComponent>;
 
+    @Output() step: EventEmitter<number> = new EventEmitter<number>();
+    protected step2Data = signal<any>(null);
+
+    protected readonly PrimeIcons = PrimeIcons;
+
     private formBuilder = inject(FormBuilder);
     protected mainForm!: FormGroup;
-
-    protected step2Data = signal<any>(null);
 
     protected readonly customMessageService = inject(CustomMessageService);
     protected readonly coreSessionStorageService = inject(CoreSessionStorageService);
@@ -36,6 +36,7 @@ export class Step2Component implements OnInit {
     constructor() {
         this.mainForm = this.formBuilder.group({});
     }
+
     async ngOnInit() {
         await this.loadData();
     }

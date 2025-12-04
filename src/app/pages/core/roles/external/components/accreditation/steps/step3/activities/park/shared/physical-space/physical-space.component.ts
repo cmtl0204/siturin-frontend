@@ -55,7 +55,7 @@ export class PhysicalSpaceComponent implements OnInit {
     watchFormChanges() {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
             if (this.form.valid) {
-                this.dataOut.emit(this.form);
+                this.dataOut.emit(this.form.value);
             }
         });
 

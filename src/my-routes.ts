@@ -1,4 +1,5 @@
 export const MY_ROUTES = {
+    main: 'main',
     home: '',
     layout: {
         base: 'layout'

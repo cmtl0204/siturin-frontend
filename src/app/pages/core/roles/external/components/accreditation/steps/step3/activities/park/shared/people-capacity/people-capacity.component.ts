@@ -42,7 +42,7 @@ export class PeopleCapacityComponent implements OnInit {
     watchFormChanges(): void {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(() => {
             if (this.form.valid) {
-                this.dataOut.emit(this.form);
+                this.dataOut.emit(this.form.value);
             }
         });
     }

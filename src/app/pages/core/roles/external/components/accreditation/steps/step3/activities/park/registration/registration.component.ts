@@ -18,6 +18,7 @@ import { ParkHttpService } from '@modules/core/roles/external/services/park-http
 export class RegistrationComponent implements OnInit {
     @ViewChildren(PhysicalSpaceComponent) private physicalSpaceComponent!: QueryList<PhysicalSpaceComponent>;
     @ViewChildren(PeopleCapacityComponent) private peopleCapacityComponent!: QueryList<PeopleCapacityComponent>;
+    @ViewChildren(RegulationComponent) private regulationComponent!: QueryList<RegulationComponent>;
 
     protected readonly PrimeIcons = PrimeIcons;
     private readonly coreSessionStorageService = inject(CoreSessionStorageService);
@@ -34,7 +35,7 @@ export class RegistrationComponent implements OnInit {
             if (!process) return;
 
             const candidates = [process.classification, process.category];
-            const regulated = candidates.find(c => c?.hasRegulation);
+            const regulated = candidates.find((c) => c?.hasRegulation);
 
             if (regulated) {
                 this.modelId = regulated.id;
@@ -61,6 +62,8 @@ export class RegistrationComponent implements OnInit {
     private async saveProcess() {
         const sessionData = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
 
+        console.log(this.mainData);
+
         const payload = { ...this.mainData, ...sessionData };
 
         this.parksHttpService.createRegistration(payload).subscribe({
@@ -69,7 +72,7 @@ export class RegistrationComponent implements OnInit {
     }
 
     private checkFormErrors() {
-        const components = [...this.physicalSpaceComponent.toArray(), ...this.peopleCapacityComponent.toArray()];
+        const components = [...this.physicalSpaceComponent.toArray(), ...this.peopleCapacityComponent.toArray(), ...this.regulationComponent.toArray()];
 
         const errors = components.flatMap((c) => c.getFormErrors());
 
