@@ -1,5 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges, inject, QueryList, ViewChildren } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    inject,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    QueryList,
+    SimpleChanges,
+    ViewChildren
+} from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
@@ -16,7 +27,7 @@ import { RegulationComponent } from '@/pages/core/shared/components/regulation/r
 @Component({
     selector: 'app-food-drink',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, InputNumberModule, Fluid, MessageModule, LabelDirective, ErrorMessageDirective, Panel, RegulationComponent],
+    imports: [CommonModule, ReactiveFormsModule, InputNumberModule, Fluid, MessageModule, LabelDirective, ErrorMessageDirective, Panel],
     templateUrl: './food-drink.component.html',
     styleUrl: './food-drink.component.scss'
 })
@@ -56,7 +67,7 @@ export class FoodDrinkComponent implements OnInit, OnChanges {
         this.form = this.formBuilder.group({
             totalTables: [null, Validators.required],
             totalCapacities: [null, Validators.required],
-            regulation:[null, Validators.required]
+            regulation: [null, Validators.required]
         });
 
         this.watchFormChanges();
@@ -70,14 +81,14 @@ export class FoodDrinkComponent implements OnInit, OnChanges {
         });
     }
 
-    saveRegulation(form: FormGroup){
-        this.regulationField.patchValue({category: form.value.regulation.category, regulationResponses: form.value.regulation.regulationResponses})
+    saveRegulation(form: FormGroup) {
+        this.regulationField.patchValue({ category: form.value.regulation.category, regulationResponses: form.value.regulation.regulationResponses });
     }
 
     getFormErrors(): string[] {
         const errors: string[] = [];
-        const regulationErrors=this.regulationComponent.toArray().flatMap((c) => c.getFormErrors());
-        if(regulationErrors.length > 0) regulationErrors.forEach(error => errors.push(error))
+        const regulationErrors = this.regulationComponent.toArray().flatMap((c) => c.getFormErrors());
+        if (regulationErrors.length > 0) regulationErrors.forEach((error) => errors.push(error));
         if (this.totalTablesField.invalid) errors.push('Número de mesas');
         if (this.totalCapacitiesField.invalid) errors.push('Capacidad en número de personas');
 
@@ -101,6 +112,6 @@ export class FoodDrinkComponent implements OnInit, OnChanges {
     }
 
     get regulationField(): AbstractControl {
-    return this.form.controls['regulation'];
-  }
+        return this.form.controls['regulation'];
+    }
 }

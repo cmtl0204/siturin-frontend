@@ -11,13 +11,14 @@ import { TableModule } from 'primeng/table';
 import { PrimeIcons } from 'primeng/api';
 import { CustomMessageService } from '@utils/services/custom-message.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { TouristTransportCompanyComponent } from "@/pages/core/shared/components/tourist-transport-company/tourist-transport-company.component";
-import { RegulationComponent } from "@/pages/core/shared/components/regulation/regulation.component";
+import {
+    TouristTransportCompanyComponent
+} from '@/pages/core/shared/components/tourist-transport-company/tourist-transport-company.component';
 
 @Component({
     selector: 'app-transport',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, CardModule, PanelModule, MessageModule, ButtonModule, DialogModule, InputTextModule, TableModule, FormsModule, TouristTransportCompanyComponent],
+    imports: [CommonModule, ReactiveFormsModule, CardModule, PanelModule, MessageModule, ButtonModule, DialogModule, InputTextModule, TableModule, FormsModule],
     templateUrl: './transport.component.html',
     styleUrl: './transport.component.scss'
 })
@@ -27,7 +28,6 @@ export class TouristTransportCompanyCtcComponent implements OnInit {
     @Output() fieldErrorsOut = new EventEmitter<string[]>();
     @Input() modelId!: string | undefined;
 
-
     protected readonly PrimeIcons = PrimeIcons;
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
@@ -36,39 +36,39 @@ export class TouristTransportCompanyCtcComponent implements OnInit {
 
     protected mainForm!: FormGroup;
 
-        constructor() {
-            this.buildForm();
-        }
+    constructor() {
+        this.buildForm();
+    }
 
-        ngOnInit(): void {
-            this.loadData();
-        }
+    ngOnInit(): void {
+        this.loadData();
+    }
 
-        buildForm(): void {
-            this.mainForm = this.formBuilder.group({});
+    buildForm(): void {
+        this.mainForm = this.formBuilder.group({});
 
-            this.watchFormChanges();
-        }
+        this.watchFormChanges();
+    }
 
-        watchFormChanges(): void {
-            this.mainForm.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(() => {
-                if (this.mainForm.valid) {
-                    this.dataOut.emit(this.mainForm.value);
-                }
-            });
-        }
+    watchFormChanges(): void {
+        this.mainForm.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(() => {
+            if (this.mainForm.valid) {
+                this.dataOut.emit(this.mainForm.value);
+            }
+        });
+    }
 
-        saveForm(childForm: FormGroup): void {
-            Object.keys(childForm.controls).forEach((controlName) => {
-                if (!this.mainForm.contains(controlName)) {
-                    this.mainForm.addControl(controlName, this.formBuilder.control(childForm.get(controlName)?.value));
-                } else {
-                    this.mainForm.get(controlName)?.patchValue(childForm.get(controlName)?.value);
-                }
-            });
-        }
+    saveForm(childForm: FormGroup): void {
+        Object.keys(childForm.controls).forEach((controlName) => {
+            if (!this.mainForm.contains(controlName)) {
+                this.mainForm.addControl(controlName, this.formBuilder.control(childForm.get(controlName)?.value));
+            } else {
+                this.mainForm.get(controlName)?.patchValue(childForm.get(controlName)?.value);
+            }
+        });
+    }
 
-        getFormErrors(): string[] {
+    getFormErrors(): string[] {
         const errors: string[] = [];
 
         const touristTransportCompanyErrors: string[] = [...this.touristTransportCompanyComponent.toArray().flatMap((c) => c.getFormErrors())];

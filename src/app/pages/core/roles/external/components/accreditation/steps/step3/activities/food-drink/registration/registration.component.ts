@@ -1,16 +1,25 @@
 import { Component, effect, EventEmitter, inject, Output, QueryList, ViewChildren } from '@angular/core';
-import { PhysicalSpaceComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/physical-space/physical-space.component';
-import { EstablishmentTypeComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-type/establishment-type.component';
+import {
+    PhysicalSpaceComponent
+} from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/physical-space/physical-space.component';
+import {
+    EstablishmentTypeComponent
+} from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-type/establishment-type.component';
 import { Button } from 'primeng/button';
 import { PrimeIcons } from 'primeng/api';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CoreSessionStorageService, CustomMessageService } from '@utils/services';
 import { CommonModule } from '@angular/common';
-import { AdventureModalitiesComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/adventure-modalities/adventure-modalities.component';
-import { EstablishmentCapacityComponent } from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-capacity/establishment-capacity.component';
-import { EstablishmentServiceComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-service/establishment-service.component';
+import {
+    EstablishmentCapacityComponent
+} from '@modules/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-capacity/establishment-capacity.component';
+import {
+    EstablishmentServiceComponent
+} from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-service/establishment-service.component';
 import { ClassificationInterface } from '@modules/core/shared/interfaces';
-import { EstablishmentKitchenComponent } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-kitchen/establishment-kitchen.component';
+import {
+    EstablishmentKitchenComponent
+} from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/food-drink/shared/establishment-kitchen/establishment-kitchen.component';
 import { CatalogueActivitiesCodeEnum, CatalogueProcessFoodDrinksClassificationEnum, CoreEnum } from '@/utils/enums';
 import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
 import { FoodDrinkHttpService } from '@/pages/core/roles/external/services';
@@ -19,7 +28,7 @@ import { Fluid } from 'primeng/fluid';
 @Component({
     selector: 'app-registration',
     standalone: true,
-    imports: [CommonModule, Button, EstablishmentTypeComponent, PhysicalSpaceComponent, EstablishmentCapacityComponent, EstablishmentServiceComponent, EstablishmentKitchenComponent, RegulationComponent, Fluid],
+    imports: [CommonModule, Button, EstablishmentTypeComponent, PhysicalSpaceComponent, EstablishmentCapacityComponent, EstablishmentServiceComponent, EstablishmentKitchenComponent, Fluid],
     templateUrl: './registration.component.html',
     styleUrl: './registration.component.scss'
 })

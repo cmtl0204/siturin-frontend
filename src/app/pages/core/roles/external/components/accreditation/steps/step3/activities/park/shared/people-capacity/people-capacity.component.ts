@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, inject, input, InputSignal, OnInit, output, OutputEmitterRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { LabelDirective } from '@utils/directives/label.directive';
@@ -16,8 +16,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     styleUrl: './people-capacity.component.scss'
 })
 export class PeopleCapacityComponent implements OnInit {
-    @Input() data!: string | undefined;
-    @Output() dataOut = new EventEmitter<FormGroup>();
+    public dataIn: InputSignal<any> = input<any>();
+    public dataOut: OutputEmitterRef<any> = output<any>();
 
     protected readonly PrimeIcons = PrimeIcons;
     private readonly formBuilder = inject(FormBuilder);
@@ -25,26 +25,34 @@ export class PeopleCapacityComponent implements OnInit {
 
     protected form!: FormGroup;
 
-    constructor() {
-        this.buildForm();
-    }
+    constructor() {}
 
     ngOnInit(): void {
-        this.watchFormChanges();
+        this.buildForm();
+        this.loadData();
     }
 
     buildForm(): void {
         this.form = this.formBuilder.group({
             totalCapacities: [null, [Validators.required, Validators.min(1)]]
         });
+
+        this.watchFormChanges();
     }
 
     watchFormChanges(): void {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(() => {
-            if (this.form.valid) {
+            if (this.getFormErrors().length === 0) {
+                console.log('entrooo');
                 this.dataOut.emit(this.form.value);
             }
         });
+    }
+
+    loadData() {
+        if (this.dataIn()) {
+            this.form.patchValue(this.dataIn());
+        }
     }
 
     getFormErrors(): string[] {
@@ -61,6 +69,9 @@ export class PeopleCapacityComponent implements OnInit {
         return errors;
     }
 
+    /**
+        Getters
+    **/
     get totalCapacitiesField(): AbstractControl {
         return this.form.controls['totalCapacities'];
     }

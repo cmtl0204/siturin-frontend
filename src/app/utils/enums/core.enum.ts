@@ -8,5 +8,12 @@ export enum CoreEnum {
     classifications = 'classifications',
     categories = 'categories',
     step1 = 'step1',
-    step2 = 'step2'
+    step2 = 'step2',
+    step3 = 'step3',
+    peopleCapacity = 'peopleCapacity',
+}
+
+export enum ChildParkFormEnum {
+    peopleCapacity = 'peopleCapacity',
+    physicalSpace = 'physicalSpace',
 }
