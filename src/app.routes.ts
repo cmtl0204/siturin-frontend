@@ -35,6 +35,12 @@ export const appRoutes: Routes = [
         children: [{ path: MY_ROUTES.guessPages.simulator.base, component: RegulationSimulatorComponent }]
     },
 
+    {
+        path: 'tests',
+        component: AppLayoutBlank,
+        children: [{ path: '', loadChildren: () => import('./app/pages/tests/tests.routes') }]
+    },
+
     { path: '', redirectTo: '/main/dashboards', pathMatch: 'full' },
 
     { path: '**', redirectTo: MY_ROUTES.errorPages.notFound.absolute }

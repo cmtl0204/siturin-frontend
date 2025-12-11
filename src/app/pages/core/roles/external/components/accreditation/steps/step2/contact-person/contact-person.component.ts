@@ -45,7 +45,7 @@ export class ContactPersonComponent implements OnInit {
 
     buildForm() {
         this.form = this.formBuilder.group({
-            identification: [null, [Validators.required]],
+            identification: [null, [Validators.required,Validators.minLength(9), Validators.maxLength(10)]],
             name: [null, [Validators.required]],
             phone: [null, [Validators.required, Validators.minLength(9), Validators.maxLength(10)]],
             secondaryPhone: [null, [Validators.minLength(9), Validators.maxLength(10)]],

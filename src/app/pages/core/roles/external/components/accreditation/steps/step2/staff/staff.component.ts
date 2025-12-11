@@ -7,11 +7,10 @@ import { CustomMessageService } from '@utils/services/custom-message.service';
 import { LabelDirective } from '@utils/directives/label.directive';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { Message } from 'primeng/message';
-import { InputText } from 'primeng/inputtext';
 
 @Component({
     selector: 'app-staff',
-    imports: [Fluid, ReactiveFormsModule, LabelDirective, InputNumber, ErrorMessageDirective, Message, InputText],
+    imports: [Fluid, ReactiveFormsModule, LabelDirective, InputNumber, ErrorMessageDirective, Message],
     templateUrl: './staff.component.html',
     styleUrl: './staff.component.scss'
 })
@@ -23,14 +22,14 @@ export class StaffComponent implements OnInit {
     protected readonly customMessageService = inject(CustomMessageService);
 
     protected form!: FormGroup;
-    protected formInitialized = false;
+    protected initializedForm = false;
 
-    protected totalStaffControl: FormControl = new FormControl(null, [Validators.required, Validators.min(1)]);
+    protected totalStaffControl: FormControl = new FormControl(0, [Validators.required, Validators.min(1)]);
 
     constructor() {
         effect(() => {
-            if (this.dataIn() && !this.formInitialized) {
-                this.formInitialized = true;
+            if (this.dataIn() && !this.initializedForm) {
+                this.initializedForm = true;
                 this.loadData();
             }
         });
@@ -60,10 +59,14 @@ export class StaffComponent implements OnInit {
 
         this.totalMenField.valueChanges.subscribe((value) => {
             if (value && value > 0) {
+                if (value < this.totalMenDisabilityField.value) {
+                    this.totalMenDisabilityField.setValue(value);
+                }
+
                 this.totalStaffControl.patchValue(value + this.totalWomenField.value);
             } else {
-                this.totalMenDisabilityField.patchValue(value);
-                this.totalStaffControl.patchValue(0);
+                this.totalMenDisabilityField.patchValue(0);
+                this.totalStaffControl.patchValue(this.totalWomenField.value);
             }
 
             this.totalStaffControl.markAsTouched();
@@ -71,10 +74,14 @@ export class StaffComponent implements OnInit {
 
         this.totalWomenField.valueChanges.subscribe((value) => {
             if (value && value > 0) {
+                if (value < this.totalWomenDisabilityField.value) {
+                    this.totalWomenDisabilityField.setValue(value);
+                }
+
                 this.totalStaffControl.patchValue(value + this.totalMenField.value);
             } else {
                 this.totalWomenDisabilityField.patchValue(0);
-                this.totalStaffControl.patchValue(0);
+                this.totalStaffControl.patchValue(this.totalMenField.value);
             }
 
             this.totalStaffControl.markAsTouched();

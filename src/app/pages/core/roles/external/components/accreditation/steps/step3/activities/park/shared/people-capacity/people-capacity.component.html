@@ -1,27 +1,32 @@
-<p-fluid>
-    <form [formGroup]="form" class="card flex flex-col gap-6 w-full">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 -mt-12">
-            <!-- totalCapacities -->
-            <div class="md:col-span-12 flex flex-col gap-2">
-                <label
-                    appLabel
-                    for="totalCapacities"
-                    label="Capacidad en número de personas"
-                    [required]="form.controls['capacidadPersonas']">
-                </label>
+<p-fluid class="custom-card-form">
+    <form [formGroup]="form" class="custom-grid-form">
+        <!-- totalCapacities -->
+        <div class="md:col-span-3 custom-field-form">
+            <label
+                appLabel
+                for="totalCapacities"
+                label="Capacidad en número de personas"
+                [required]="totalCapacitiesField">
+            </label>
 
-                <p-inputNumber
-                    inputId="totalCapacities"
-                    formControlName="totalCapacities"
-                    [showButtons]="true"
-                    [min]="1" />
+            <p-inputNumber
+                inputId="totalCapacities"
+                formControlName="totalCapacities"
+                [showButtons]="true"
+                [min]="1">
+                <ng-template #incrementbuttonicon>
+                    <span class="pi pi-plus"></span>
+                </ng-template>
+                <ng-template #decrementbuttonicon>
+                    <span class="pi pi-minus"></span>
+                </ng-template>
+            </p-inputNumber>
 
-                <p-message
-                    appErrorMessage
-                    [errors]="form.controls['totalCapacities'].errors"
-                    [touched]="form.controls['totalCapacities'].touched"
-                    [dirty]="form.controls['totalCapacities'].dirty" />
-            </div>
+            <p-message
+                appErrorMessage
+                [errors]="totalCapacitiesField.errors"
+                [touched]="totalCapacitiesField.touched"
+                [dirty]="totalCapacitiesField.dirty" />
         </div>
     </form>
 </p-fluid>

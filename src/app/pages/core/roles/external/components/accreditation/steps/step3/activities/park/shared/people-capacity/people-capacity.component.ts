@@ -20,8 +20,9 @@ export class PeopleCapacityComponent implements OnInit {
     public dataOut: OutputEmitterRef<any> = output<any>();
 
     protected readonly PrimeIcons = PrimeIcons;
+
     private readonly formBuilder = inject(FormBuilder);
-    protected readonly customMessageService = inject(CustomMessageService);
+    private readonly customMessageService = inject(CustomMessageService);
 
     protected form!: FormGroup;
 
@@ -29,12 +30,12 @@ export class PeopleCapacityComponent implements OnInit {
 
     ngOnInit(): void {
         this.buildForm();
-        this.loadData();
+        // this.loadData();
     }
 
     buildForm(): void {
         this.form = this.formBuilder.group({
-            totalCapacities: [null, [Validators.required, Validators.min(1)]]
+            totalCapacities: [null, [Validators.required, Validators.min(2)]]
         });
 
         this.watchFormChanges();
@@ -43,7 +44,6 @@ export class PeopleCapacityComponent implements OnInit {
     watchFormChanges(): void {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(() => {
             if (this.getFormErrors().length === 0) {
-                console.log('entrooo');
                 this.dataOut.emit(this.form.value);
             }
         });

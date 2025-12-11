@@ -8,11 +8,12 @@ import { PhysicalSpaceComponent } from '@modules/core/roles/external/components/
 import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
 import { ParkHttpService } from '@modules/core/roles/external/services/park-http.service';
 import { collectFormErrors } from '@utils/helpers/collect-form-errors.helper';
+import { Fluid } from 'primeng/fluid';
 
 @Component({
     selector: 'app-registration',
     standalone: true,
-    imports: [Button, PeopleCapacityComponent, PhysicalSpaceComponent, RegulationComponent],
+    imports: [Button, PeopleCapacityComponent, PhysicalSpaceComponent, RegulationComponent, Fluid],
     templateUrl: './registration.component.html',
     styleUrl: './registration.component.scss'
 })
@@ -57,6 +58,7 @@ export class RegistrationComponent implements OnInit {
     }
 
     protected saveForm(data: any, objectName?: string) {
+        console.log('saveForm', data);
         this.mainData.update((currentData) => {
             let newData = { ...currentData };
 

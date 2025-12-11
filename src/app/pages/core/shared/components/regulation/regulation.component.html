@@ -1,8 +1,8 @@
 <p-fluid>
     @if (sections()) {
-        <form [formGroup]="form" class="card flex flex-col">
-            <div formArrayName="sections" class="grid grid-cols-1 md:grid-cols-12">
-                <div class="md:col-span-12 flex flex-col mb-6">
+        <form [formGroup]="form" class="custom-card-form">
+            <div formArrayName="sections" class="custom-grid-form">
+                <div class="md:col-span-12 custom-field-form">
                     <h1>Normativa</h1>
 
                     <p-message severity="warn">
@@ -23,8 +23,9 @@
                 </div>
 
                 @for (section of sectionsField.controls; track section.value.id; let i = $index; let even = $even) {
-                    <div [formGroupName]="i" class="md:col-span-12 flex flex-col">
+                    <div [formGroupName]="i" class="md:col-span-12 custom-field-form">
                         <div class="mb-4">
+                            <p-divider />
                             <p class="text-lg font-bold mb-4 text-justify">
                                 {{ section.value.name }}
 
@@ -35,13 +36,11 @@
                             </span>
                                 }
                             </p>
-
-                            <p-divider />
                         </div>
 
-                        <div formArrayName="items" class="grid grid-cols-1 md:grid-cols-12 gap-3">
+                        <div formArrayName="items" class="custom-grid-form">
                             @for (item of getRegulationItemsField(i).controls; track item.value.id; let j = $index) {
-                                <div [formGroupName]="j" class="md:col-span-11 flex flex-col">
+                                <div [formGroupName]="j" class="md:col-span-11 custom-field-form">
                                     <p class="text-justify">
                                         @if (item.value.isMandatory) {
                                             <span class="text-red-500 ml-1">*</span>
@@ -55,12 +54,8 @@
                                     </p>
                                 </div>
 
-                                <div [formGroupName]="j" class="md:col-span-1 flex flex-col">
+                                <div [formGroupName]="j" class="md:col-span-1 custom-field-form">
                                     <app-toggle-switch id="isCompliant" formControlName="isCompliant"/>
-                                </div>
-
-                                <div class="md:col-span-12 flex flex-col">
-                                    <p-divider />
                                 </div>
                             }
                         </div>
