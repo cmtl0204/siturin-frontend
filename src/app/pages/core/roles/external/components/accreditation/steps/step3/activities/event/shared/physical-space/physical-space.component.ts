@@ -54,15 +54,15 @@ export class PhysicalSpaceComponent implements OnInit {
     }
 
     watchFormChanges() {
-        this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
+        this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((value) => {
             if (this.form.valid) {
-                this.dataOut.emit(this.form);
+                this.dataOut.emit(this.form.value);
             }
         });
 
         this.isProtectedAreaField.valueChanges.subscribe((value) => {
             this.hasProtectedAreaContractField.clearValidators();
-            this.hasProtectedAreaContractField.reset();
+            this.hasProtectedAreaContractField.setValue(false);
 
             if (value) {
                 this.hasProtectedAreaContractField.setValidators(Validators.required);

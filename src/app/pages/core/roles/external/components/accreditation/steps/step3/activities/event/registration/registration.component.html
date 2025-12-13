@@ -1,5 +1,5 @@
-<app-physical-space (dataOut)="saveForm($event)" />
-<app-people-capacity (dataOut)="saveForm($event)" />
+<app-physical-space (dataOut)="saveForm($event, ChildParkFormEnum.physicalSpace)" />
+<app-people-capacity (dataOut)="saveForm($event, ChildParkFormEnum.peopleCapacity)" [dataIn]="dataIn?.peopleCapacity" />
 <app-regulation [modelId]="modelId" [isProtectedArea]="true" (dataOut)="saveForm($event)" />
 
 
