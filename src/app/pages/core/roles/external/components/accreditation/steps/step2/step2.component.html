@@ -1,10 +1,10 @@
-<app-business-info-component (dataOut)="saveForm($event)" [dataIn]="step2Data()" />
+<app-business-info-component (dataOut)="saveForm($event,ChildStep2FormEnum.establishment)" [dataIn]="step2Data()" />
 
-<app-staff (dataOut)="saveForm($event)" [dataIn]="step2Data()" />
+<app-staff (dataOut)="saveForm($event,ChildStep2FormEnum.establishment)" [dataIn]="step2Data()" />
 
-<app-address (dataOut)="saveForm($event)" [dataIn]="step2Data()" />
+<app-address (dataOut)="saveForm($event,ChildStep2FormEnum.establishmentAddress)" [dataIn]="step2Data()" />
 
-<app-contact-person (dataOut)="saveForm($event)" [dataIn]="step2Data()" />
+<app-contact-person (dataOut)="saveForm($event,ChildStep2FormEnum.establishmentContactPerson)" [dataIn]="step2Data()" />
 
 <p-fluid class="custom-card-form">
     <div class="custom-grid-form">

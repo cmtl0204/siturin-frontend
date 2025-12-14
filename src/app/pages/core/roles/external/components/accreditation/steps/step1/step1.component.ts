@@ -82,11 +82,11 @@ export class Step1Component implements OnInit {
     async saveProcess() {
         await this.coreSessionStorageService.setEncryptedValue(CoreEnum.step1, { ...this.mainForm.value });
         const { type, processId } = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
+
         const payload = { ...this.mainForm.value, processId, type };
 
         this.processHttpService.createStep1(payload).subscribe({
             next: (response: any) => {
-                console.log(response);
                 this.step.emit(2);
                 this.coreSessionStorageService.setEncryptedValue(CoreEnum.process, {
                     processId:response.id,

@@ -54,7 +54,7 @@ export class StaffComponent implements OnInit {
 
     watchFormChanges() {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
-            if (this.form.valid) this.dataOut.emit(this.form);
+            if (this.form.valid) this.dataOut.emit(this.form.value);
         });
 
         this.totalMenField.valueChanges.subscribe((value) => {
@@ -111,7 +111,7 @@ export class StaffComponent implements OnInit {
 
     loadData() {
         if (this.dataIn()) {
-            this.form.patchValue(this.dataIn());
+            this.form.patchValue(this.dataIn()?.establishment);
             this.totalStaffControl.patchValue(this.totalMenField.value + this.totalWomenField.value);
         }
     }

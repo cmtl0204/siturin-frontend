@@ -22,20 +22,18 @@ export class PeopleCapacityComponent implements OnInit {
     protected readonly PrimeIcons = PrimeIcons;
 
     private readonly formBuilder = inject(FormBuilder);
-    private readonly customMessageService = inject(CustomMessageService);
-
     protected form!: FormGroup;
 
     constructor() {}
 
     ngOnInit(): void {
         this.buildForm();
-        // this.loadData();
+        this.loadData();
     }
 
     buildForm(): void {
         this.form = this.formBuilder.group({
-            totalCapacities: [null, [Validators.required, Validators.min(2)]]
+            totalCapacities: [null, [Validators.required, Validators.min(1)]]
         });
 
         this.watchFormChanges();

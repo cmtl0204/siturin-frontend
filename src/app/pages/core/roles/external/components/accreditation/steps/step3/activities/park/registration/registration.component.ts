@@ -23,7 +23,6 @@ export class RegistrationComponent implements OnInit {
     @ViewChildren(RegulationComponent) private regulationComponent!: QueryList<RegulationComponent>;
 
     protected readonly CoreEnum = CoreEnum;
-    protected readonly ChildParkFormEnum = ChildParkFormEnum;
     protected readonly PrimeIcons = PrimeIcons;
     private readonly coreSessionStorageService = inject(CoreSessionStorageService);
     private readonly parksHttpService = inject(ParkHttpService);
@@ -33,6 +32,7 @@ export class RegistrationComponent implements OnInit {
     protected modelId?: string;
 
     protected dataIn!: any;
+    protected loadedDataIn: boolean = false;
 
     constructor() {
         effect(async () => {
@@ -54,11 +54,12 @@ export class RegistrationComponent implements OnInit {
     }
 
     private async loadDataIn() {
+        this.loadedDataIn = false;
         this.dataIn = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.step3);
+        this.loadedDataIn = true;
     }
 
     protected saveForm(data: any, objectName?: string) {
-        console.log('saveForm', data);
         this.mainData.update((currentData) => {
             let newData = { ...currentData };
 
@@ -88,16 +89,13 @@ export class RegistrationComponent implements OnInit {
 
         const process = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
 
-        // console.log(this.mainData());
         console.log(await this.coreSessionStorageService.getEncryptedValue(CoreEnum.step3));
 
         const payload = { ...this.mainData(), ...process };
 
-        // console.log(payload);
-
-        // this.parksHttpService.createRegistration(payload).subscribe({
-        //     next: () => {}
-        // });
+        this.parksHttpService.createRegistration(payload).subscribe({
+            next: () => {}
+        });
     }
 
     private checkFormErrors() {

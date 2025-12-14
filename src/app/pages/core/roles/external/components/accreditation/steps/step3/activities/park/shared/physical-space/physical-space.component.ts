@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, input, Input, InputSignal, OnInit, output, Output, OutputEmitterRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Fluid } from 'primeng/fluid';
@@ -20,17 +20,16 @@ import { CatalogueService } from '@utils/services/catalogue.service';
     styleUrl: './physical-space.component.scss'
 })
 export class PhysicalSpaceComponent implements OnInit {
-    @Input() data!: string | undefined;
-    @Output() dataOut = new EventEmitter<FormGroup>();
+    public dataIn: InputSignal<any> = input<any>();
+    public dataOut: OutputEmitterRef<any> = output<any>();
 
     protected readonly Validators = Validators;
     protected readonly PrimeIcons = PrimeIcons;
+
     private readonly formBuilder = inject(FormBuilder);
-    protected readonly customMessageService = inject(CustomMessageService);
+    protected form!: FormGroup;
 
     private readonly catalogueService = inject(CatalogueService);
-
-    protected form!: FormGroup;
 
     protected localTypes: CatalogueInterface[] = [];
 
@@ -38,8 +37,8 @@ export class PhysicalSpaceComponent implements OnInit {
         this.buildForm();
     }
 
-    ngOnInit() {
-        this.loadCatalogues();
+    async ngOnInit() {
+        await this.loadCatalogues();
         this.loadData();
     }
 
@@ -55,9 +54,7 @@ export class PhysicalSpaceComponent implements OnInit {
 
     watchFormChanges() {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
-            if (this.getFormErrors().length === 0) {
-                this.dataOut.emit(this.form.value);
-            }
+            this.dataOut.emit(this.form.value);
         });
 
         this.isProtectedAreaField.valueChanges.subscribe((value) => {
@@ -92,7 +89,11 @@ export class PhysicalSpaceComponent implements OnInit {
         return [];
     }
 
-    loadData() {}
+    loadData() {
+        if (this.dataIn()) {
+            this.form.patchValue(this.dataIn());
+        }
+    }
 
     async loadCatalogues() {
         this.localTypes = await this.catalogueService.findByType(CatalogueTypeEnum.processes_local_type);

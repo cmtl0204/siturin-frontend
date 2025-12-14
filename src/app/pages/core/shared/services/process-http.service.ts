@@ -24,6 +24,16 @@ export class ProcessHttpService {
         );
     }
 
+    createStep2(payload: any) {
+        const url = `${this._apiUrl}/step2`;
+
+        return this._httpClient.post<HttpResponseInterface>(url, payload).pipe(
+            map((response) => {
+                return response.data;
+            })
+        );
+    }
+
     createFilesInspectionStatus(modelId: string, payload: FormData, folder: string): Observable<HttpResponseInterface> {
         const url = `${this._apiUrl}/inspection-status/uploads`;
 
