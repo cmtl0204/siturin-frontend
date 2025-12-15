@@ -27,8 +27,8 @@ import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-sw
     styleUrl: './establishment-type.component.scss'
 })
 export class EstablishmentTypeComponent implements OnInit {
-    @Input() data!: string | undefined;
-    @Output() dataOut = new EventEmitter<FormGroup>();
+    @Input() data!: string | undefined; //ya se encuentra aqui 
+    @Output() dataOut = new EventEmitter<FormGroup>(); // igualmente 
     @Output() fieldErrorsOut = new EventEmitter<string[]>();
 
     protected readonly Validators = Validators;
@@ -49,7 +49,7 @@ export class EstablishmentTypeComponent implements OnInit {
 
     async ngOnInit() {
         await this.loadCatalogues();
-        await this.watchFormChanges();
+        this.watchFormChanges(); //eliminaod el await
         await this.loadData();
     }
 
@@ -57,10 +57,10 @@ export class EstablishmentTypeComponent implements OnInit {
         this.form = this.formBuilder.group({
             establishmentType: [null, [Validators.required]],
             establishmentName: [null],
-            hasFranchiseGrantCertificate: [null, [Validators.requiredTrue]]
+            hasFranchiseGrantCertificate: [null] //eliminado el validators
         });
 
-        this.watchFormChanges();
+        //this.watchFormChanges(); no se si esta mal pero ya no va con un ngoinit
     }
 
     watchFormChanges() {
@@ -71,17 +71,18 @@ export class EstablishmentTypeComponent implements OnInit {
         });
 
         this.establishmentTypeField.valueChanges.subscribe((value) => {
-            if (value.code === CatalogueProcessFoodDrinksEstablishmentTypeEnum.cadena) {
+             const code = value?.code;// puede value venir undefinido
+            if (code === CatalogueProcessFoodDrinksEstablishmentTypeEnum.cadena) {
                 this.establishmentNameField.setValidators([Validators.required]);
                 this.hasFranchiseGrantCertificateField.clearValidators();
             }
 
-            if (value.code === CatalogueProcessFoodDrinksEstablishmentTypeEnum.franquicia) {
+            if (code === CatalogueProcessFoodDrinksEstablishmentTypeEnum.franquicia) {
                 this.hasFranchiseGrantCertificateField.setValidators([Validators.required]);
                 this.establishmentNameField.setValidators([Validators.required]);
             }
 
-            if (value.code === CatalogueProcessFoodDrinksEstablishmentTypeEnum.ninguno) {
+            if (code === CatalogueProcessFoodDrinksEstablishmentTypeEnum.ninguno) {
                 this.hasFranchiseGrantCertificateField.clearValidators();
                 this.establishmentNameField.clearValidators();
             }
@@ -95,15 +96,17 @@ export class EstablishmentTypeComponent implements OnInit {
         const errors: string[] = [];
 
         if (this.establishmentTypeField.invalid) errors.push('Tipo de Establecimiento');
+
         if (this.establishmentNameField.invalid) errors.push('Nombre de la Franquicia o Cadena');
+
         if (this.hasFranchiseGrantCertificateField.invalid) errors.push('Certificación de concesión de la franquicia');
 
         if (errors.length > 0) {
             this.form.markAllAsTouched();
-            return errors;
+            //return errors; comento esta linea porque puse el erros abajo 
         }
 
-        return [];
+        return errors ;
     }
 
     async loadCatalogues() {

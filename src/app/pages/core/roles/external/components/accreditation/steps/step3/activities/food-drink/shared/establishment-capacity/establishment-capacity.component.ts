@@ -22,9 +22,12 @@ import { CatalogueService } from '@/utils/services/catalogue.service';
     styleUrl: './establishment-capacity.component.scss'
 })
 export class EstablishmentCapacityComponent implements OnInit {
+    //@Input() data!: string | undefined;
+    //@Output() dataOut = new EventEmitter<FormGroup>(); ya se encuentra en el forms
+    //@Output() fieldErrorsOut = new EventEmitter<string[]>(); 
+
     @Input() data!: string | undefined;
     @Output() dataOut = new EventEmitter<FormGroup>();
-    @Output() fieldErrorsOut = new EventEmitter<string[]>();
 
     protected readonly Validators = Validators;
     protected readonly PrimeIcons = PrimeIcons;
@@ -39,11 +42,12 @@ export class EstablishmentCapacityComponent implements OnInit {
     protected typeEstablishments: CatalogueInterface[] = [];
 
     constructor() {
-        this.buildForm();
+        this.buildForm(); //igual al de referencia
     }
 
     ngOnInit() {
         this.loadData();
+        this.watchFormChanges(); //se añadio
     }
 
     onSubmit() {
@@ -74,14 +78,14 @@ export class EstablishmentCapacityComponent implements OnInit {
         if (this.capacityField.invalid) errors.push('Capacidad en número de personas');
         if (errors.length > 0) {
             this.form.markAllAsTouched();
-            return errors;
         }
 
-        return [];
+        return errors ;     //corchetes eliminados
     }
 
     async loadCatalogues() {
-        this.typeEstablishments = await this.catalogueService.findByType(CatalogueTypeEnum.process_food_drinks_establishment_type);
+        this.typeEstablishments = await this.catalogueService.findByType
+        (CatalogueTypeEnum.process_food_drinks_establishment_type);
     }
 
     loadData() {}

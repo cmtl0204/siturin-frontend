@@ -44,6 +44,7 @@ export class PhysicalSpaceComponent implements OnInit {
     async ngOnInit() {
         await this.loadCatalogues();
         await this.loadData();
+        this.watchFormChanges();
     }
 
     buildForm() {
@@ -52,11 +53,13 @@ export class PhysicalSpaceComponent implements OnInit {
             hasLandUse: [null, [Validators.requiredTrue]]
         });
 
-        this.watchFormChanges();
+        //this.watchFormChanges();
     }
 
     watchFormChanges() {
-        this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
+        this.form.valueChanges
+        .pipe(debounceTime(300), distinctUntilChanged())
+        .subscribe((_) => {
             if (this.form.valid) {
                 this.dataOut.emit(this.form);
             }
@@ -67,20 +70,22 @@ export class PhysicalSpaceComponent implements OnInit {
         const errors: string[] = [];
 
         if (this.localTypeField.invalid) errors.push('Su local es');
+    
         if (this.hasLandUseField.invalid) errors.push('Al momento de la inspección se presentará el Certificado de Informe de compatibilidad de uso de suelo');
+        
 
         if (errors.length > 0) {
             this.form.markAllAsTouched();
-            return errors;
         }
 
-        return [];
+        return errors; //añadir errors
     }
 
     async loadData() {}
 
     async loadCatalogues() {
-        this.localTypes = await this.catalogueService.findByType(CatalogueTypeEnum.processes_local_type);
+        this.localTypes = await this.catalogueService
+        .findByType(CatalogueTypeEnum.processes_local_type);
     }
 
     get localTypeField(): AbstractControl {
