@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, input, Input, InputSignal, OnInit, output, Output, OutputEmitterRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ConfirmationService, MenuItem, PrimeIcons } from 'primeng/api';
 import { CustomMessageService } from '@utils/services/custom-message.service';
@@ -20,6 +20,7 @@ import { CatalogueTypeEnum } from '@utils/enums';
 import { CatalogueService } from '@utils/services/catalogue.service';
 import { AdventureTourismModalityInterface } from '@/pages/core/shared/interfaces';
 import { deleteButtonAction } from '@utils/components/button-action/consts';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 interface LandTransportInterface {
     type: string;
@@ -56,6 +57,10 @@ interface LandTransportInterface {
     ]
 })
 export class TypeVehiclesComponent implements OnInit {
+
+    //public dataIn: InputSignal<any> = input<any>();
+    //public dataOut: OutputEmitterRef<any> = output<any>();
+
     @Input() data!: string | undefined;
     @Output() dataOut = new EventEmitter<FormGroup>();
 
@@ -78,7 +83,18 @@ export class TypeVehiclesComponent implements OnInit {
         this.buildForm();
         this.buildColumns();
         this.loadCatalogues();
+        //this.watchFormChanges();
     }
+
+    /*watchFormChanges(): void {
+        this.form.valueChanges
+          .pipe(debounceTime(300), distinctUntilChanged())
+          .subscribe(() => {
+            if (this.getFormErrors().length === 0) {
+              this.dataOut.emit(this.form);
+            }
+          });
+      }*/
 
     buildForm(): void {
         this.landTransportTypeForm = this.formBuilder.group({

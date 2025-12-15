@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, input, Input, InputSignal, OnInit, output, Output, OutputEmitterRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Fluid } from 'primeng/fluid';
 import { SelectModule } from 'primeng/select';
@@ -12,6 +12,8 @@ import { CatalogueTypeEnum } from '@/utils/enums';
 import { CatalogueService } from '@/utils/services/catalogue.service';
 import { CatalogueInterface } from '@/utils/interfaces';
 import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-switch.component';
+import { CustomMessageService } from '@/utils/services';
+import { debounce, debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
     selector: 'app-air',
@@ -21,24 +23,29 @@ import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-sw
     styleUrl: './air.component.scss'
 })
 export class AirComponent implements OnInit {
+
+    public dataIn: InputSignal<any> = input<any>();
+    public dataOut: OutputEmitterRef<any> = output<any>();
+
     protected readonly formBuilder = inject(FormBuilder);
     private readonly catalogueService = inject(CatalogueService);
+    protected readonly customMessageService = inject(CustomMessageService);
 
-    @Input() isAirTransport = false;
-    @Input() subClassification: string | undefined;
-    @Output() dataOut = new EventEmitter<FormGroup>();
+    //@Input() isAirTransport = false;
+    @Input() subClassification: string | undefined; // muertra errores al quitar
+    //@Output() dataOut = new EventEmitter<FormGroup>();
 
     protected readonly Validators = Validators;
-    protected form!: FormGroup;
     protected airlineTypes: CatalogueInterface[] = [];
     protected localTypes: CatalogueInterface[] = [];
 
-    constructor() {
-        this.buildForm();
-    }
+    protected form!: FormGroup;
+
+    constructor() {}
 
     async ngOnInit() {
         await this.loadCatalogues();
+        this.loadData();
     }
 
     async loadCatalogues() {
@@ -60,8 +67,8 @@ export class AirComponent implements OnInit {
     }
 
     watchFormChanges() {
-        this.form.valueChanges.subscribe(() => {
-            if (this.form.valid) {
+        this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(() => {
+            if (this.getFormErrors().length === 0) {
                 this.dataOut.emit(this.form);
             }
         });
@@ -75,6 +82,12 @@ export class AirComponent implements OnInit {
             }
             this.localTypeField.updateValueAndValidity();
         });
+    }
+
+    loadData() {
+        if (this.dataIn()) {
+            this.form.patchValue(this.dataIn());
+        }
     }
 
     getFormErrors(): string[] {

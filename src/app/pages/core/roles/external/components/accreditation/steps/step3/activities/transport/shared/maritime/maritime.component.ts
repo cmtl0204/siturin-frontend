@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, input, Input, InputSignal, OnInit, output, Output, OutputEmitterRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Fluid } from 'primeng/fluid';
 import { ConfirmationService, MenuItem, PrimeIcons } from 'primeng/api';
@@ -16,6 +16,7 @@ import { InputText } from 'primeng/inputtext';
 import { ListBasicComponent } from '@utils/components/list-basic/list-basic.component';
 import { DatePicker } from 'primeng/datepicker';
 import { InputNumber } from 'primeng/inputnumber';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
     selector: 'app-maritime',
@@ -24,8 +25,11 @@ import { InputNumber } from 'primeng/inputnumber';
     styleUrls: ['./maritime.component.scss']
 })
 export class MaritimeComponent implements OnInit {
-    @Input() data!: string | undefined;
-    @Output() dataOut = new EventEmitter<FormGroup>();
+    public dataIn: InputSignal<any> = input<any>();
+    public dataOut: OutputEmitterRef<any> = output<any>();
+
+    //@Input() data!: string | undefined;
+    //@Output() dataOut = new EventEmitter<FormGroup>();
 
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
@@ -49,7 +53,6 @@ export class MaritimeComponent implements OnInit {
         this.loadData();
     }
 
-    loadData() {}
 
     buildForm() {
         this.maritimeForm = this.formBuilder.group({
@@ -72,10 +75,18 @@ export class MaritimeComponent implements OnInit {
     watchFormChanges() {
         this.dataOut.emit(this.form);
 
-        this.hasMaritimeTransportField.valueChanges.subscribe((value) => {
+        this.hasMaritimeTransportField.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((value) => {
             this.maritimeItemsField.setValue(this.items);
-            this.dataOut.emit(this.form);
+            if (this.getFormErrors().length === 0) {
+                this.dataOut.emit(this.form);
+            }
         });
+    }
+
+    loadData() {
+        if (this.dataIn()) {
+            this.form.patchValue(this.dataIn());
+        }
     }
 
     buildButtonActions(item: any) {
@@ -125,7 +136,7 @@ export class MaritimeComponent implements OnInit {
             return false;
         }
 
-        return true;
+        return errors;
     }
 
     create() {

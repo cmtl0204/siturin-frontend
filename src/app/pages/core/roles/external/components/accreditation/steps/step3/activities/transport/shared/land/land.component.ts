@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, input, InputSignal, output, Output, OutputEmitterRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { LabelDirective } from '@utils/directives/label.directive';
@@ -22,9 +22,13 @@ import {
     styleUrl: './land.component.scss'
 })
 export class LandComponent {
-    protected readonly formBuilder = inject(FormBuilder);
-    @Output() dataOut = new EventEmitter<FormGroup>();
 
+    public dataIn: InputSignal<any> = input<any>();
+    public dataOut: OutputEmitterRef<any> = output<any>();
+
+    //@Output() dataOut = new EventEmitter<FormGroup>();
+
+    private readonly formBuilder = inject(FormBuilder);
     protected form!: FormGroup;
 
     protected localTypes: CatalogueInterface[] = [
@@ -36,6 +40,7 @@ export class LandComponent {
 
     ngOnInit(): void {
         this.buildForm();
+        this.loadData();
     }
 
     buildForm() {
@@ -51,10 +56,16 @@ export class LandComponent {
     }
     watchFormChanges() {
         this.form.valueChanges.subscribe(() => {
-            if (this.form.valid) {
+            if (this.getFormErrors().length === 0) {
                 this.dataOut.emit(this.form);
             }
         });
+    }
+
+    loadData() {
+        if (this.dataIn()) {
+            this.form.patchValue(this.dataIn());
+        }
     }
 
     getFormErrors(): string[] {

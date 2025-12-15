@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, input, InputSignal, OnInit, output, Output, OutputEmitterRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Message } from 'primeng/message';
 import { Fluid } from 'primeng/fluid';
@@ -6,6 +6,7 @@ import { LabelDirective } from '@utils/directives/label.directive';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { CommonModule } from '@angular/common';
 import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-switch.component';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
     selector: 'app-protected-area',
@@ -15,10 +16,14 @@ import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-sw
     styleUrl: './protected-area.component.scss'
 })
 export class ProtectedAreaComponent implements OnInit {
+
+    public dataIn: InputSignal<any> = input<any>();
+    public dataOut: OutputEmitterRef<any> = output<any>();
+
     protected readonly formBuilder = inject(FormBuilder);
     protected form!: FormGroup;
 
-    @Output() dataOut = new EventEmitter<FormGroup>();
+    //@Output() dataOut = new EventEmitter<FormGroup>();
 
     constructor() {
         this.buildForm();
@@ -26,6 +31,7 @@ export class ProtectedAreaComponent implements OnInit {
 
     ngOnInit(): void {
         this.watchFormChanges();
+        this.loadData();
     }
 
     buildForm(): void {
@@ -44,8 +50,8 @@ export class ProtectedAreaComponent implements OnInit {
     }
 
     watchFormChanges(): void {
-        this.form.valueChanges.subscribe(() => {
-            if (this.form.valid) {
+        this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(() => {
+            if (this.getFormErrors().length === 0) {
                 this.dataOut.emit(this.form);
             }
         });
@@ -60,6 +66,12 @@ export class ProtectedAreaComponent implements OnInit {
 
             this.hasProtectedAreaContractField.updateValueAndValidity();
         });
+    }
+
+    loadData() {
+        if (this.dataIn()) {
+            this.form.patchValue(this.dataIn());
+        }
     }
 
     getFormErrors(): string[] {

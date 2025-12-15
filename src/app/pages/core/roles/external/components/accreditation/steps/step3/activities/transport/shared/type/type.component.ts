@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, inject, Output, EventEmitter, OutputEmitterRef, InputSignal, input, output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -31,21 +31,28 @@ import { CatalogueTypeEnum } from '@/utils/enums';
   styleUrl: './type.component.scss'
 })
 export class TypeComponent implements OnInit {
-  protected readonly formBuilder = inject(FormBuilder);
-  @Output() dataOut = new EventEmitter<FormGroup>();
+
+  public dataIn: InputSignal<any> = input<any>();
+  public dataOut: OutputEmitterRef<any> = output<any>();
+  
+  //@Output() dataOut = new EventEmitter<FormGroup>();
 
   protected form!: FormGroup;
+  protected readonly formBuilder = inject(FormBuilder);
 
- protected transporte_tipo_locales: CatalogueInterface[] = [];
-     private readonly catalogueService = inject(CatalogueService);
+  protected transporte_tipo_locales: CatalogueInterface[] = [];
+  private readonly catalogueService = inject(CatalogueService);
  
      
      async loadCatalogues() {
          this.transporte_tipo_locales = await this.catalogueService.findByType(CatalogueTypeEnum.transporte_tipo_locales);
      }
+
   ngOnInit(): void {
     this.buildForm();
     this.watchFormChanges();
+    this.loadData();
+
   }
 
   buildForm(): void {
@@ -58,11 +65,17 @@ export class TypeComponent implements OnInit {
     this.form.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe(() => {
-        if (this.form.valid) {
+        if (this.getFormErrors().length === 0) {
           this.dataOut.emit(this.form);
         }
       });
   }
+
+  loadData() {
+        if (this.dataIn()) {
+            this.form.patchValue(this.dataIn());
+        }
+    }
 
   get localTypeField(): AbstractControl {
     return this.form.controls['localType'];

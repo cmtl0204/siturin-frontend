@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, input, Input, InputSignal, OnInit, output, Output, OutputEmitterRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Fluid } from 'primeng/fluid';
@@ -18,9 +18,12 @@ import { CatalogueInterface } from '@utils/interfaces';
     styleUrl: './physical-space.component.scss'
 })
 export class PhysicalSpaceComponent implements OnInit {
-    @Input() data!: string | undefined;
-    @Output() dataOut = new EventEmitter<FormGroup>();
-    @Output() fieldErrorsOut = new EventEmitter<string[]>();
+    public dataIn: InputSignal<any> = input<any>();
+    public dataOut: OutputEmitterRef<any> = output<any>();
+
+    //@Input() data!: string | undefined;
+    //@Output() dataOut = new EventEmitter<FormGroup>();
+    //@Output() fieldErrorsOut = new EventEmitter<string[]>();
 
     protected readonly PrimeIcons = PrimeIcons;
     private readonly formBuilder = inject(FormBuilder);
@@ -62,10 +65,16 @@ export class PhysicalSpaceComponent implements OnInit {
 
     watchFormChanges() {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
-            if (this.form.valid) {
+            if (this.getFormErrors().length === 0) {
                 this.dataOut.emit(this.form);
             }
         });
+    }
+
+    loadData() {
+        if (this.dataIn()) {
+            this.form.patchValue(this.dataIn());
+        }
     }
 
     getFormErrors(): string[] {
@@ -90,7 +99,7 @@ export class PhysicalSpaceComponent implements OnInit {
         return [];
     }
 
-    loadData() {}
+    
 
     get localTypeField(): AbstractControl {
         return this.form.controls['localType'];

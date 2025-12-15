@@ -14,6 +14,7 @@ import { CatalogueProcessesTypeEnum } from '@utils/enums';
     styleUrls: ['./transport.component.scss']
 })
 export class TransportComponent implements OnChanges {
+    
     @Input() processTypeCode: string = 'registration';
     @Input() classification: any;
 
