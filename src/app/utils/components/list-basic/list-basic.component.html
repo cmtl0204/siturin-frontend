@@ -6,12 +6,12 @@
     [loading]="coreService.loading()">
     <ng-template #caption>
         <p-fluid>
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-                <div class="md:col-span-8 flex flex-col gap-2">
-                    <span class="text-xl font-bold">{{ title }}</span>
+            <div class="custom-grid-form">
+                <div class="md:col-span-8 custom-field-form">
+                    <div class="custom-section-title-form">{{ title }}</div>
                 </div>
 
-                <div class="md:col-span-4 flex flex-col gap-2">
+                <div class="md:col-span-4 custom-field-form">
                     <p-iconfield>
                         <p-inputicon>
                             <i [class]="PrimeIcons.SEARCH"></i>
@@ -38,7 +38,7 @@
         </tr>
     </ng-template>
 
-    <ng-template #body let-item let-columns="columns">
+    <ng-template #body let-item let-columns="columns" let-rowIndex="rowIndex">
         <tr>
             @for (col of columns; track col) {
                 @switch (col?.type) {
@@ -65,7 +65,7 @@
                     [buttonActions]="buttonActions"
                     [enabled]="isButtonActionsEnabled"
                     (isHide)="isButtonActionsEnabled=$event"
-                    (click)="selectItem(item)">
+                    (click)="selectItem(item,rowIndex)">
                 </app-button-action>
             </td>
         </tr>

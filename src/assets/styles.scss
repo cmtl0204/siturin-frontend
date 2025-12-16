@@ -10,7 +10,7 @@
 }
 
 .custom-grid-form {
-    @apply grid grid-cols-1 md:grid-cols-12 gap-6
+    @apply grid grid-cols-1 md:grid-cols-12 gap-6;
 }
 
 .custom-field-form {
@@ -20,4 +20,8 @@
 .custom-card-form {
     background-color: #fff !important;
     @apply flex flex-col gap-6 rounded-lg shadow-md p-6 bg-surface-100 mb-4;
+}
+
+.custom-section-title-form {
+    @apply text-3xl font-semibold;
 }

@@ -46,10 +46,10 @@ export class ListBasicComponent {
 
     checkValueChanges() {}
 
-    selectItem(item: any) {
+    selectItem(item: any, index: number) {
         this.isButtonActionsEnabled = true;
         this.selectedItem = item;
-        this.onSelect.emit(item);
+        this.onSelect.emit({ item, index });
     }
 
     create() {
