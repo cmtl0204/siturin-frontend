@@ -1,32 +1,103 @@
+<!-- Componente Fluid de PrimeNG para que los inputs ocupen el ancho disponible -->
 <p-fluid>
-    <form [formGroup]="form" class="card flex flex-col gap-6">
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-            <!-- Establishment Capacity -->
-            <div class="md:col-span-12 font-semibold text-xl">
-                Capacidades del Establecimiento
-            </div>
-            <div class="md:col-span-6 flex flex-col gap-2">
-                <label appLabel for="totalTables" label="Mesas" [required]="tablesField">
-                </label>
 
-                <p-inputNumber id="totalTables" formControlName="totalTables" [showButtons]="true" inputId="minmax-buttons"
-                    [min]="0" [max]="100" />
+  <!-- Formulario reactivo enlazado al FormGroup del TS -->
+  <form [formGroup]="form" class="card flex flex-col gap-6">
 
-                <p-message appErrorMessage [errors]="tablesField.errors" [touched]="tablesField.touched"
-                    [dirty]="tablesField.dirty" />
-            </div>
-            <div class="md:col-span-6 flex flex-col gap-2">
-                <label appLabel for="totalCapacities" label="Capacidad en número de personas" [required]="capacityField">
-                </label>
+    <!-- Grid responsivo: 1 columna en móvil, 12 en desktop -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
 
-                <p-inputNumber id="totalCapacities" formControlName="totalCapacities" [showButtons]="true" inputId="minmax-buttons"
-                    [min]="0" [max]="100" />
+      <!-- ===================== -->
+      <!-- TÍTULO DE LA SECCIÓN -->
+      <!-- ===================== -->
+      <div class="md:col-span-12 font-semibold text-xl">
+        Capacidades del Establecimiento
+      </div>
 
-                <p-message appErrorMessage [errors]="capacityField.errors" [touched]="capacityField.touched"
-                    [dirty]="capacityField.dirty" />
-            </div>
-            <p-divider class="md:col-span-12" type="solid" />
+      <!-- ===================== -->
+      <!-- CAMPO: TOTAL DE MESAS -->
+      <!-- ===================== -->
+      <div class="md:col-span-6 flex flex-col gap-2">
 
-        </div>
-    </form>
+        <!--
+          Label personalizado con appLabel
+          - for: asocia el label al input
+          - label: texto que se muestra
+          - [required]: se pasa el AbstractControl (NO boolean)
+            para que la directiva determine si es obligatorio
+        -->
+        <label
+          appLabel
+          for="totalTables"
+          label="Mesas"
+          [required]="tablesField">
+        </label>
+
+        <!--
+          InputNumber de PrimeNG
+          - formControlName conecta con el FormGroup
+          - showButtons muestra botones +/-
+          - min / max coinciden con los Validators del TS
+        -->
+        <p-inputNumber
+          id="totalTables"
+          inputId="tables-buttons"
+          formControlName="totalTables"
+          [showButtons]="true"
+          [min]="1"
+          [max]="100">
+        </p-inputNumber>
+
+        <!--
+          Mensaje de error reutilizable
+          - recibe los errores del control
+          - solo se muestra si el campo fue tocado o modificado
+        -->
+        <p-message
+          appErrorMessage
+          [errors]="tablesField.errors"
+          [touched]="tablesField.touched"
+          [dirty]="tablesField.dirty">
+        </p-message>
+      </div>
+
+      <!-- ===================================== -->
+      <!-- CAMPO: CAPACIDAD TOTAL DE PERSONAS -->
+      <!-- ===================================== -->
+      <div class="md:col-span-6 flex flex-col gap-2">
+
+        <!-- Label para el campo de capacidad -->
+        <label
+          appLabel
+          for="totalCapacities"
+          label="Capacidad en número de personas"
+          [required]="capacityField">
+        </label>
+
+        <!-- InputNumber para la capacidad -->
+        <p-inputNumber
+          id="totalCapacities"
+          inputId="capacity-buttons"
+          formControlName="totalCapacities"
+          [showButtons]="true"
+          [min]="1"
+          [max]="100">
+        </p-inputNumber>
+
+        <!-- Mensaje de error del campo capacidad -->
+        <p-message
+          appErrorMessage
+          [errors]="capacityField.errors"
+          [touched]="capacityField.touched"
+          [dirty]="capacityField.dirty">
+        </p-message>
+      </div>
+
+      <!-- ===================== -->
+      <!-- DIVISOR VISUAL -->
+      <!-- ===================== -->
+      <p-divider class="md:col-span-12" type="solid"></p-divider>
+
+    </div>
+  </form>
 </p-fluid>

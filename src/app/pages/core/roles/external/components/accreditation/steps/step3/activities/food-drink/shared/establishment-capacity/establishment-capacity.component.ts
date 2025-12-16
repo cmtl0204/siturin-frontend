@@ -21,139 +21,103 @@ import {
   output
 } from '@angular/core';
 
-
 @Component({
-    selector: 'app-establishment-capacity',
-    standalone: true,
-    imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, Divider, InputNumber, CommonModule],
-    templateUrl: './establishment-capacity.component.html',
-    styleUrl: './establishment-capacity.component.scss'
+  selector: 'app-establishment-capacity',
+  standalone: true,
+  imports: [Fluid, ReactiveFormsModule, LabelDirective, Message, ErrorMessageDirective, Divider, InputNumber, CommonModule],
+  templateUrl: './establishment-capacity.component.html',
+  styleUrl: './establishment-capacity.component.scss'
 })
 export class EstablishmentCapacityComponent implements OnInit {
 
-    /*
-      Antes:
-        @Input() data!: string | undefined;
+  dataIn = input<any>();
+  dataOut = output<any>();
 
-      Ahora:
-        input()
-        → se lee con dataIn()
-    */
-    dataIn = input<any>(); 
+  protected readonly Validators = Validators;
+  protected readonly PrimeIcons = PrimeIcons;
 
-    /*
-      Antes:
-        @Output() dataOut = new EventEmitter<FormGroup>();
+  private readonly formBuilder = inject(FormBuilder);
+  protected readonly customMessageService = inject(CustomMessageService);
+  private readonly catalogueService = inject(CatalogueService);
 
-      Ahora:
-        output()
-        → se emite SOLO form.value
-    */
-    dataOut = output<any>(); 
+  protected readonly CatalogueActivitiesCodeEnum = CatalogueActivitiesCodeEnum;
 
-    protected readonly Validators = Validators;
-    protected readonly PrimeIcons = PrimeIcons;
+  protected form!: FormGroup;
 
-    private readonly formBuilder = inject(FormBuilder);
-    protected readonly customMessageService = inject(CustomMessageService);
-    private readonly catalogueService = inject(CatalogueService);
+  // Catálogo de tipos de establecimiento
+  protected typeEstablishments: CatalogueInterface[] = [];
 
-    protected readonly CatalogueActivitiesCodeEnum = CatalogueActivitiesCodeEnum;
+  constructor() {}
 
-    protected form!: FormGroup;
+  async ngOnInit() {
+    this.buildForm();
+    await this.loadCatalogues();   // <-- integración del catálogo
+    this.loadData();
+    this.watchFormChanges();
+  }
 
-    protected typeEstablishments: CatalogueInterface[] = [];
+  private buildForm() {
+    this.form = this.formBuilder.group({
+      totalTables: [null, [Validators.required, Validators.min(1), Validators.max(100)]],
+      totalCapacities: [null, [Validators.required, Validators.min(1), Validators.max(100)]],
+      typeEstablishment: [null, [Validators.required]]   // <-- nuevo campo para catálogo
+    });
+  }
 
-    /*
-      Antes:
-        buildForm() en el constructor
-
-        constructor vacío
-    */
-    constructor() {} 
-    ngOnInit() {
-
-        /*
-          buildForm pasa a ngOnInit
-        */
-        this.buildForm(); 
-
-        /*
-          Cargar data antes de escuchar cambios
-        */
-        this.loadData(); 
-
-        this.watchFormChanges();
-    }
-
-    private buildForm() {
-        this.form = this.formBuilder.group({
-            totalTables: [null, [Validators.required, Validators.min(1), Validators.max(100)]],
-            totalCapacities: [null, [Validators.required, Validators.min(1), Validators.max(100)]],
-        });
-
-        /*
-         Eliminado watchFormChanges() de aquí
-          porque se estaba duplicando la suscripción
-        */
-    }
-
-    private watchFormChanges() {
-        this.form.valueChanges
-            .pipe(debounceTime(300), distinctUntilChanged())
-            .subscribe(() => {
-                if (this.form.valid) {
-                    /*
-                      Antes:
-                        this.dataOut.emit(this.form);
-
-                      Ahora:
-                        se emite SOLO el value
-                    */
-                    this.dataOut.emit(this.form.value); 
-                }
-            });
-    }
-
-    getFormErrors(): string[] {
-        const errors: string[] = [];
-
-        if (this.tablesField.invalid) {
-            errors.push('Número de mesas');
+  private watchFormChanges() {
+    this.form.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(() => {
+        if (this.form.valid) {
+          this.dataOut.emit(this.form.value);
         }
+      });
+  }
 
-        if (this.capacityField.invalid) {
-            errors.push('Capacidad en número de personas');
-        }
+  getFormErrors(): string[] {
+    const errors: string[] = [];
 
-        if (errors.length > 0) {
-            this.form.markAllAsTouched();
-        }
-
-        return errors;
+    if (this.tablesField.invalid) {
+      errors.push('Número de mesas');
     }
 
-    async loadCatalogues() {
-        this.typeEstablishments = await this.catalogueService.findByType(
-            CatalogueTypeEnum.process_food_drinks_establishment_type
-        );
+    if (this.capacityField.invalid) {
+      errors.push('Capacidad en número de personas');
     }
 
-    private loadData() {
-        /*
-          dataIn es Signal → se lee con ()
-        */
-        const data = this.dataIn(); 
-        if (!data) return;
-
-        this.form.patchValue(data);
+    if (this.typeEstablishmentField.invalid) {
+      errors.push('Tipo de establecimiento');
     }
 
-    get tablesField(): AbstractControl {
-        return this.form.controls['totalTables'];
+    if (errors.length > 0) {
+      this.form.markAllAsTouched();
     }
 
-    get capacityField(): AbstractControl {
-        return this.form.controls['totalCapacities'];
-    }
+    return errors;
+  }
+
+  async loadCatalogues() {
+    this.typeEstablishments = await this.catalogueService.findByType(
+      CatalogueTypeEnum.process_food_drinks_establishment_type
+    );
+  }
+
+  private loadData() {
+    const data = this.dataIn();
+    if (!data) return;
+
+    this.form.patchValue(data);
+  }
+
+  get tablesField(): AbstractControl {
+    return this.form.controls['totalTables'];
+  }
+
+  get capacityField(): AbstractControl {
+    return this.form.controls['totalCapacities'];
+  }
+
+  get typeEstablishmentField(): AbstractControl {
+    return this.form.controls['typeEstablishment'];
+  }
 }

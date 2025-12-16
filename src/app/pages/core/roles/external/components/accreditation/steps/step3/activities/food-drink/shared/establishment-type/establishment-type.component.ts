@@ -13,6 +13,8 @@ import { CustomMessageService } from '@utils/services/custom-message.service';
 import { CatalogueService } from '@/utils/services/catalogue.service';
 import { CatalogueInterface } from '@utils/interfaces';
 
+
+
 import {
   CatalogueActivitiesCodeEnum,
   CatalogueProcessFoodDrinksEstablishmentTypeEnum,
@@ -31,7 +33,7 @@ import {
 @Component({
     selector: 'app-establishment-type',
     standalone: true,
-    imports: [Fluid, ReactiveFormsModule, LabelDirective, Select, Message, ErrorMessageDirective, InputText, CommonModule, ToggleSwitchComponent],
+    imports: [Fluid, ReactiveFormsModule, LabelDirective, Select, Message, ErrorMessageDirective, InputText, CommonModule, ToggleSwitchComponent,],
     templateUrl: './establishment-type.component.html',
     styleUrl: './establishment-type.component.scss'
 })
