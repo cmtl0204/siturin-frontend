@@ -10,6 +10,8 @@ import { CustomMessageService } from '@utils/services/custom-message.service';
 import { LabelDirective } from '@utils/directives/label.directive';
 import { ErrorMessageDirective } from '@utils/directives/error-message.directive';
 import { CatalogueInterface } from '@utils/interfaces';
+import { CatalogueService } from '@/utils/services/catalogue.service';
+import { CatalogueTypeEnum } from '@/utils/enums';
 
 @Component({
     selector: 'app-physical-space',
@@ -21,9 +23,7 @@ export class PhysicalSpaceComponent implements OnInit {
     public dataIn: InputSignal<any> = input<any>();
     public dataOut: OutputEmitterRef<any> = output<any>();
 
-    //@Input() data!: string | undefined;
-    //@Output() dataOut = new EventEmitter<FormGroup>();
-    //@Output() fieldErrorsOut = new EventEmitter<string[]>();
+    private readonly catalogueService = inject(CatalogueService);
 
     protected readonly PrimeIcons = PrimeIcons;
     private readonly formBuilder = inject(FormBuilder);
@@ -31,25 +31,31 @@ export class PhysicalSpaceComponent implements OnInit {
 
     protected form!: FormGroup;
 
-    protected localTypes: CatalogueInterface[] = [
+    protected localTypes: CatalogueInterface[] = [];
+    protected permanentPhysicalSpaces: CatalogueInterface[] = [];
+
+
+    /*protected localTypes: CatalogueInterface[] = [
         { name: 'Option 1', code: 'Option 1' },
         { name: 'Option 2', code: 'Option 2' },
         { name: 'Option 3', code: 'Option 3' }
-    ];
-    protected permanentPhysicalSpaces: CatalogueInterface[] = [
+    ];*/
+
+    /*protected permanentPhysicalSpaces: CatalogueInterface[] = [
         { id: '1', name: 'Casa' },
         {
             id: '2',
             name: 'Edificio'
         }
-    ];
+    ];*/
 
     constructor() {
         this.buildForm();
     }
 
-    ngOnInit() {
+    async ngOnInit() {
         this.loadData();
+        await this.loadCatalogues();
     }
 
     buildForm() {
@@ -66,7 +72,7 @@ export class PhysicalSpaceComponent implements OnInit {
     watchFormChanges() {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
             if (this.getFormErrors().length === 0) {
-                this.dataOut.emit(this.form);
+                this.dataOut.emit(this.form.value);
             }
         });
     }
@@ -97,6 +103,11 @@ export class PhysicalSpaceComponent implements OnInit {
         }
 
         return [];
+    }
+
+    async loadCatalogues() {
+        this.localTypes = await this.catalogueService.findByType(CatalogueTypeEnum.processes_local_type);
+        this.permanentPhysicalSpaces = await this.catalogueService.findByType(CatalogueTypeEnum.processes_legal_entity)
     }
 
     

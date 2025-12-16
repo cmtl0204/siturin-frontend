@@ -27,13 +27,16 @@ export class AirComponent implements OnInit {
     public dataIn: InputSignal<any> = input<any>();
     public dataOut: OutputEmitterRef<any> = output<any>();
 
+
+
     protected readonly formBuilder = inject(FormBuilder);
-    private readonly catalogueService = inject(CatalogueService);
+    private readonly catalogueService = inject(CatalogueService); //Es el Catalogo que se va a usar
     protected readonly customMessageService = inject(CustomMessageService);
 
-    //@Input() isAirTransport = false;
+
     @Input() subClassification: string | undefined; // muertra errores al quitar
-    //@Output() dataOut = new EventEmitter<FormGroup>();
+
+
 
     protected readonly Validators = Validators;
     protected airlineTypes: CatalogueInterface[] = [];
@@ -41,7 +44,9 @@ export class AirComponent implements OnInit {
 
     protected form!: FormGroup;
 
-    constructor() {}
+    constructor() {
+        this.buildForm();
+    }
 
     async ngOnInit() {
         await this.loadCatalogues();

@@ -35,7 +35,7 @@ export class TypeComponent implements OnInit {
   public dataIn: InputSignal<any> = input<any>();
   public dataOut: OutputEmitterRef<any> = output<any>();
   
-  //@Output() dataOut = new EventEmitter<FormGroup>();
+  
 
   protected form!: FormGroup;
   protected readonly formBuilder = inject(FormBuilder);
@@ -55,6 +55,10 @@ export class TypeComponent implements OnInit {
 
   }
 
+  constructor() {
+        this.buildForm();
+    }
+
   buildForm(): void {
     this.form = this.formBuilder.group({
       localType: [null, Validators.required]
@@ -66,7 +70,7 @@ export class TypeComponent implements OnInit {
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe(() => {
         if (this.getFormErrors().length === 0) {
-          this.dataOut.emit(this.form);
+          this.dataOut.emit(this.form.value);
         }
       });
   }

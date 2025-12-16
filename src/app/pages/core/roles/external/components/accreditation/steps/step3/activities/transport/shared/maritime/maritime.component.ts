@@ -17,6 +17,7 @@ import { ListBasicComponent } from '@utils/components/list-basic/list-basic.comp
 import { DatePicker } from 'primeng/datepicker';
 import { InputNumber } from 'primeng/inputnumber';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { CatalogueService } from '@/utils/services/catalogue.service';
 
 @Component({
     selector: 'app-maritime',
@@ -28,8 +29,7 @@ export class MaritimeComponent implements OnInit {
     public dataIn: InputSignal<any> = input<any>();
     public dataOut: OutputEmitterRef<any> = output<any>();
 
-    //@Input() data!: string | undefined;
-    //@Output() dataOut = new EventEmitter<FormGroup>();
+    //private readonly catalogueService = inject(CatalogueService);
 
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
@@ -45,7 +45,9 @@ export class MaritimeComponent implements OnInit {
     protected cols: ColInterface[] = [];
     protected items: any[] = [];
 
-    constructor() {}
+    constructor() {
+        this.buildForm();
+    }
 
     ngOnInit() {
         this.buildForm();

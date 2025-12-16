@@ -13,6 +13,8 @@ import { Message } from 'primeng/message';
 import {
     TypeVehiclesComponent
 } from '@/pages/core/roles/external/components/accreditation/steps/step3/activities/transport/shared/type-vehicles/type-vehicles.component';
+import { CatalogueService } from '@/utils/services/catalogue.service';
+import { CatalogueTypeEnum } from '@/utils/enums';
 
 
 @Component({
@@ -26,21 +28,29 @@ export class LandComponent {
     public dataIn: InputSignal<any> = input<any>();
     public dataOut: OutputEmitterRef<any> = output<any>();
 
-    //@Output() dataOut = new EventEmitter<FormGroup>();
-
+    private readonly catalogueService = inject(CatalogueService);
+    
     private readonly formBuilder = inject(FormBuilder);
     protected form!: FormGroup;
 
-    protected localTypes: CatalogueInterface[] = [
+    //Catalgo
+    protected localTypes: CatalogueInterface[] = [];
+
+    /*protected localTypes: CatalogueInterface[] = [
         { name: 'Islas de Centros Comerciales', code: 'islas' },
         { name: 'Local Comercial', code: 'comercial' },
         { name: 'Oficinas', code: 'oficinas' },
         { name: 'Oficinas Compartidas', code: 'compartidas' }
-    ];
+    ];*/
 
-    ngOnInit(): void {
+    async ngOnInit() {
         this.buildForm();
         this.loadData();
+        await this.loadCatalogues();
+    }
+
+    constructor() {
+        this.buildForm();
     }
 
     buildForm() {
@@ -95,6 +105,11 @@ export class LandComponent {
         }
 
         return errors;
+    }
+
+    async loadCatalogues() {
+        this.localTypes = await this.catalogueService.findByType(CatalogueTypeEnum.processes_local_type);
+        //this.legalEntities = await this.catalogueService.findByType(CatalogueTypeEnum.processes_legal_entity)
     }
 
     get certifiedField(): AbstractControl {

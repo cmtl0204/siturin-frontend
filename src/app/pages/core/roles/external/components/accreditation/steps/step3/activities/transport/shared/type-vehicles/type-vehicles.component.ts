@@ -68,6 +68,7 @@ export class TypeVehiclesComponent implements OnInit {
     protected readonly customMessageService = inject(CustomMessageService);
     private confirmationService = inject(ConfirmationService);
     protected readonly PrimeIcons = PrimeIcons;
+
     private readonly catalogueService = inject(CatalogueService);
 
     protected form!: FormGroup;
@@ -86,12 +87,16 @@ export class TypeVehiclesComponent implements OnInit {
         //this.watchFormChanges();
     }
 
+    constructor() {
+        this.buildForm();
+    }
+
     /*watchFormChanges(): void {
         this.form.valueChanges
           .pipe(debounceTime(300), distinctUntilChanged())
           .subscribe(() => {
             if (this.getFormErrors().length === 0) {
-              this.dataOut.emit(this.form);
+              this.dataOut.emit(this.form.value);
             }
           });
       }*/

@@ -20,10 +20,11 @@ export class ProtectedAreaComponent implements OnInit {
     public dataIn: InputSignal<any> = input<any>();
     public dataOut: OutputEmitterRef<any> = output<any>();
 
+    
+
     protected readonly formBuilder = inject(FormBuilder);
     protected form!: FormGroup;
 
-    //@Output() dataOut = new EventEmitter<FormGroup>();
 
     constructor() {
         this.buildForm();
@@ -52,7 +53,7 @@ export class ProtectedAreaComponent implements OnInit {
     watchFormChanges(): void {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(() => {
             if (this.getFormErrors().length === 0) {
-                this.dataOut.emit(this.form);
+                this.dataOut.emit(this.form.value);
             }
         });
 
