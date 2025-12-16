@@ -69,7 +69,7 @@ export class AirComponent implements OnInit {
     watchFormChanges() {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(() => {
             if (this.getFormErrors().length === 0) {
-                this.dataOut.emit(this.form);
+                this.dataOut.emit(this.form.value);
             }
         });
 

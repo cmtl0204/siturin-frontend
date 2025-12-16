@@ -73,12 +73,12 @@ export class MaritimeComponent implements OnInit {
     }
 
     watchFormChanges() {
-        this.dataOut.emit(this.form);
+        this.dataOut.emit(this.form.value);
 
         this.hasMaritimeTransportField.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((value) => {
             this.maritimeItemsField.setValue(this.items);
             if (this.getFormErrors().length === 0) {
-                this.dataOut.emit(this.form);
+                this.dataOut.emit(this.form.value);
             }
         });
     }

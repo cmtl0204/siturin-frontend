@@ -57,7 +57,7 @@ export class LandComponent {
     watchFormChanges() {
         this.form.valueChanges.subscribe(() => {
             if (this.getFormErrors().length === 0) {
-                this.dataOut.emit(this.form);
+                this.dataOut.emit(this.form.value);
             }
         });
     }
