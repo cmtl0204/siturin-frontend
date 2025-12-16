@@ -1,4 +1,3 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { Fluid } from 'primeng/fluid';
@@ -14,85 +13,175 @@ import { CatalogueActivitiesCodeEnum, CatalogueTypeEnum } from '@/utils/enums';
 import { CatalogueService } from '@/utils/services/catalogue.service';
 import { ToggleSwitchComponent } from '@utils/components/toggle-switch/toggle-switch.component';
 
+import {
+  Component,
+  EventEmitter,
+  inject,
+  OnInit,
+  input,
+  output
+} from '@angular/core';
+
 @Component({
-    selector: 'app-physical-space',
-    standalone: true,
-    imports: [Fluid, CommonModule, ReactiveFormsModule, LabelDirective, Select, Message, ErrorMessageDirective, ToggleSwitchComponent],
-    templateUrl: './physical-space.component.html',
-    styleUrl: './physical-space.component.scss'
+  selector: 'app-physical-space',
+  standalone: true,
+  imports: [
+    Fluid,
+    CommonModule,
+    ReactiveFormsModule,
+    LabelDirective,
+    Select,
+    Message,
+    ErrorMessageDirective,
+    ToggleSwitchComponent
+  ],
+  templateUrl: './physical-space.component.html',
+  styleUrl: './physical-space.component.scss'
 })
 export class PhysicalSpaceComponent implements OnInit {
-    @Input() data!: string | undefined;
-    @Output() dataOut = new EventEmitter<FormGroup>();
-    @Output() fieldErrorsOut = new EventEmitter<string[]>();
 
-    protected readonly Validators = Validators;
-    protected readonly PrimeIcons = PrimeIcons;
-    private readonly formBuilder = inject(FormBuilder);
-    protected readonly customMessageService = inject(CustomMessageService);
-    private readonly catalogueService = inject(CatalogueService);
+  /*
+    Antes:
+      @Input() data!: string | undefined;
 
-    protected readonly CatalogueActivitiesCodeEnum = CatalogueActivitiesCodeEnum;
-    protected form!: FormGroup;
 
-    protected localTypes: CatalogueInterface[] = [];
+      dataIn = input<any>();
 
-    constructor() {
-        this.buildForm();
-    }
+    - input() retorna un Signal
+    - por eso se inicializa como propiedad
+    - y se lee usando dataIn()
+  */
+  dataIn = input<any>();
 
-    async ngOnInit() {
-        await this.loadCatalogues();
-        await this.loadData();
-        this.watchFormChanges();
-    }
+  /*
+    Antes:
+      @Output() dataOut = new EventEmitter<FormGroup>();
 
-    buildForm() {
-        this.form = this.formBuilder.group({
-            localType: [null, [Validators.required]],
-            hasLandUse: [null, [Validators.requiredTrue]]
-        });
+    Ahora:
+      dataOut = output<any>();
 
-        //this.watchFormChanges();
-    }
+    - se emite SOLO el valor del formulario
+    - el estado se controla en el componente padre
+  */
+  dataOut = output<any>();
 
-    watchFormChanges() {
-        this.form.valueChanges
-        .pipe(debounceTime(300), distinctUntilChanged())
-        .subscribe((_) => {
-            if (this.form.valid) {
-                this.dataOut.emit(this.form);
-            }
-        });
-    }
+  protected readonly Validators = Validators;
+  protected readonly PrimeIcons = PrimeIcons;
 
-    getFormErrors(): string[] {
-        const errors: string[] = [];
+  private readonly formBuilder = inject(FormBuilder);
+  protected readonly customMessageService = inject(CustomMessageService);
+  private readonly catalogueService = inject(CatalogueService);
 
-        if (this.localTypeField.invalid) errors.push('Su local es');
-    
-        if (this.hasLandUseField.invalid) errors.push('Al momento de la inspección se presentará el Certificado de Informe de compatibilidad de uso de suelo');
-        
+  protected readonly CatalogueActivitiesCodeEnum = CatalogueActivitiesCodeEnum;
 
-        if (errors.length > 0) {
-            this.form.markAllAsTouched();
+  protected form!: FormGroup;
+  protected localTypes: CatalogueInterface[] = [];
+
+  constructor() {}
+
+  async ngOnInit() {
+    /*
+      buildForm() se mueve a ngOnInit
+      para respetar el ciclo de vida del componente
+    */
+    this.buildForm();
+
+    await this.loadCatalogues();
+
+    /*
+      se agrega carga explícita de datos desde dataIn
+    */
+    this.loadData();
+
+    /*
+      la escucha de cambios se hace después
+      de cargar datos iniciales
+    */
+    this.watchFormChanges();
+  }
+
+  private buildForm() {
+    this.form = this.formBuilder.group({
+      localType: [null, Validators.required],
+
+      /*
+        antes se usaba reset()
+        ahora se inicializa explícitamente en false
+        para coincidir con park
+      */
+      hasLandUse: [false, Validators.requiredTrue]
+    });
+  }
+
+  private loadData() {
+    /*
+      dataIn es un Signal, se lee con ()
+    */
+    const data = this.dataIn();
+
+    if (!data) return;
+
+    /*
+      se usa patchValue para poblar el formulario
+      desde datos externos
+    */
+    this.form.patchValue(data);
+  }
+
+  private watchFormChanges() {
+    this.form.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(() => {
+
+        /*
+          la validación ya no usa this.form.valid
+          se centraliza con getFormErrors()
+        */
+        if (this.getFormErrors().length === 0) {
+
+          /*
+            se emite SOLO this.form.value
+            no el FormGroup completo
+          */
+          this.dataOut.emit(this.form.value);
         }
+      });
+  }
 
-        return errors; //añadir errors
+  getFormErrors(): string[] {
+    const errors: string[] = [];
+
+    if (this.localTypeField.invalid) {
+      errors.push('Su local es obligatorio');
     }
 
-    async loadData() {}
-
-    async loadCatalogues() {
-        this.localTypes = await this.catalogueService
-        .findByType(CatalogueTypeEnum.processes_local_type);
+    if (this.hasLandUseField.invalid) {
+      errors.push(
+        'Al momento de la inspección se presentará el Certificado de Informe de compatibilidad de uso de suelo'
+      );
     }
 
-    get localTypeField(): AbstractControl {
-        return this.form.controls['localType'];
+    /*
+      si hay errores, se marcan todos los campos
+      como touched para mostrar mensajes
+    */
+    if (errors.length > 0) {
+      this.form.markAllAsTouched();
     }
 
-    get hasLandUseField(): AbstractControl {
-        return this.form.controls['hasLandUse'];
-    }
+    return errors;
+  }
+
+  private async loadCatalogues() {
+    this.localTypes = await this.catalogueService
+      .findByType(CatalogueTypeEnum.processes_local_type);
+  }
+
+  get localTypeField(): AbstractControl {
+    return this.form.controls['localType'];
+  }
+
+  get hasLandUseField(): AbstractControl {
+    return this.form.controls['hasLandUse'];
+  }
 }
