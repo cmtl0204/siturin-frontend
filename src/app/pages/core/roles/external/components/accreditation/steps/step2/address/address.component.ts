@@ -71,7 +71,7 @@ export class AddressComponent implements OnInit {
 
     watchFormChanges() {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
-            if (this.form.valid) this.dataOut.emit(this.form);
+            if (this.form.valid) this.dataOut.emit(this.form.value);
         });
 
         this.provinceField.valueChanges.subscribe(async (value) => {
@@ -137,7 +137,7 @@ export class AddressComponent implements OnInit {
 
     loadData() {
         if (this.dataIn()) {
-            this.form.patchValue(this.dataIn());
+            this.form.patchValue(this.dataIn()?.establishmentAddress);
         }
     }
 

@@ -22,6 +22,8 @@ export class ContactPersonComponent implements OnInit {
     dataIn = input<any>(null);
     @Output() dataOut = new EventEmitter<FormGroup>();
 
+    protected readonly PrimeIcons = PrimeIcons;
+
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
 
@@ -45,21 +47,19 @@ export class ContactPersonComponent implements OnInit {
 
     buildForm() {
         this.form = this.formBuilder.group({
-            identification: [null, [Validators.required]],
+            identification: [null, [Validators.required, Validators.minLength(9), Validators.maxLength(10)]],
             name: [null, [Validators.required]],
             phone: [null, [Validators.required, Validators.minLength(9), Validators.maxLength(10)]],
             secondaryPhone: [null, [Validators.minLength(9), Validators.maxLength(10)]],
             email: [null, [Validators.required, invalidEmailValidator()]]
         });
 
-        this.nameField.disable();
-
         this.watchFormChanges();
     }
 
     watchFormChanges() {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe((_) => {
-            if (this.form.valid) this.dataOut.emit(this.form);
+            if (this.form.valid) this.dataOut.emit(this.form.getRawValue());
         });
     }
 
@@ -131,7 +131,7 @@ export class ContactPersonComponent implements OnInit {
 
     loadData() {
         if (this.dataIn()) {
-            this.form.patchValue(this.dataIn());
+            this.form.patchValue(this.dataIn()?.establishmentContactPerson);
         }
     }
 
@@ -154,6 +154,4 @@ export class ContactPersonComponent implements OnInit {
     get emailField(): AbstractControl {
         return this.form.controls['email'];
     }
-
-    protected readonly PrimeIcons = PrimeIcons;
 }

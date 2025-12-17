@@ -50,13 +50,14 @@ export class BusinessInfoComponent implements OnInit {
 
     watchFormChanges() {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(() => {
-            this.dataOut.emit(this.form);
+            this.dataOut.emit(this.form.value);
         });
     }
 
     loadData() {
+        console.log(this.dataIn());
         if (this.dataIn()) {
-            this.form.patchValue(this.dataIn());
+            this.form.patchValue(this.dataIn()?.establishment);
         }
     }
 

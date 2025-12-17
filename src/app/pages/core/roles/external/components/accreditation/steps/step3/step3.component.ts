@@ -42,6 +42,7 @@ export class Step3Component implements OnInit {
     private readonly formBuilder = inject(FormBuilder);
     protected form!: FormGroup;
     protected process!: ProcessI;
+    protected dataIn!: any;
 
     private readonly activityService = inject(ActivityService);
     private readonly coreSessionStorageService = inject(CoreSessionStorageService);
@@ -66,6 +67,7 @@ export class Step3Component implements OnInit {
     }
 
     async ngOnInit() {
+        this.process = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
         await this.loadCatalogues();
         await this.loadActivities();
         await this.watchFormChanges();
@@ -84,7 +86,6 @@ export class Step3Component implements OnInit {
     async watchFormChanges() {
         this.form.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(async () => {
             if (this.form.valid) {
-                this.dataOut.emit(this.form);
                 await this.coreSessionStorageService.setEncryptedValue(CoreEnum.process, { ...this.form.getRawValue() });
             }
         });
@@ -165,8 +166,6 @@ export class Step3Component implements OnInit {
     }
 
     async loadActivities() {
-        this.process = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
-
         this.geographicAreaField.patchValue(this.geographicAreas.find((x) => x.code === 'continent'));
 
         if (this.process.province?.code === '20') {
@@ -198,6 +197,10 @@ export class Step3Component implements OnInit {
                 this.activityField.disable();
                 this.classificationField.disable();
                 this.categoryField.reset();
+                break;
+
+            case CatalogueProcessesTypeEnum.registration:
+                this.form.patchValue(this.process);
                 break;
         }
     }

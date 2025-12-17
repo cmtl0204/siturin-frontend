@@ -10,10 +10,15 @@ export enum CoreEnum {
     step1 = 'step1',
     step2 = 'step2',
     step3 = 'step3',
-    peopleCapacity = 'peopleCapacity',
 }
 
 export enum ChildParkFormEnum {
     peopleCapacity = 'peopleCapacity',
-    physicalSpace = 'physicalSpace',
+    physicalSpace = 'physicalSpace'
+}
+
+export enum ChildStep2FormEnum {
+    establishment = 'establishment',
+    establishmentAddress = 'establishmentAddress',
+    establishmentContactPerson = 'establishmentContactPerson'
 }

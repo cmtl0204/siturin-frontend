@@ -31,7 +31,7 @@ export class EstablishmentCapacityComponent implements OnInit {
     private readonly formBuilder = inject(FormBuilder);
     protected readonly customMessageService = inject(CustomMessageService);
     private readonly catalogueService = inject(CatalogueService);
-        
+
     protected readonly CatalogueActivitiesCodeEnum = CatalogueActivitiesCodeEnum;
 
     protected form!: FormGroup;

@@ -30,6 +30,7 @@ export enum CatalogueTypeEnum {
     service_types_continent = 'service_types_continent',
     transport_vehicle_types = 'transporte_tipo_vehiculos',
     process_transport_airline_type = 'process_transport_airline_type',
+    processes_type = 'tramite_tipos'
 }
 
 export enum CatalogueStateEnum {

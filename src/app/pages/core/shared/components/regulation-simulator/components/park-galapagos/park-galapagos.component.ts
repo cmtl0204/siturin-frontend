@@ -20,16 +20,13 @@ export class ParkGalapagosComponent {
 
     buildForm = effect(() => {
         if (!this.classificationInput()) return;
-        console.log(this.classificationInput());
 
         this.classification.set(data.find((item) => item.codeClassification === this.classificationInput()) ?? null);
 
-        console.log(this.classification());
 
         this.form = this.fb.group({
             items: this.fb.array(items.map((item) => this.createItemGroup(item)))
         });
-        console.log(this.form.value);
     });
 
     createItemGroup(item: Item): FormGroup {

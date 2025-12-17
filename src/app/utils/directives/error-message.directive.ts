@@ -1,5 +1,7 @@
 import { Directive, ElementRef, inject, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
+import { dateGreaterThan } from '@utils/form-validators/custom-validator';
+import { format } from 'date-fns';
 
 @Directive({
     selector: '[appErrorMessage]',
@@ -33,6 +35,7 @@ export class ErrorMessageDirective implements OnChanges {
         dateMax: this.fieldDateMax,
         dateMin: this.fieldDateMin,
         agreementExists: this.fieldAgreementExists,
+        dateGreaterThan: this.fieldDateGreaterThan
     };
 
     constructor() {
@@ -41,18 +44,17 @@ export class ErrorMessageDirective implements OnChanges {
 
     ngOnChanges(): void {
         this.setErrorMessage();
-
     }
 
-    @Input() set touched(value: boolean|null|undefined) {
+    @Input() set touched(value: boolean | null | undefined) {
         this._touched = value;
     }
 
-    @Input() set dirty(value: boolean|null|undefined) {
+    @Input() set dirty(value: boolean | null | undefined) {
         this._dirty = value;
     }
 
-    @Input() set errors(value: ValidationErrors | null|undefined) {
+    @Input() set errors(value: ValidationErrors | null | undefined) {
         this._errors = value;
     }
 
@@ -160,5 +162,9 @@ export class ErrorMessageDirective implements OnChanges {
 
     private get fieldUnregisteredUser(): string {
         return 'El usuario no se encuentra registrado, por favor registre una cuenta.';
+    }
+
+    private fieldDateGreaterThan(errors: ValidationErrors): string {
+        return `La fecha de fin ${format(errors['endDate'], 'yyyy-MM-dd')} no puede ser menor a la fecha de inicio ${format(errors['startDate'], 'yyyy-MM-dd')}.`;
     }
 }

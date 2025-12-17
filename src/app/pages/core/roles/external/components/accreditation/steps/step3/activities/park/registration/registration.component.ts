@@ -8,11 +8,12 @@ import { PhysicalSpaceComponent } from '@modules/core/roles/external/components/
 import { RegulationComponent } from '@/pages/core/shared/components/regulation/regulation.component';
 import { ParkHttpService } from '@modules/core/roles/external/services/park-http.service';
 import { collectFormErrors } from '@utils/helpers/collect-form-errors.helper';
+import { Fluid } from 'primeng/fluid';
 
 @Component({
     selector: 'app-registration',
     standalone: true,
-    imports: [Button, PeopleCapacityComponent, PhysicalSpaceComponent, RegulationComponent],
+    imports: [Button, PeopleCapacityComponent, PhysicalSpaceComponent, RegulationComponent, Fluid],
     templateUrl: './registration.component.html',
     styleUrl: './registration.component.scss'
 })
@@ -22,7 +23,6 @@ export class RegistrationComponent implements OnInit {
     @ViewChildren(RegulationComponent) private regulationComponent!: QueryList<RegulationComponent>;
 
     protected readonly CoreEnum = CoreEnum;
-    protected readonly ChildParkFormEnum = ChildParkFormEnum;
     protected readonly PrimeIcons = PrimeIcons;
     private readonly coreSessionStorageService = inject(CoreSessionStorageService);
     private readonly parksHttpService = inject(ParkHttpService);
@@ -32,6 +32,7 @@ export class RegistrationComponent implements OnInit {
     protected modelId?: string;
 
     protected dataIn!: any;
+    protected loadedDataIn: boolean = false;
 
     constructor() {
         effect(async () => {
@@ -53,7 +54,9 @@ export class RegistrationComponent implements OnInit {
     }
 
     private async loadDataIn() {
+        this.loadedDataIn = false;
         this.dataIn = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.step3);
+        this.loadedDataIn = true;
     }
 
     protected saveForm(data: any, objectName?: string) {
@@ -86,16 +89,13 @@ export class RegistrationComponent implements OnInit {
 
         const process = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.process);
 
-        // console.log(this.mainData());
         console.log(await this.coreSessionStorageService.getEncryptedValue(CoreEnum.step3));
 
         const payload = { ...this.mainData(), ...process };
 
-        // console.log(payload);
-
-        // this.parksHttpService.createRegistration(payload).subscribe({
-        //     next: () => {}
-        // });
+        this.parksHttpService.createRegistration(payload).subscribe({
+            next: () => {}
+        });
     }
 
     private checkFormErrors() {

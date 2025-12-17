@@ -34,6 +34,26 @@ export class ActivityService {
         return activities;
     }
 
+    async findActivitiesByZone2(): Promise<ActivityInterface[]> {
+        let activities: ActivityInterface[] = [];
+
+        if (sessionStorage.getItem(CoreEnum.activities)) {
+            activities = await this.coreSessionStorageService.getEncryptedValue(CoreEnum.activities);
+            activities = Object.values(activities);
+
+            activities = activities
+                .map((item) => {
+                    return {
+                        id: item.id,
+                        code: item.code,
+                        name: item.name
+                    };
+                });
+        }
+
+        return activities;
+    }
+
     async findClassificationsByActivity(activityId: string): Promise<ClassificationInterface[]> {
         let classifications: ClassificationInterface[] = [];
 

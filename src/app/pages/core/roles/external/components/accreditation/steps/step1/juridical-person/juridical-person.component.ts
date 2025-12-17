@@ -28,7 +28,10 @@ export class JuridicalPersonComponent implements OnInit {
 
     protected form!: FormGroup;
     protected formInitialized = false;
+
+    //Catalogues
     protected legalEntities: CatalogueInterface[] = [];
+    protected otroCatalogo: CatalogueInterface[] = [];
 
     constructor() {
         effect(() => {
@@ -39,9 +42,9 @@ export class JuridicalPersonComponent implements OnInit {
         });
     }
 
-    ngOnInit() {
+    async ngOnInit() {
         this.buildForm();
-        this.loadCatalogues();
+        await this.loadCatalogues();
         this.loadData();
     }
 
