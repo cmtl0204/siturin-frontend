@@ -7,4 +7,4 @@ import { ChildrenListFormComponent } from '@/pages/tests/children-list-form/chil
     templateUrl: './parent-form.html',
     styleUrl: './parent-form.scss'
 })
-export class ParentForm {}
+export class ParentForm {} 
