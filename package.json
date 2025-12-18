@@ -1,7 +1,9 @@
 {
     "name": "siturin-frontend",
     "version": "20.0.0",
-    "engines": { "node": ">=20.19.0" },
+    "engines": {
+        "node": ">=20.19.0"
+    },
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
@@ -26,6 +28,7 @@
         "@tailwindcss/postcss": "^4.1.11",
         "chart.js": "4.4.2",
         "date-fns": "^4.1.0",
+        "force": "^0.0.3",
         "primeclt": "^0.1.5",
         "primeicons": "^7.0.0",
         "primeng": "^20",
