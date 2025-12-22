@@ -1,0 +1,132 @@
+<p-fluid class="custom-card-form">
+    <form [formGroup]="form" class="custom-grid-form">
+        
+        <div class="md:col-span-12 custom-field-form">
+            <div class="custom-section-title-form">Entrega de muebles:</div>
+        </div>
+
+        <div class="md:col-span-12 custom-field-form">
+            <label appLabel for="furniture" [required]="furnitureField">
+                <b>Declaro</b> que deseo realizar una entrega de muebles.
+            </label>
+
+            <p-toggleswitch id="furniture" formControlName="furniture">
+                <ng-template #handle let-checked="checked">
+                    <span class="!text-xs font-semibold">{{ checked ? 'SÍ' : 'NO' }}</span>
+                </ng-template>
+            </p-toggleswitch>
+
+            <p-message 
+                appErrorMessage 
+                [errors]="furnitureField.errors"
+                [touched]="furnitureField.touched" 
+                [dirty]="furnitureField.dirty" />
+        </div>
+    </form>
+</p-fluid>
+
+<p-fluid>
+    @if (furnitureField.value) {
+    <app-list-basic 
+        title="Listado de entregas" 
+        [items]="items" 
+        [cols]="cols" 
+        [buttonActions]="buttonActions"
+        (onCreate)="createItem()" 
+        (onSelect)="buildButtonActions($event)" />
+    }
+</p-fluid>
+
+<p-dialog [(visible)]="isVisibleModal" [modal]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [style]="{ width: '30vw' }" [draggable]="false" (onHide)="closeModal()" [resizable]="false">
+    <ng-template #header>
+        <div class="inline-flex items-center justify-center gap-2">
+            <span class="font-bold whitespace-nowrap">
+                Agregar entrega de mueble
+            </span>
+        </div>
+    </ng-template>
+
+    <p-fluid>
+        <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="custom-grid-form">
+            <!-- nombre -->
+            <div class="md:col-span-12 custom-field-form">
+                <label 
+                appLabel for="name" 
+                [required]="nameField" 
+                label="Nombre del mueble">
+                </label>
+
+                <input pInputText id="name" formControlName="name" />
+
+                <p-message 
+                    appErrorMessage 
+                    [errors]="nameField.errors" 
+                    [touched]="nameField.touched"
+                    [dirty]="nameField.dirty" />
+            </div>
+
+            <!-- cantidad -->
+            <div class="md:col-span-12 custom-field-form">
+                <label 
+                    appLabel for="quantity" 
+                    [required]="quantityField" 
+                    label="Cantidad">
+                </label>
+
+                <p-inputNumber id="quantity" formControlName="quantity" type="number" [min]="1" />
+
+                <p-message 
+                    appErrorMessage 
+                    [errors]="quantityField.errors" 
+                    [touched]="quantityField.touched"
+                    [dirty]="quantityField.dirty" />
+            </div>
+
+            <!-- fecha de entrega -->
+            <div class="md:col-span-12 custom-field-form">
+                <label 
+                    appLabel for="deliveryDate" 
+                    [required]="deliveryDateField" 
+                    label="Fecha de entrega">
+                </label>
+
+                <p-datepicker 
+                    id="deliveryDate" 
+                    formControlName="deliveryDate" 
+                    [showIcon]="true" 
+                    dateFormat="yy-mm-dd"
+                    appendTo="body">
+                </p-datepicker>
+
+                <p-message 
+                    appErrorMessage 
+                    [errors]="deliveryDateField.errors" 
+                    [touched]="deliveryDateField.touched"
+                    [dirty]="deliveryDateField.dirty" />
+            </div>
+
+            <!-- color -->
+            <div class="md:col-span-12 custom-field-form">
+                <label 
+                    appLabel for="color" 
+                    [required]="colorField" 
+                    label="Color del mueble">
+                </label>
+
+                <p-colorPicker id="color" formControlName="color" [inline]="true"></p-colorPicker>
+
+                <p-message 
+                    appErrorMessage 
+                    [errors]="colorField.errors" 
+                    [touched]="colorField.touched"
+                    [dirty]="colorField.dirty" />
+            </div>
+
+            <!-- actions -->
+            <div class="md:col-span-12 custom-field-form">
+                <p-button type="submit" label="Agregar" [icon]="PrimeIcons.SAVE" />
+            </div>
+        </form>
+    </p-fluid>
+</p-dialog>

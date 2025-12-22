@@ -1,7 +1,7 @@
 import { Component, inject, input, InputSignal, OnInit, output, OutputEmitterRef } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Fluid } from 'primeng/fluid';
-import { ConfirmationService, MenuItem, PrimeIcons } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService, PrimeIcons } from 'primeng/api';
 import { ToggleSwitch } from 'primeng/toggleswitch';
 import { Message } from 'primeng/message';
 import { TableModule } from 'primeng/table';
@@ -22,14 +22,29 @@ import { CatalogueService } from '@utils/services/catalogue.service';
 import { Select } from 'primeng/select';
 import { DpaService } from '@utils/services';
 import { ActivityService } from '@/pages/core/shared/services';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
+import { MessageModule } from 'primeng/message';
+import { TitleCasePipe } from '@angular/common';
+import { ColorPicker } from 'primeng/colorpicker';
+import { RatingModule } from 'primeng/rating';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { SliderModule } from 'primeng/slider';
+import { KnobModule } from 'primeng/knob';
+
 
 @Component({
-    selector: 'app-children-list-form',
-    imports: [Fluid, ReactiveFormsModule, DatePicker, LabelDirective, Message, ErrorMessageDirective, ToggleSwitch, TableModule, Button, Dialog, InputText, ListBasicComponent, InputNumber, Select],
-    templateUrl: './children-list-form.component.html',
-    styleUrls: ['./children-list-form.component.scss']
+  selector: 'app-from-child-list',
+  imports: [Fluid, ReactiveFormsModule, DatePicker, LabelDirective, Message, ErrorMessageDirective, ToggleSwitch, TableModule, Button, Dialog, InputText, ListBasicComponent, InputNumber, Select,
+    CheckboxModule, ToastModule, ButtonModule, MessageModule, TitleCasePipe, ColorPicker, RatingModule, MultiSelectModule, ToggleButtonModule, SliderModule, KnobModule
+
+  ],
+  templateUrl: './from-child-list.html',
+  styleUrl: './from-child-list.scss'
 })
-export class ChildrenListFormComponent implements OnInit {
+export class FromChildList implements OnInit {
     public dataIn: InputSignal<any> = input<any>();
     public dataOut: OutputEmitterRef<any> = output<any>();
 
@@ -39,9 +54,14 @@ export class ChildrenListFormComponent implements OnInit {
     protected readonly customMessageService = inject(CustomMessageService);
     private confirmationService = inject(ConfirmationService);
 
+    messageService = inject(MessageService); //Checkbox
+
+    formSubmitted: boolean = false;
+
     private readonly formBuilder = inject(FormBuilder);
     protected form!: FormGroup;
     protected itemForm!: FormGroup;
+    protected start!: FormGroup;
 
     protected items: any[] = [];
     protected cols: ColInterface[] = [];
@@ -50,6 +70,8 @@ export class ChildrenListFormComponent implements OnInit {
     protected index = -1;
 
     protected dpaTypes: CatalogueInterface[] = [];
+    protected localTypes: CatalogueInterface[] = [];
+
 
     constructor() {}
 
@@ -67,15 +89,30 @@ export class ChildrenListFormComponent implements OnInit {
     }
 
     async loadCatalogues() {
-        this.dpaTypes = await this.catalogueService.findByType(CatalogueTypeEnum.activities_geographic_area);
+      this.localTypes = await this.catalogueService.findByType(CatalogueTypeEnum.processes_local_type);
+      this.dpaTypes = await this.catalogueService.findByType(CatalogueTypeEnum.activities_geographic_area);
     }
 
     buildForm() {
         this.form = this.formBuilder.group({
             hasMaritimeTransport: [false, [Validators.required]],
             other: [null, [Validators.required,Validators.minLength(3)]],
-            items: []
+            color: ['', Validators.required],
+            rating: [null, Validators.required],
+            items: [],
+            start: [],
+            localType: [null, [Validators.required]],
         });
+
+        this.start = this.formBuilder.group(
+          {
+            slow: [false, [Validators.required]],
+            normal: [false, [Validators.required]],
+            fast: [false, [Validators.required]],
+            veryFast: [false, [Validators.required]],
+          },
+          { validators: this.atLeastOneSelectedValidator }
+        );
 
         this.itemForm = this.formBuilder.group(
             {
@@ -86,7 +123,11 @@ export class ChildrenListFormComponent implements OnInit {
                 certifiedIssueAt: [null, [Validators.required]],
                 certifiedExpirationAt: [null, [Validators.required]],
                 dpaType: [null, [Validators.required]],
-                processType: [null, [Validators.required]]
+                processType: [null, [Validators.required]],
+                toggleButton: [false, Validators.required],
+                capacity: [50, Validators.required],
+                progress: [25, Validators.required]
+
             },
             {
                 validators: dateGreaterThan('certifiedIssueAt', 'certifiedExpirationAt')
@@ -102,10 +143,33 @@ export class ChildrenListFormComponent implements OnInit {
         });
     }
 
+    atLeastOneSelectedValidator(group: FormGroup): { [key: string]: any } | null {
+        const anySelected = Object.values(group.controls).some((control) => control.value === true);
+        return anySelected ? null : { atLeastOneRequired: true };
+    }
+
+    hasAnyInvalid(): boolean {
+        return this.formSubmitted && this.start.hasError('atLeastOneRequired');
+    }
+
+    get formKeys(): string[] {
+      return Object.keys(this.start.controls);
+    }
+
+    isInvalid(controlName: string): boolean {
+      const control = this.start.get(controlName);
+      return !!control && control.invalid && (control.dirty || control.touched);
+    }
+
+    
+
+
     getFormErrors(): string[] {
         const errors: string[] = [];
 
         if (this.hasMaritimeTransportField.value && this.items.length === 0) errors.push('Transporte Marítimo');
+
+        if (this.colorField.invalid) errors.push('Color');
 
         if (errors.length > 0) {
             this.form.markAllAsTouched();
@@ -171,7 +235,7 @@ export class ChildrenListFormComponent implements OnInit {
     }
 
     editItem(index: number) {
-        console.log('entro');
+        console.log('entroo');
         console.log(index);
         if (index > -1) {
             this.itemForm.patchValue(this.items[index]);
@@ -217,12 +281,8 @@ export class ChildrenListFormComponent implements OnInit {
 
     closeModal() {
         this.isVisibleModal = false;
-        this.idField.reset();
-        this.totalUnitsField.reset();
-        this.totalSeatsField.reset();
-        this.certifiedCodeField.reset();
-        this.certifiedIssueAtField.reset();
-        this.certifiedExpirationAtField.reset();
+        this.itemForm.reset();
+
     }
 
     onSubmit() {
@@ -274,4 +334,34 @@ export class ChildrenListFormComponent implements OnInit {
     get otherField(): AbstractControl {
         return this.form.controls['other'];
     }
+
+    get startField(): AbstractControl {
+        return this.form.controls['start'];
+    }
+
+    get colorField(): AbstractControl {
+        return this.form.controls['color'];
+    }
+
+    get ratingField() {
+        return this.form.controls['rating'];
+    }
+
+    get localTypeField(): AbstractControl {
+        return this.form.controls['localType'];
+    }
+
+    get toggleButtonField() {
+    return this.itemForm.get('toggleButton');
+  }
+
+  get capacityField() {
+    return this.itemForm.get('capacity');
+  }
+
+  get progressField() {
+    return this.itemForm.get('progress');
+  }
+
 }
+

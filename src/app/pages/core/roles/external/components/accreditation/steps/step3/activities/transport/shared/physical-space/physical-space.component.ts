@@ -127,4 +127,10 @@ export class PhysicalSpaceComponent implements OnInit {
     get hasProtectedAreaContractField(): AbstractControl {
         return this.form.controls['hasProtectedAreaContract'];
     }
+
+    get dpaTypeField(): AbstractControl {
+        return this.form.controls['localType'];
+    }
+
+
 }

@@ -1,0 +1,148 @@
+<p-fluid class="custom-card-form">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="custom-grid-form">
+        <!-- title -->
+        <div class="md:col-span-12 custom-field-form">
+            <div class="custom-section-title-form">Pide un deseo:</div>
+        </div>
+
+        <!-- ImputText -->
+        <div class="md:col-span-12 custom-field-form">
+            <label
+                appLabel
+                for="desire"
+                [required]="desireField"
+                label="¿Qué Deseas?">
+            </label>
+
+            <input type="text" id="desire" pInputText formControlName="desire"> 
+
+            <p-message
+                appErrorMessage
+                [errors]="desireField.errors"
+                [touched]="desireField.touched"
+                [dirty]="desireField.dirty"
+            />
+        </div>
+
+        <!-- Textarea -->
+        <div class="md:col-span-12 custom-field-form">
+            <label
+                appLabel
+                for="description"
+                [required]="descriptionField"
+                label="Describe tu deseo:">
+            </label>
+
+            <textarea id="description" pInputTextarea formControlName="description"></textarea>
+
+            <p-message
+                appErrorMessage
+                [errors]="descriptionField.errors"
+                [touched]="descriptionField.touched"
+                [dirty]="descriptionField.dirty"
+            />
+        </div>
+
+        <!-- InputOtp -->
+        <div class="md:col-span-12 custom-field-form">
+            <label
+                appLabel
+                for="key"
+                [required]="keyField"
+                label="Número de estrella">
+            </label>
+        
+
+            <p-inputOtp
+                id="key"
+                formControlName="key"
+                [length]="5"
+                [autofocus]="true"
+                [integerOnly]="true"
+
+                [disabled]="false">
+            </p-inputOtp>
+
+            <p-message
+                appErrorMessage
+                [errors]="keyField.errors"
+                [touched]="keyField.touched"
+                [dirty]="keyField.dirty"
+            />
+        </div>
+
+        <!-- Silder -->
+        <div class="md:col-span-12 custom-field-form">
+            <label
+                appLabel
+                for="power"
+                [required]="powerField"
+                label="Nivel de poder del deseo">
+            </label>
+
+                <div class="text-center font-bold mb-2">{{ powerField.value }}</div>
+
+            <p-slider
+                id="power"
+                formControlName="power"
+                [min]="0"
+                [max]="100"
+                [step]="1"
+                [style]="{width:'300px'}">
+            </p-slider>
+
+            
+
+            <p-message
+                appErrorMessage
+                [errors]="powerField.errors"
+                [touched]="powerField.touched"
+                [dirty]="powerField.dirty"
+            />
+        </div>
+
+        <!-- InputMask -->
+        <div class="md:col-span-12 custom-field-form">
+            <label
+                appLabel
+                for="phone"
+                [required]="phoneField"
+                label="Número de teléfono">
+            </label>
+
+            <p-inputMask
+                id="phone"
+                formControlName="phone"
+                mask="999-999-9999"
+                placeholder="000-000-0000">
+            </p-inputMask>
+
+            <p-message
+                appErrorMessage
+                [errors]="phoneField.errors"
+                [touched]="phoneField.touched"
+                [dirty]="phoneField.dirty"
+            />
+        </div>
+
+
+        <div class="md:col-span-12 custom-field-form">
+            <p-button type="submit" label="Agregar" [icon]="PrimeIcons.SAVE" />
+        </div>
+
+    </form>
+
+    
+</p-fluid>
+
+<p-fluid>
+        <app-list-basic
+            title="Listado"
+            [items]="star"
+            [cols]="cols"
+            [buttonActions]="buttonActions"
+            (onCreate)="createStar()"
+            (onSelect)="buildButtonActions($event)"
+        />
+</p-fluid>
+

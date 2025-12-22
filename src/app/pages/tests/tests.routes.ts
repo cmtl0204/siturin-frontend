@@ -10,5 +10,6 @@ export default [
     {
         path: 'child-form',
         component: ChildForm
-    }
+    },
+
 ] as Routes;

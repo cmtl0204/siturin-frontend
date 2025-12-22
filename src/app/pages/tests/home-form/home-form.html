@@ -1,0 +1,116 @@
+<p-fluid class="custom-card-form">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="custom-grid-form">
+        <!-- title -->
+        <div class="md:col-span-12 custom-field-form">
+            <div class="custom-section-title-form">Ubicación de Casa</div>
+        </div>
+
+        <!-- Text -->
+        <div class="md:col-span-12 custom-field-form">
+            <label 
+                appLabel for="name" 
+                [required]="nameField" 
+                label="nombre del propietario">
+            </label>
+
+            <input type="text" id="name" pInputText formControlName="name">
+
+            <p-message 
+                appErrorMessage 
+                [errors]="nameField.errors" 
+                [touched]="nameField.touched"
+                [dirty]="nameField.dirty"
+            />
+        </div>
+
+        <!-- Avenue -->
+        <div class="md:col-span-12 custom-field-form">
+            <label 
+                appLabel for="avenue" 
+                [required]="avenueField" 
+                label="Avenida">
+            </label>
+
+            <textarea id="avenue" pInputTextarea formControlName="avenue"></textarea>
+
+            <p-message 
+                appErrorMessage 
+                [errors]="avenueField.errors" 
+                [touched]="avenueField.touched"
+                [dirty]="avenueField.dirty" 
+            />
+        </div>
+
+        <!-- inputNumber -->
+        <div class="md:col-span-12 custom-field-form">
+            <label 
+                appLabel for="peopleCount" 
+                [required]="peopleCountField" 
+                label="Número de personas alojadas">
+            </label>
+
+            <p-inputNumber id="peopleCount" formControlName="peopleCount" [min]="1" [max]="20" [step]="1"></p-inputNumber>
+
+            <p-message 
+                appErrorMessage 
+                [errors]="peopleCountField.errors" 
+                [touched]="peopleCountField.touched"
+                [dirty]="peopleCountField.dirty" 
+            />
+        </div>
+
+        <!-- inputMask -->
+        <div class="md:col-span-12 custom-field-form">
+            <label 
+                appLabel for="postalCode" 
+                [required]="postalCodeField" 
+                label="Codigo Postal">
+            </label>
+
+            <p-inputMask id="postalCode" formControlName="postalCode" mask="99999" placeholder="00000"></p-inputMask>
+
+            <p-message 
+                appErrorMessage 
+                [errors]="postalCodeField.errors" 
+                [touched]="postalCodeField.touched"
+                [dirty]="postalCodeField.dirty" />
+        </div>
+
+        <div class="md:col-span-12 custom-field-form">
+            <label
+                appLabel
+                for="localType"
+                [required]="localTypeField"
+                label="Su local es">
+            </label>
+
+            <p-multiSelect id="localType"
+                [options]="localTypes"
+                formControlName="localType"
+                optionLabel="name">
+            </p-multiSelect>
+
+            <p-message
+                appErrorMessage
+                [errors]="localTypeField.errors"
+                [touched]="localTypeField.touched"
+                [dirty]="localTypeField.dirty" />
+        </div>
+
+        <!-- Crear -->
+        <div class="md:col-span-12 custom-field-form">
+            <p-button type="submit" label="Add House" [icon]="PrimeIcons.SAVE"></p-button>
+        </div>
+    </form>
+</p-fluid>
+
+<p-fluid>
+    <app-list-basic 
+        title="Listado de Hogares" 
+        [items]="houses" 
+        [cols]="cols" 
+        [buttonActions]="buttonActions"
+        (onCreate)="createHouse()" 
+        (onSelect)="buildButtonActions($event)">
+    </app-list-basic>
+</p-fluid>
