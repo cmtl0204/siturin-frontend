@@ -123,6 +123,27 @@
                     [dirty]="colorField.dirty" />
             </div>
 
+            <div class="md:col-span-12 custom-field-form">
+            <label
+                appLabel
+                for="localType"
+                [required]="localTypeField"
+                label="Su local es">
+            </label>
+
+            <p-multiSelect id="localType"
+                [options]="localTypes"
+                formControlName="localType"
+                optionLabel="name">
+            </p-multiSelect>
+
+            <p-message
+                appErrorMessage
+                [errors]="localTypeField.errors"
+                [touched]="localTypeField.touched"
+                [dirty]="localTypeField.dirty" />
+        </div>
+
             <!-- actions -->
             <div class="md:col-span-12 custom-field-form">
                 <p-button type="submit" label="Agregar" [icon]="PrimeIcons.SAVE" />
